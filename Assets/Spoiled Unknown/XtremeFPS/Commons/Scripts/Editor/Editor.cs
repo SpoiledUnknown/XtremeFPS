@@ -17,7 +17,8 @@ public class NDSEditor : EditorWindow
         window.Show();
     }
 
-    
+
+
     #endregion
     #region Varibales
 
@@ -27,14 +28,14 @@ public class NDSEditor : EditorWindow
     private bool layerButton = false;
     private bool completeButton = false;
 
-    private string groundLayer = "Ground";
-    private string physicsLayer = "Physics";
+    private const string physicsLayer = "Physics";
 
-    private string concreteTag = "Concrete";
-    private string grassTag = "Grass";
-    private string gravelTag = "Gravel";
-    private string waterTag = "Water";
-    private string metalTag = "Metals";
+    private const string concreteTag = "Concrete";
+    private const string grassTag = "Grass";
+    private const string gravelTag = "Gravel";
+    private const string waterTag = "Water";
+    private const string metalTag = "Metals";
+    private const string woodTag = "Wood";
     #endregion
     private void OnGUI()
     {
@@ -181,7 +182,6 @@ public class NDSEditor : EditorWindow
             if (GUI.Button(buttonRect, "Create Layers"))
             {
                 // Create the new layer.
-                CreateLayer(groundLayer);
                 CreateLayer(physicsLayer);
             }
             EditorGUILayout.Space();
@@ -199,6 +199,7 @@ public class NDSEditor : EditorWindow
                 CreateTag(gravelTag);
                 CreateTag(waterTag);
                 CreateTag(metalTag);
+                CreateTag(woodTag);
             }
             EditorGUILayout.Space();
             #endregion

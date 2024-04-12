@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.EventSystems;
 
-namespace XtremeFPS.Common.InputSystem.PlayerInputHandler
+namespace XtremeFPS.Common.InputSystem
 {
     public class FPSInputManager : MonoBehaviour
     {

@@ -1,55 +1,50 @@
 ﻿/*Copyright © Spoiled Unknown*/
 /*2024*/
 
+using System.Collections;
 using UnityEngine;
-using XtremeFPS.Common.WeaponSystem.ShootableObjects;
+using XtremeFPS.Common.Pool;
 
-namespace XtremeFPS.Common.WeaponSystem.ParabolicBullet
+namespace XtremeFPS.Common.WeaponSystem
 {
     public class ParabolicBullet : MonoBehaviour
     {
         #region Variables
         private float speed;
         private float gravity;
-        private float Spread;
-        private Transform startTransform;
         private Vector3 startPosition;
         private Vector3 startForward;
         private GameObject particlesPrefab;
-
-        private bool isInitialized = false;
+        private float bulletLiftime;
 
         private float startTime = -1;
+        private Vector3 currentPoint;
         #endregion
 
         #region Initialization
-        public void Initialize(Transform startPoint, float speed, float gravity, float Spread, GameObject particlePrefab)
+        public void Initialize(Transform startPoint, float speed, float gravity, float bulletLifetime, GameObject particlePrefab)
         {
-            this.startTransform = startPoint;
+            this.startPosition = startPoint.position;
             this.startForward = startPoint.forward.normalized;
             this.speed = speed;
             this.gravity = gravity;
-            this.Spread = Spread;
             this.particlesPrefab = particlePrefab;
-            isInitialized = true;
+            this.bulletLiftime = bulletLifetime;
         }
         #endregion
 
         #region MonoBehaviour Callbacks
 
-        private void Start()
+        void OnEnable()
         {
-            //Spread
-            float x = Random.Range(-Spread, Spread);
-            float y = Random.Range(-Spread, Spread);
-
-            startPosition = startTransform.position + new Vector3(x, y, 0f);
+            StartCoroutine(DestroyBullets());
+            startTime = -1f;
+            currentPoint = startPosition;
         }
 
         private void FixedUpdate()
         {
 
-            if (!isInitialized) return;
             if (startTime < 0) startTime = Time.time;
 
             float currentTime = Time.time - startTime;
@@ -74,13 +69,12 @@ namespace XtremeFPS.Common.WeaponSystem.ParabolicBullet
                 OnHit(hit);
             }
         }
-
         private void Update()
         {
-            if (!isInitialized || startTime < 0) return;
+            if (startTime < 0) return;
 
             float currentTime = Time.time - startTime;
-            Vector3 currentPoint = FindPointOnParabola(currentTime);
+            currentPoint = FindPointOnParabola(currentTime);
             transform.position = currentPoint;
         }
 
@@ -105,15 +99,28 @@ namespace XtremeFPS.Common.WeaponSystem.ParabolicBullet
             ShootableObject shootableObject = hit.transform.GetComponent<ShootableObject>();
             if (shootableObject)
             {
+                PoolManager.Instance.GetPooledObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
                 shootableObject.OnHit(hit);
             }
             else
             {
-                GameObject instantiatedParticles = (GameObject)Instantiate(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal), transform.root.parent);
-                Destroy(instantiatedParticles, 2f);
+                PoolManager.Instance.GetPooledObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
             }
-            Destroy(gameObject);
+            OnBulletDestroy();
         }
+
+        private IEnumerator DestroyBullets()
+        {
+            yield return new WaitForSeconds(bulletLiftime);
+            OnBulletDestroy();
+        }
+
+        private void OnBulletDestroy()
+        {
+            PoolManager.Instance.ReturnObjectToPool(this.gameObject);
+        }
+
+        
         #endregion
     }
 }

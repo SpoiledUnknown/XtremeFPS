@@ -3,19 +3,22 @@
 
 using UnityEngine;
 using TMPro;
-using XtremeFPS.Common.InputSystem.PlayerInputHandler;
-using XtremeFPS.Common.WeaponSystem.ParabolicBullet;
-using XtremeFPS.NonArm.FirstPersonController;
+using XtremeFPS.Common.InputSystem;
+using XtremeFPS.Common.WeaponSystem;
+using XtremeFPS.NonArmature.FirstPersonController;
+using XtremeFPS.Common.Pool;
+using System.Collections;
 
-namespace XtremeFPS.NonArm.WeaponSystem
+namespace XtremeFPS.NonArmature.WeaponSystem
 {
     [RequireComponent(typeof(AudioSource))]
+    [AddComponentMenu("Spoiled Unknown/XtremeFPS/Non-Arm Weapon System")]
     public class WeaponSystem : MonoBehaviour
     {
         #region Variables
         //Reference
         public FPSInputManager inputManager;
-        public First_Person_Controller fpsController;
+        public FirstPersonController.FirstPersonController fpsController;
         public Transform shootPoint;
         public ParticleSystem muzzleFlash;
         public GameObject bulletPrefab;
@@ -37,7 +40,6 @@ namespace XtremeFPS.NonArm.WeaponSystem
         public bool isAimHold;
         public float timeBetweenEachShots;
         public float timeBetweenShooting;
-        public float Spread;
         public int magazineSize;
         public int totalBullets;
         public int bulletsPerTap;
@@ -153,6 +155,7 @@ namespace XtremeFPS.NonArm.WeaponSystem
         #endregion
 
         #region MonoBehaviour Callbacks
+
         private void Start()
         {
             fpsController.haveCameraRecoil = haveSensyRecoil;
@@ -188,11 +191,13 @@ namespace XtremeFPS.NonArm.WeaponSystem
              if (isGunAuto) shooting = inputManager.isFiringHold;
              else shooting = inputManager.isFiringTap;
 
-            //handle inputs
+            //handle mouse inputs
             mouseX = inputManager.mouseDirection.x;
             mouseY = inputManager.mouseDirection.y;
+
             if (isAimHold) aiming = inputManager.isAimingHold;
             else aiming = inputManager.isAimingTap;
+
             if ((inputManager.isReloading || bulletsLeft == 0) && bulletsLeft < magazineSize && totalBullets > 0 &&!reloading) Reload();
 
             //Shoot
@@ -220,36 +225,45 @@ namespace XtremeFPS.NonArm.WeaponSystem
         {
             readyToShoot = false;
 
-            // Parabolic shoot code here
-            GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
-            ParabolicBullet bulletScript = bullet.GetComponent<ParabolicBullet>();
-            if (bulletScript)
-            {
-                bulletScript.Initialize(shootPoint, bulletSpeed, bulletGravitationalForce, Spread, particlesPrefab);
-            }
-            Destroy(bullet, bulletLifeTime);
-
+            //Parabolic shoot code here
+            GameObject bulletObject = PoolManager.Instance.GetPooledObject(bulletPrefab, shootPoint.position, Quaternion.identity);
+            ParabolicBullet parabolicBullet = bulletObject.GetComponent<ParabolicBullet>();
+            parabolicBullet.Initialize(shootPoint, bulletSpeed, bulletGravitationalForce, bulletLifeTime, particlesPrefab);
 
             //Graphics
             muzzleFlash.Play();
             Invoke(nameof(StopMuzzleEffect), muzzelEffectLifeTime);
 
-            Instantiate(Shell, ShellPosition.position, ShellPosition.rotation);
+            PoolManager.Instance.GetPooledObject(Shell, ShellPosition.position, ShellPosition.rotation);
             bulletSound.PlayOneShot(bulletSoundClip, soundVolume * 0.01f);
             float hRecoil = Random.Range(-this.hRecoil, this.hRecoil);
             switch (aiming)
             {
                 case true:
+                    // Adjust current rotation with aiming-specific recoil.
                     currentRotation += new Vector3(-adsFireRecoil.x, Random.Range(-adsFireRecoil.y, adsFireRecoil.y), Random.Range(-adsFireRecoil.z, adsFireRecoil.z));
+
+                    // Adjust rotation recoil with aiming-specific values.
                     rotationRecoil += new Vector3(-recoilRotationAds.x, Random.Range(-recoilRotationAds.y, recoilRotationAds.y), Random.Range(-recoilRotationAds.z, recoilRotationAds.z));
+
+                    // Adjust position recoil with aiming-specific values.
                     positionRecoil += new Vector3(Random.Range(-recoilKickBackAds.x, recoilKickBackAds.y), Random.Range(-recoilKickBackAds.y, recoilKickBackAds.y), recoilKickBackAds.z);
+
+                    // Add aiming recoil to the first-person controller.
                     fpsController.AddRecoil(hRecoil * 0.5f, vRecoil * 0.5f);
                     break;
 
                 case false:
+                    // Adjust current rotation with hip fire-specific recoil.
                     currentRotation += new Vector3(-hipFireRecoil.x, Random.Range(-hipFireRecoil.y, hipFireRecoil.y), Random.Range(-hipFireRecoil.z, hipFireRecoil.z));
+
+                    // Adjust rotation recoil with hip fire-specific values.
                     rotationRecoil += new Vector3(-recoilRotationHip.x, Random.Range(-recoilRotationHip.y, recoilRotationHip.y), Random.Range(-recoilRotationHip.z, recoilRotationHip.z));
+
+                    // Adjust position recoil with hip fire-specific values.
                     positionRecoil += new Vector3(Random.Range(-recoilKickBackHip.x, recoilKickBackHip.y), Random.Range(-recoilKickBackHip.y, recoilKickBackHip.y), recoilKickBackHip.z);
+
+                    // Add hip fire recoil to the first-person controller.
                     fpsController.AddRecoil(hRecoil, vRecoil);
                     break;
             }
@@ -262,6 +276,7 @@ namespace XtremeFPS.NonArm.WeaponSystem
             if (bulletsShot > 0 && bulletsLeft > 0)
                 Invoke(nameof(Shoot), timeBetweenEachShots);
         }
+
         private void StopMuzzleEffect()
         {
             muzzleFlash.Stop();
@@ -398,13 +413,18 @@ namespace XtremeFPS.NonArm.WeaponSystem
             switch (fpsController.isGrounded)
             {
                 case true:
+                    // Calculate delta time based on the player's movement speed.
                     float delta = Time.deltaTime * idleSpeed;
                     float velocity = (lastPosition - transform.position).magnitude * walkSpeedMultiplier;
                     delta += Mathf.Clamp(velocity, 0, walkSpeedMax);
+
+                    // Update the sinX and sinY values to create a bobbing effect.
                     sinX += delta / 2;
                     sinY += delta;
                     sinX %= Mathf.PI * 2;
                     sinY %= Mathf.PI * 2;
+
+                    // Adjust the weapon's local position to create the bobbing effect.
                     float magnitude = aiming ? this.magnitude / aimReduction : this.magnitude;
                     transform.localPosition = Vector3.zero + magnitude * Mathf.Sin(sinY) * Vector3.up;
                     transform.localPosition += magnitude * Mathf.Sin(sinX) * Vector3.right;
@@ -424,6 +444,7 @@ namespace XtremeFPS.NonArm.WeaponSystem
             switch (fpsController.isGrounded)
             {
                 case false:
+                    // Adjust the weapon's rotation based on the player's jump velocity.
                     float yVelocity = fpsController.jumpVelocity.y;
                     yVelocity = Mathf.Clamp(yVelocity, -weaponMinClamp, weaponMaxClamp);
                     impactForce = -yVelocity * landingIntensity;
@@ -433,15 +454,20 @@ namespace XtremeFPS.NonArm.WeaponSystem
                         yVelocity = Mathf.Max(yVelocity, 0);
                     }
 
+                    // Update the weapon's local rotation to simulate the jump sway effect.
                     this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(0f, 0f, yVelocity * jumpIntensity), Time.deltaTime * jumpSmooth);
                     break;
 
                 case true when impactForce >= 0:
+
+                    // If the player is grounded and has impact force, adjust the weapon's rotation accordingly.
                     this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(0, 0, impactForce), Time.deltaTime * landingSmooth);
                     impactForce -= recoverySpeed * Time.deltaTime;
                     break;
 
                 case true:
+
+                    // If the player is grounded and there's no impact force, reset the weapon's rotation.
                     this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.identity, Time.deltaTime * landingSmooth);
                     break;
             }
@@ -449,6 +475,7 @@ namespace XtremeFPS.NonArm.WeaponSystem
         }
         private void SetUIElements()
         {
+            if (bulletCount == null) return;
             //SetText
             bulletCount.SetText(bulletsLeft + " / " + totalBullets);
         }

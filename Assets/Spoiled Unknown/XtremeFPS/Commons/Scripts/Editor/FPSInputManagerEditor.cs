@@ -3,7 +3,7 @@
 /*Note: This is an important editor script*/
 
 using UnityEditor;
-using XtremeFPS.Common.InputSystem.PlayerInputHandler;
+using XtremeFPS.Common.InputSystem;
 using UnityEngine;
 
 [CustomEditor(typeof(FPSInputManager)), CanEditMultipleObjects]

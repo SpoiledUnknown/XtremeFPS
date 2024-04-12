@@ -3,26 +3,27 @@
 
 using System.Collections;
 using UnityEngine;
-using XtremeFPS.Common.InputSystem.PlayerInputHandler;
+using XtremeFPS.Common.InputSystem;
 using Cinemachine;
 using UnityEngine.UI;
 
-namespace XtremeFPS.NonArm.FirstPersonController
+namespace XtremeFPS.NonArmature.FirstPersonController
 {
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(FPSInputManager))]
     [RequireComponent(typeof(AudioSource))]
-    public class First_Person_Controller : MonoBehaviour
+    [AddComponentMenu("Spoiled Unknown/XtremeFPS/Non-Arm First Person Controller")]
+    public class FirstPersonController : MonoBehaviour
     {
         #region Variables
-
         // Player
-        public bool playerCanMove;
         public CharacterController characterController;
+        public FPSInputManager inputManager;
+        public bool playerCanMove;
         public float transitionSpeed;
         public float walkSpeed = 5f;
         public float walkSoundSpeed;
-        // Define different player movement states
+
         private enum PlayerMovementState
         {
             Sprinting,
@@ -30,6 +31,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
             Walking,
             Default
         }
+
 
         //sprinting
         public bool playerCanSprint;
@@ -42,27 +44,21 @@ namespace XtremeFPS.NonArm.FirstPersonController
         public Slider staminaSlider;
         public float sprintSoundSpeed;
 
-        private FPSInputManager inputManager;
         private float targetSpeed;
         private float transitionDelta;
         private Vector3 moveDirection;
         private bool isSprinting;
         private bool isSprintCooldown = false;
-        private float sprintCooldownReset;
+        private readonly float sprintCooldownReset;
         private float sprintRemaining;
 
 
         // Gravity and Jumping
         public bool canJump;
         public float jumpHeight = 2f;
-        public int groundLayerID;
-        public float groundCheckRadius;
-        public Transform groundCheckTransform;
         public float gravitationalForce = 10f;
-
         public bool isGrounded;
         public Vector3 jumpVelocity;
-        private LayerMask groundLayerMask;
 
         private bool havePreviouslyJumped;
 
@@ -79,7 +75,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
         private float initialHeight;
         private bool isTryingToUncrouch;
         private Vector3 initialCameraPosition;
-        private Vector3 initialGroundCheckerPosition;
+
 
         // Camera
         public bool isCursorLocked;
@@ -93,25 +89,26 @@ namespace XtremeFPS.NonArm.FirstPersonController
 
         private float rotationY;
 
+
         //Zooming
         public bool enableZoom;
         public bool isZoomingHold;
         public float zoomFOV = 30f;
-        public float zoomStepTime = 5f;
+        //public float zoomStepTime = 5f;
 
-        // Internal Variables
         private bool isZoomed = false;
+
 
         //Head Bobbing effect
         public bool canHeadBob;
         public float headBobAmplitude = 0.01f;
         public float headBobFrequency = 18.5f;
 
-        private float _toggleSpeed = 3.0f;
         private Vector3 _startPos;
 
         //Sound System
         public bool canPlaySound;
+        public AudioSource audioSource;
         public string grassTag;
         public AudioClip[] soundGrass;
         public string waterTag;
@@ -128,11 +125,10 @@ namespace XtremeFPS.NonArm.FirstPersonController
         public AudioClip jumpClip;
         public float footstepSensitivity;
 
-
-        private AudioSource audioSource;
         private float AudioEffectSpeed;
         private bool moving = false;
         private string floortag;
+
 
         // Handling Physics
         public bool canPush;
@@ -141,85 +137,36 @@ namespace XtremeFPS.NonArm.FirstPersonController
 
         private LayerMask pushLayers;
 
-        //Armature
-        public bool hasArmature;
-        public Transform armature;
-        public float newArmatureHeight;
-
-        private float originalArmatureHeight;
 
         //Recoil For Weapon System;
         public bool haveCameraRecoil = false;
 
         private float hRecoil = 0f;
         private float vRecoil = 0f;
+        #endregion
 
-
-
-
-#if UNITY_EDITOR
-        // Debug Only
-        public bool debugMode;
-#endif
-#endregion
         #region MonoBehaviour Callbacks
 
         private void Start()
         {
-            // Get the reference to the FPSInputManager component
-            inputManager = GetComponent<FPSInputManager>();
-
-            // Get the layer mask from the groundLayerID
-            groundLayerMask = LayerMaskFromLayer(groundLayerID);
-
-            // If canPush is true, get the layer mask from the pushLayersID
-            if(canPush)
-            {
-                pushLayers = LayerMaskFromLayer(pushLayersID);
-            }
-
-            // Get the reference to the AudioSource component
-            audioSource = GetComponent<AudioSource>();
-
-            // Set the cursor lock state based on the value of isCursorLocked
-            Cursor.lockState = isCursorLocked ? CursorLockMode.Locked : CursorLockMode.None;
-
-            // Set the field of view of the player virtual camera
             playerVirtualCamera.m_Lens.FieldOfView = FOV;
-
-            // Set the audio effect speed to walkSoundSpeed
             AudioEffectSpeed = walkSoundSpeed;
-
-            // Store the initial position of the cameraFollow
             _startPos = cameraFollow.localPosition;
 
+            Cursor.lockState = isCursorLocked ? CursorLockMode.Locked : CursorLockMode.None;
+
+            // If canPush is true, get the layer mask from the pushLayersID
+            if (canPush) pushLayers = LayerMaskFromLayer(pushLayersID);
+
             // Start the coroutine for senseSteps
-            if (canPlaySound)
-            {
-                StartCoroutine(SenseSteps());
-            }
+            if (canPlaySound) StartCoroutine(SenseSteps());
 
             // If hasStaminaBar is true and unlimitedSprinting is true, deactivate the stamina slider
-            if (hasStaminaBar && unlimitedSprinting)
-            {
-                staminaSlider.gameObject.SetActive(false);
-            }
+            if (hasStaminaBar && unlimitedSprinting) staminaSlider.gameObject.SetActive(false);
 
-            // If canCrouch is false, exit the function
             if (!canCrouch) return;
-
-            // Store the initial height of the character controller
             initialHeight = characterController.height;
-
-            // Store the initial position of the camera head holder and ground check transform
             initialCameraPosition = cameraFollow.transform.localPosition;
-            initialGroundCheckerPosition = groundCheckTransform.transform.localPosition;
-
-            // If hasArmature is true, store the original armature height
-            if (hasArmature)
-            {
-                originalArmatureHeight = armature.localScale.y;
-            }
         }
 
         private void Update()
@@ -250,17 +197,6 @@ namespace XtremeFPS.NonArm.FirstPersonController
                 PushRigidBodies(hit);
             }
         }
-
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            if (debugMode)
-            {
-                Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(groundCheckTransform.position, groundCheckRadius);
-            }
-        }
-#endif
 
         #endregion
         #region Private Methods
@@ -362,14 +298,6 @@ namespace XtremeFPS.NonArm.FirstPersonController
 
                 // Set the audio effect speed for crouching
                 AudioEffectSpeed = crouchSoundPlayTime;
-
-                // Check if the character has an armature
-                if (hasArmature)
-                {
-                    // If yes, interpolate the armature's height to the new crouched height
-                    float newHeight = Mathf.Lerp(armature.localScale.y, newArmatureHeight, transitionDelta);
-                    armature.transform.localScale = new Vector3(armature.localScale.x, newHeight, armature.localScale.z);
-                }
             }
             else
             {
@@ -384,14 +312,6 @@ namespace XtremeFPS.NonArm.FirstPersonController
                 {
                     // If not sprinting, set the audio effect speed for walking
                     AudioEffectSpeed = walkSoundSpeed;
-                }
-
-                // Check if the character has an armature
-                if (hasArmature)
-                {
-                    // If yes, interpolate the armature's height to the original armature height
-                    float newHeight = Mathf.Lerp(armature.localScale.y, originalArmatureHeight, transitionDelta);
-                    armature.transform.localScale = new Vector3(armature.localScale.x, newHeight, armature.localScale.z);
                 }
             }
         }
@@ -413,7 +333,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
             }
 
             // Interpolate the character's height towards the target height
-            newHeight = Mathf.Lerp(characterController.height, targetHeight, transitionDelta) + (inputManager.isCrouchingTap ? -0.0000001f : 0.0000001f);
+            newHeight = Mathf.Lerp(characterController.height, targetHeight, transitionDelta);
 
             // Update the character controller's height
             characterController.height = newHeight;
@@ -422,13 +342,14 @@ namespace XtremeFPS.NonArm.FirstPersonController
             Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) / 2, 0);
             Vector3 newCameraHeight = initialCameraPosition - halfHeightDifference;
             cameraFollow.localPosition = newCameraHeight;
-
-            // Adjust the ground checker position based on the new height
-            Vector3 halfHeightDifferenceGroundChecker = new Vector3(0, (initialHeight - newHeight) / 2, 0);
-            Vector3 newGroundCheckerHeight = initialGroundCheckerPosition + halfHeightDifferenceGroundChecker;
-            groundCheckTransform.localPosition = newGroundCheckerHeight;
         }
         #endregion
+
+        /// <summary>
+        /// The method assigns the horizontal recoil and vertical recoil values provided as parameters to the camera.
+        /// </summary>
+        /// <param name="hRecoil">Float</param>
+        /// <param name="vRecoil">Float</param>
         public void AddRecoil(float hRecoil, float vRecoil)
         {
             if (!haveCameraRecoil) return;
@@ -456,11 +377,11 @@ namespace XtremeFPS.NonArm.FirstPersonController
 
             if (isZoomed)
             {
-                playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, zoomFOV, zoomStepTime * Time.deltaTime);
+                playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, zoomFOV, transitionDelta);
             }
             else if (!isZoomed && !isSprinting)
             {
-                playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, FOV, zoomStepTime * Time.deltaTime);
+                playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, FOV, transitionDelta);
             }
         }
         private void AdjustFOVSettings(float targetFOV) 
@@ -477,8 +398,8 @@ namespace XtremeFPS.NonArm.FirstPersonController
             // Get the current field of view of the player virtual camera
             float currentFOV = playerVirtualCamera.m_Lens.FieldOfView;
 
-            // Calculate the new field of view using linear interpolation and adjust for sprinting
-            float newFOV = Mathf.Lerp(currentFOV, targetFOV, transitionDelta) + (isSprinting ? -0.0000001f : 0.0000001f);
+            // Calculate the new field of view using linear interpolation
+            float newFOV = Mathf.Lerp(currentFOV, targetFOV, transitionDelta);
 
             // Set the field of view of the player virtual camera to the new calculated value
             playerVirtualCamera.m_Lens.FieldOfView = newFOV;
@@ -503,7 +424,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
             {
                 movementState = PlayerMovementState.Crouching;
             }
-            else if (!isSprinting && characterController.height > 1.2f)
+            else if (!isSprinting && approxHeight)
             {
                 movementState = PlayerMovementState.Walking;
             }
@@ -546,8 +467,9 @@ namespace XtremeFPS.NonArm.FirstPersonController
 
         private void GravityAndJump()
         {
+            characterController.Move(Time.deltaTime * jumpVelocity.y * transform.up);
             bool isPreviouslyGrounded = isGrounded; // Store previous grounded state
-            isGrounded = Physics.CheckSphere(groundCheckTransform.position, groundCheckRadius, groundLayerMask);
+            isGrounded = characterController.isGrounded;
 
             if (isGrounded && !isPreviouslyGrounded)
             {
@@ -557,29 +479,33 @@ namespace XtremeFPS.NonArm.FirstPersonController
 
             if (isGrounded)
             {
-                if (!canJump) return;
+                if (!canJump)
+                {
+                    jumpVelocity.y = -1f;
+                    return;
+                }
+
                 if (inputManager.haveJumped && !inputManager.isCrouchingTap)
                 {
                     jumpVelocity.y = Mathf.Sqrt(jumpHeight * 2f * gravitationalForce);
+
                     if (!havePreviouslyJumped)
                     {
                         audioSource.PlayOneShot(jumpClip);
                         havePreviouslyJumped = true;
                     }
-
                 }
                 else if (!isGrounded && jumpVelocity.y < 0f)
                 {
-                    jumpVelocity.y = -3f; // Reset jump velocity on landing
+                    jumpVelocity.y = -1f; // Reset jump velocity on landing
                 }
             }
             else
             {
                 jumpVelocity.y -= gravitationalForce * Time.deltaTime;
             }
-
-            characterController.Move(Time.deltaTime * jumpVelocity.y * transform.up);
         }
+
         private void PushRigidBodies(ControllerColliderHit hit)
         {
             Rigidbody body = hit.collider.attachedRigidbody;
@@ -618,8 +544,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
         // Check motion to determine if the character is moving
         private void CheckMotion()
         {
-            float speed = characterController.velocity.magnitude;
-            if (speed < _toggleSpeed || !isGrounded)
+            if (!moving || !isGrounded)
             {
                 // If the character is not moving or not grounded, return without further action
                 return;
@@ -660,15 +585,14 @@ namespace XtremeFPS.NonArm.FirstPersonController
         {
             if (!canPlaySound) return;
             Vector3 castOrigin = transform.position;
-            RaycastHit hit;
-            if (Physics.Raycast(castOrigin, Vector3.down, out hit, 5f))
+            if (Physics.Raycast(castOrigin, Vector3.down, out RaycastHit hit, 5f))
             {
-                switch (hit.collider.tag)
+                switch (hit.collider.tag.ToLower())
                 {
                     case "grass":
                         floortag = "grass";
                         break;
-                    case "metal":
+                    case "metals":
                         floortag = "metal";
                         break;
                     case "gravel":
@@ -690,8 +614,8 @@ namespace XtremeFPS.NonArm.FirstPersonController
             }
 
             // Sensing movement for players
-            var velocity = characterController.velocity;
-            var localVel = transform.InverseTransformDirection(velocity);
+            Vector3 velocity = characterController.velocity;
+            Vector3 localVel = transform.InverseTransformDirection(velocity);
 
             moving = (localVel.z > footstepSensitivity || localVel.z < -footstepSensitivity || localVel.x > footstepSensitivity || localVel.x < -footstepSensitivity);
         }

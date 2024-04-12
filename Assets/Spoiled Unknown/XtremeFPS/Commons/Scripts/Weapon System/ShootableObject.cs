@@ -3,7 +3,7 @@
 
 using UnityEngine;
 
-namespace XtremeFPS.Common.WeaponSystem.ShootableObjects
+namespace XtremeFPS.Common.WeaponSystem
 {
     public abstract class ShootableObject : MonoBehaviour
     {

@@ -4,16 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - concrete
-  - grass
-  - gravel
-  - water
-  - metal
   - Concrete
   - Grass
   - Gravel
   - Water
   - Metals
+  - Wood
   layers:
   - Default
   - TransparentFX

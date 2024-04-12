@@ -2,9 +2,9 @@
 /*2023*/
 /*Note: This is an important editor script*/
 
-using XtremeFPS.NonArm.FirstPersonController;
-using XtremeFPS.Common.InputSystem.PlayerInputHandler;
-using XtremeFPS.NonArm.WeaponSystem;
+using XtremeFPS.NonArmature.FirstPersonController;
+using XtremeFPS.Common.InputSystem;
+using XtremeFPS.NonArmature.WeaponSystem;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -43,7 +43,7 @@ public class WeaponSystemEditor : Editor
         //Main Movement Settings
         GUI.color = Color.white;
         uni_WeaponSystem.inputManager = (FPSInputManager)EditorGUILayout.ObjectField(new GUIContent("Input Manager", "Reference to Input Manager script."), uni_WeaponSystem.inputManager, typeof(FPSInputManager), true);
-        uni_WeaponSystem.fpsController = (First_Person_Controller)EditorGUILayout.ObjectField(new GUIContent("Player Controller", "Reference to player controller script."), uni_WeaponSystem.fpsController, typeof(First_Person_Controller), true);
+        uni_WeaponSystem.fpsController = (FirstPersonController)EditorGUILayout.ObjectField(new GUIContent("Player Controller", "Reference to player controller script."), uni_WeaponSystem.fpsController, typeof(FirstPersonController), true);
         uni_WeaponSystem.shootPoint = (Transform)EditorGUILayout.ObjectField(new GUIContent("Shoot Point", "Reference to the transform of the point fro where bullets will spawn (Ideally it should be a child of gun model itself)."), uni_WeaponSystem.shootPoint, typeof(Transform), true);
         uni_WeaponSystem.muzzleFlash = (ParticleSystem)EditorGUILayout.ObjectField(new GUIContent("Muzzle Flash", "Reference to the particle system that will be played (the game object should be a child of shootPoint)."), uni_WeaponSystem.muzzleFlash, typeof(ParticleSystem), true);
         uni_WeaponSystem.particlesPrefab = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Hit Effect", "Reference to the GameObject that will be spawned at the point where bullet hits."), uni_WeaponSystem.particlesPrefab, typeof(GameObject), true);
@@ -77,7 +77,6 @@ public class WeaponSystemEditor : Editor
         uni_WeaponSystem.isGunAuto = EditorGUILayout.ToggleLeft(new GUIContent("Is Gun Auto", "Determines if the gun is automatic or tap-tap."), uni_WeaponSystem.isGunAuto);
         uni_WeaponSystem.timeBetweenEachShots = EditorGUILayout.Slider(new GUIContent("Time Between Each Shots", "Determines the time after which each shots will be fired."), uni_WeaponSystem.timeBetweenEachShots, 0f, 1f);
         uni_WeaponSystem.timeBetweenShooting = EditorGUILayout.Slider(new GUIContent("Time Between Shooting", "Determines the time it will take for weapon to load new bullets."), uni_WeaponSystem.timeBetweenShooting, 0f, 1f);
-        uni_WeaponSystem.Spread = EditorGUILayout.Slider(new GUIContent("Bullet Spread", "Determines the bullet spread."), uni_WeaponSystem.Spread, 0f, 1f);
         uni_WeaponSystem.magazineSize = EditorGUILayout.IntSlider(new GUIContent("Magazine Size", "Determines the number of bullet the weapon will hold."), uni_WeaponSystem.magazineSize, 0, 200);
         uni_WeaponSystem.totalBullets = EditorGUILayout.IntSlider(new GUIContent("Total Bullets", "Determines the number of bullet the player have."), uni_WeaponSystem.totalBullets, 0, 999);
         uni_WeaponSystem.bulletsPerTap = EditorGUILayout.IntSlider(new GUIContent("Bullet Per Shoot", "Determines the number of bullet the player will shoot in single tap/shoot cycle."), uni_WeaponSystem.bulletsPerTap, 0, 30);

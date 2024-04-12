@@ -2,7 +2,7 @@
 /*2024*/
 /*Note: This is an important editor script*/
 
-using XtremeFPS.Common.WeaponSystem.ParabolicBullet;
+using XtremeFPS.Common.WeaponSystem;
 using UnityEditor;
 using UnityEngine;
 
