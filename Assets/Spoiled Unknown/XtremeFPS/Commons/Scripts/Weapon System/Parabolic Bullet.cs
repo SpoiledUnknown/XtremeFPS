@@ -39,7 +39,7 @@ namespace XtremeFPS.Common.WeaponSystem
         {
             StartCoroutine(DestroyBullets());
             startTime = -1f;
-            currentPoint = startPosition;
+            //currentPoint = startPosition;
         }
 
         private void FixedUpdate()

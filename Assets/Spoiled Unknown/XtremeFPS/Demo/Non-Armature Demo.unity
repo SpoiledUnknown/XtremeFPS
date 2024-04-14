@@ -876,13 +876,13 @@ MonoBehaviour:
   - objectToPool: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d,
       type: 3}
     amountToPool: 2
-    shouldExpand: 1
-    shouldRecycle: 0
-  - objectToPool: {fileID: 2046857199201600465, guid: adb843424a0f88a4ea26c84473f521d2,
-      type: 3}
-    amountToPool: 1
     shouldExpand: 0
     shouldRecycle: 1
+  - objectToPool: {fileID: 2046857199201600465, guid: adb843424a0f88a4ea26c84473f521d2,
+      type: 3}
+    amountToPool: 30
+    shouldExpand: 0
+    shouldRecycle: 0
 --- !u!1 &775199590
 GameObject:
   m_ObjectHideFlags: 0
@@ -1808,7 +1808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5419,7 +5419,7 @@ Transform:
   m_GameObject: {fileID: 4630927426849752628}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.865, y: 0.0858, z: 0}
+  m_LocalPosition: {x: -0.865, y: 0.0907, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5525,7 +5525,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!33 &3255544954306623209
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6687,25 +6687,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterController: {fileID: 2951787819800977851}
   inputManager: {fileID: 8844642988595288916}
-  playerCanMove: 1
+  canPlayerMove: 1
   transitionSpeed: 10
   walkSpeed: 2
   walkSoundSpeed: 0.3
-  playerCanSprint: 1
-  unlimitedSprinting: 1
+  canPlayerSprint: 1
+  unlimitedSprinting: 0
   isSprintHold: 0
   sprintSpeed: 4
   sprintDuration: 8
   sprintCooldown: 0.1
-  hasStaminaBar: 0
-  staminaSlider: {fileID: 0}
+  hasStaminaBar: 1
+  staminaSlider: {fileID: 2210322537319523679}
   sprintSoundSpeed: 0.25
   canJump: 1
   jumpHeight: 1.89
   gravitationalForce: 10
-  isGrounded: 1
   jumpVelocity: {x: 0, y: -4.332953, z: 0}
-  canCrouch: 1
+  canPlayerCrouch: 1
   isCrouchHold: 0
   crouchedHeight: 1
   crouchedSpeed: 1
@@ -6718,7 +6717,7 @@ MonoBehaviour:
   minimumClamp: -90
   sprintFOV: 90
   FOV: 75
-  enableZoom: 1
+  enableZoom: 0
   isZoomingHold: 0
   zoomFOV: 30
   canHeadBob: 1
@@ -8042,7 +8041,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7523226945082423610}
   - {fileID: 5709415838622715630}
   m_Father: {fileID: 7731987416920244368}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8078,7 +8076,7 @@ MonoBehaviour:
   timeBetweenEachShots: 0.1
   timeBetweenShooting: 0.1
   magazineSize: 30
-  totalBullets: 100
+  totalBullets: 101
   bulletsPerTap: 1
   muzzelEffectLifeTime: 1
   reloadTime: 2.3
@@ -8160,7 +8158,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dbf898c9f9c4a2d46aa6336e23caeb61, type: 2}
+  - {fileID: 2100000, guid: 7824299439ec64941bb271a882649e38, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9312,7 +9310,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -244, y: -251}
+  m_AnchoredPosition: {x: -244, y: -215}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7224186214669085680
@@ -9528,7 +9526,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -409.99997, y: -200.2797}
+  m_AnchoredPosition: {x: -409.99997, y: -158}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!33 &7446304817311174095
@@ -9558,21 +9556,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7523226945082423610
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8510663076546414264}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.777, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5772371038086543681}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7542960180863280483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15841,22 +15824,6 @@ Transform:
   - {fileID: 6346217102371017879}
   m_Father: {fileID: 2910362323826084961}
   m_LocalEulerAnglesHint: {x: 10.670812, y: 52.839756, z: 54.302307}
---- !u!1 &8510663076546414264
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7523226945082423610}
-  m_Layer: 0
-  m_Name: Ground Check Transform
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!33 &8538602892400466448
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -410,7 +410,7 @@ namespace XtremeFPS.NonArmature.WeaponSystem
         {
             if(!haveBobbing) return;
 
-            switch (fpsController.isGrounded)
+            switch (fpsController.IsGrounded)
             {
                 case true:
                     // Calculate delta time based on the player's movement speed.
@@ -441,7 +441,7 @@ namespace XtremeFPS.NonArmature.WeaponSystem
         {
             if(!haveJumpSway || aiming) return;
 
-            switch (fpsController.isGrounded)
+            switch (fpsController.IsGrounded)
             {
                 case false:
                     // Adjust the weapon's rotation based on the player's jump velocity.

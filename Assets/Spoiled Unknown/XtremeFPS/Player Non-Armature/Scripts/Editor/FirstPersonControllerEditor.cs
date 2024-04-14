@@ -48,8 +48,8 @@ public class FirstPersonControllerEditor : Editor
         fpsController.inputManager = (FPSInputManager)EditorGUILayout.ObjectField(new GUIContent("Input Manager Script", "Referrence to the input manager script attach to the player"), fpsController.inputManager, typeof(FPSInputManager), true);
         fpsController.transitionSpeed = EditorGUILayout.Slider(new GUIContent("Transition Speed", "The speed at which any animation should play."), fpsController.transitionSpeed, 1f, 30f);
         GUILayout.Space(10);
-        fpsController.playerCanMove = EditorGUILayout.ToggleLeft(new GUIContent("Enable Player Movement", "Determines if the player is allowed to move."), fpsController.playerCanMove);
-        if (fpsController.playerCanMove)
+        fpsController.canPlayerMove = EditorGUILayout.ToggleLeft(new GUIContent("Enable Player Movement", "Determines if the player is allowed to move."), fpsController.canPlayerMove);
+        if (fpsController.canPlayerMove)
         {
             fpsController.walkSpeed = EditorGUILayout.Slider(new GUIContent("Walk Speed", "Determines how fast the player will move while walking."), fpsController.walkSpeed, .1f, fpsController.sprintSpeed);
             fpsController.walkSoundSpeed = EditorGUILayout.Slider(new GUIContent("Sound Playback Speed", "Determines the speed at which footstep sounds will play while walking."), fpsController.walkSoundSpeed, 0.1f, 0.5f);
@@ -57,8 +57,8 @@ public class FirstPersonControllerEditor : Editor
             GUI.color = Color.blue;
             GUILayout.Label("Sprint Settings", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
             GUI.color = Color.white;
-            fpsController.playerCanSprint = EditorGUILayout.ToggleLeft(new GUIContent("Enable Sprinting", "Determines if the player is allowed to sprint."), fpsController.playerCanSprint);
-            if (fpsController.playerCanSprint)
+            fpsController.canPlayerSprint = EditorGUILayout.ToggleLeft(new GUIContent("Enable Sprinting", "Determines if the player is allowed to sprint."), fpsController.canPlayerSprint);
+            if (fpsController.canPlayerSprint)
             {
                 fpsController.isSprintHold = EditorGUILayout.ToggleLeft(new GUIContent("Is Sprint Hold", "Determines if the player has to hold sprint key or press/tap."), fpsController.isSprintHold);
                 fpsController.sprintSpeed = EditorGUILayout.Slider(new GUIContent("Sprint Speed", "Determines how fast the player will move while sprinting."), fpsController.sprintSpeed, fpsController.walkSpeed, 20f);
@@ -98,8 +98,8 @@ public class FirstPersonControllerEditor : Editor
         GUI.color = Color.blue;
         GUILayout.Label("Crouch Settings", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
         GUI.color = Color.white;
-        fpsController.canCrouch = EditorGUILayout.ToggleLeft(new GUIContent("Enable Player Crouch", "Determines if the player is allowed to crouch."), fpsController.canCrouch);
-        if (fpsController.canCrouch)
+        fpsController.canPlayerCrouch = EditorGUILayout.ToggleLeft(new GUIContent("Enable Player Crouch", "Determines if the player is allowed to crouch."), fpsController.canPlayerCrouch);
+        if (fpsController.canPlayerCrouch)
         {
             fpsController.isCrouchHold = EditorGUILayout.ToggleLeft(new GUIContent("Is Crouch Hold", "Determines if the player has to hold crouch key or press/tap."), fpsController.isCrouchHold);
             fpsController.crouchedHeight = EditorGUILayout.Slider(new GUIContent("Crouched Height", "Determines the height at which player should crouch."), fpsController.crouchedHeight, 0.5f, fpsController.characterController.height);
@@ -203,6 +203,8 @@ public class FirstPersonControllerEditor : Editor
             fpsController.pushLayersID = EditorGUILayout.LayerField(new GUIContent("What can be pushed?", "Determines what layers can the player push."), fpsController.pushLayersID);
             fpsController.pushStrength = EditorGUILayout.Slider(new GUIContent("Push Strength", "Determines the strength at which the player should push."), fpsController.pushStrength, 0f, 10f);
         }
+        GUI.color = Color.black;
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         #endregion
         #region Update Changes
         //Sets any changes from the prefab

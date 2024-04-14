@@ -19,7 +19,7 @@ namespace XtremeFPS.NonArmature.FirstPersonController
         // Player
         public CharacterController characterController;
         public FPSInputManager inputManager;
-        public bool playerCanMove;
+        public bool canPlayerMove;
         public float transitionSpeed;
         public float walkSpeed = 5f;
         public float walkSoundSpeed;
@@ -34,7 +34,7 @@ namespace XtremeFPS.NonArmature.FirstPersonController
 
 
         //sprinting
-        public bool playerCanSprint;
+        public bool canPlayerSprint;
         public bool unlimitedSprinting;
         public bool isSprintHold;
         public float sprintSpeed = 8f;
@@ -57,14 +57,14 @@ namespace XtremeFPS.NonArmature.FirstPersonController
         public bool canJump;
         public float jumpHeight = 2f;
         public float gravitationalForce = 10f;
-        public bool isGrounded;
+        public bool IsGrounded { get; private set; }
         public Vector3 jumpVelocity;
 
         private bool havePreviouslyJumped;
 
 
         // Crouching
-        public bool canCrouch;
+        public bool canPlayerCrouch;
         public bool isCrouchHold;
         public float crouchedHeight = 1f;
         public float crouchedSpeed = 1f;
@@ -94,7 +94,6 @@ namespace XtremeFPS.NonArmature.FirstPersonController
         public bool enableZoom;
         public bool isZoomingHold;
         public float zoomFOV = 30f;
-        //public float zoomStepTime = 5f;
 
         private bool isZoomed = false;
 
@@ -164,8 +163,8 @@ namespace XtremeFPS.NonArmature.FirstPersonController
             // If hasStaminaBar is true and unlimitedSprinting is true, deactivate the stamina slider
             if (hasStaminaBar && unlimitedSprinting) staminaSlider.gameObject.SetActive(false);
 
-            if (!canCrouch) return;
             initialHeight = characterController.height;
+            if (!canPlayerCrouch) return;
             initialCameraPosition = cameraFollow.transform.localPosition;
         }
 
@@ -211,7 +210,7 @@ namespace XtremeFPS.NonArmature.FirstPersonController
         {
 
             // If player cannot sprint, exit the function
-            if (!playerCanSprint) return;
+            if (!canPlayerSprint) return;
 
             // Determine if the player is sprinting based on input
             if (isSprintHold) 
@@ -269,7 +268,7 @@ namespace XtremeFPS.NonArmature.FirstPersonController
         private void Crouch()
         {
             // Check if the character can crouch
-            if (!canCrouch)
+            if (!canPlayerCrouch)
             {
                 // If not, return immediately
                 return;
@@ -407,7 +406,7 @@ namespace XtremeFPS.NonArmature.FirstPersonController
         private void HandleMovements()
         {
             // If player cannot move, exit the function
-            if (!playerCanMove) return;
+            if (!canPlayerMove) return;
 
             // Initialize the movement state to Default
             PlayerMovementState movementState = PlayerMovementState.Default;
@@ -416,7 +415,7 @@ namespace XtremeFPS.NonArmature.FirstPersonController
             bool approxHeight = Mathf.Approximately(characterController.height, initialHeight);
 
             // Determine the movement state based on player input and character state
-            if (isSprinting && !inputManager.isCrouchingTap && playerCanSprint && approxHeight)
+            if (isSprinting && !inputManager.isCrouchingTap && canPlayerSprint && approxHeight)
             {
                 movementState = PlayerMovementState.Sprinting;
             }
@@ -468,16 +467,16 @@ namespace XtremeFPS.NonArmature.FirstPersonController
         private void GravityAndJump()
         {
             characterController.Move(Time.deltaTime * jumpVelocity.y * transform.up);
-            bool isPreviouslyGrounded = isGrounded; // Store previous grounded state
-            isGrounded = characterController.isGrounded;
+            bool isPreviouslyGrounded = IsGrounded; // Store previous grounded state
+            IsGrounded = characterController.isGrounded;
 
-            if (isGrounded && !isPreviouslyGrounded)
+            if (IsGrounded && !isPreviouslyGrounded)
             {
                 audioSource.PlayOneShot(landClip); // Play land audio only when just touching ground
                 havePreviouslyJumped = false;
             }
 
-            if (isGrounded)
+            if (IsGrounded)
             {
                 if (!canJump)
                 {
@@ -495,7 +494,7 @@ namespace XtremeFPS.NonArmature.FirstPersonController
                         havePreviouslyJumped = true;
                     }
                 }
-                else if (!isGrounded && jumpVelocity.y < 0f)
+                else if (!IsGrounded && jumpVelocity.y < 0f)
                 {
                     jumpVelocity.y = -1f; // Reset jump velocity on landing
                 }
@@ -544,7 +543,7 @@ namespace XtremeFPS.NonArmature.FirstPersonController
         // Check motion to determine if the character is moving
         private void CheckMotion()
         {
-            if (!moving || !isGrounded)
+            if (!moving || !IsGrounded)
             {
                 // If the character is not moving or not grounded, return without further action
                 return;
@@ -626,7 +625,7 @@ namespace XtremeFPS.NonArmature.FirstPersonController
             if (!canPlaySound) yield return null;
             while (true)
             {
-                if (isGrounded && moving)
+                if (IsGrounded && moving)
                 {
                     switch (floortag)
                     {
