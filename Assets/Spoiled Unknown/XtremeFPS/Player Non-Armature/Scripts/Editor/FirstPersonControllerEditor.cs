@@ -11,7 +11,7 @@ using XtremeFPS.Common.InputSystem;
 
 
 [CustomEditor(typeof(FirstPersonController)), CanEditMultipleObjects]
-public class FirstPersonControllerEditor : Editor
+public class FirstPersonControllerEditor : UnityEditor.Editor
 {
     FirstPersonController fpsController;
     SerializedObject serFPS;

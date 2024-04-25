@@ -4,7 +4,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
-using UnityEngine.EventSystems;
 
 namespace XtremeFPS.Common.InputSystem
 {
@@ -21,7 +20,7 @@ namespace XtremeFPS.Common.InputSystem
         [HideInInspector] public bool isCrouchingHold;
         //Vectors
         [HideInInspector] public Vector2 moveDirection;
-        [HideInInspector] public Vector2 mouseDirection;
+         public Vector2 mouseDirection;
         //Jump
         [HideInInspector] public bool haveJumped;
         //Zooming
@@ -33,8 +32,6 @@ namespace XtremeFPS.Common.InputSystem
         [HideInInspector] public bool isReloading;
         [HideInInspector] public bool isAimingTap;
         [HideInInspector] public bool isAimingHold;
-        //Peeking
-        [HideInInspector] public Vector2 peekDirection;
 
         #endregion
         #region Initialization
@@ -71,64 +68,26 @@ namespace XtremeFPS.Common.InputSystem
             playerInputAction.Player.CrouchHold.canceled += CrouchHoldInput;
             playerInputAction.Player.SprintHold.canceled += SprintHoldInput;
             playerInputAction.Player.ZoomHold.canceled += ZoomHoldInput;
-
-
-
-
             #endregion
+
+
             #region Weapon System
             playerInputAction.Shooting.FireHold.performed += ShootInput;
             playerInputAction.Shooting.FireTap.performed += ShootTapInput;
             playerInputAction.Shooting.Reload.performed += ReloadingInput;
             playerInputAction.Shooting.ADSTap.performed += ADSTapInput;
             playerInputAction.Shooting.ADSHold.performed += ADSHoldInput;
-            playerInputAction.Shooting.Peek.performed += PeekInput;
 
 
             playerInputAction.Shooting.Reload.canceled += ReloadingInput;
             playerInputAction.Shooting.FireHold.canceled += ShootInput;
             playerInputAction.Shooting.ADSHold.canceled += ADSHoldInput;
-            playerInputAction.Shooting.Peek.canceled += PeekInput;
 
 
             #endregion
         }
-#if UNITY_ANDROID || UNITY_IOS
-        private void Update()
-        {
-            if (Touchscreen.current == null || Touchscreen.current.touches.Count == 0) return;
 
-            if (EventSystem.current.IsPointerOverGameObject(Touchscreen.current.touches[0].touchId.ReadValue()))
-            {
-                if (Touchscreen.current.touches.Count > 1 && Touchscreen.current.touches[1].isInProgress)
-                {
-                    if (EventSystem.current.IsPointerOverGameObject(Touchscreen.current.touches[1].touchId.ReadValue())) return;
-
-                    mouseDirection = Touchscreen.current.touches[1].delta.ReadValue();
-                }
-                else
-                {
-                    mouseDirection = Vector2.zero;
-                }
-            }
-            else
-            {
-                if (Touchscreen.current.touches.Count > 0 && Touchscreen.current.touches[0].isInProgress)
-                {
-                    if (EventSystem.current.IsPointerOverGameObject(Touchscreen.current.touches[0].touchId.ReadValue())) return;
-
-                    mouseDirection = Touchscreen.current.touches[0].delta.ReadValue();
-                }
-                else
-                {
-                    mouseDirection = Vector2.zero;
-                }
-            }
-        }
-#endif
-#endregion
-
-
+        #endregion
         #region Input Handling
         private void MouseInput(InputAction.CallbackContext context)
         {
@@ -230,11 +189,6 @@ namespace XtremeFPS.Common.InputSystem
         {
             yield return new WaitForSeconds(0.05f);
             isFiringTap = false;
-        }
-
-        private void PeekInput(InputAction.CallbackContext context)
-        {
-            peekDirection = context.ReadValue<Vector2>();
         }
         #endregion
     }

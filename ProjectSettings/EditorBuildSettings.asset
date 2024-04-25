@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Spoiled Unknown/XtremeFPS/Demo/Main Menu.unity
     guid: 1b6f742088504a8419f55e1cf45a7dc7
   - enabled: 1

@@ -10,7 +10,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(WeaponSystem)), CanEditMultipleObjects]
-public class WeaponSystemEditor : Editor
+public class WeaponSystemEditor : UnityEditor.Editor
 {
     WeaponSystem uni_WeaponSystem;
     SerializedObject serWeaponSystem;

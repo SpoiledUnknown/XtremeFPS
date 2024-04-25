@@ -481,15 +481,6 @@ namespace XtremeFPS.Common.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Peek"",
-                    ""type"": ""Value"",
-                    ""id"": ""29675c3e-b034-4f16-ab88-360c8df3375f"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -602,39 +593,6 @@ namespace XtremeFPS.Common.InputSystem
                     ""action"": ""ADSTap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Q and E"",
-                    ""id"": ""e1191312-18a1-457d-942b-cb23e2bc0065"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Peek"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""2022db2e-e02d-4a72-8dc2-a7588181d4d4"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Peek"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""115a9c74-d79b-449f-aa2f-80c25d914c3a"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Peek"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -675,7 +633,6 @@ namespace XtremeFPS.Common.InputSystem
             m_Shooting_Reload = m_Shooting.FindAction("Reload", throwIfNotFound: true);
             m_Shooting_ADSHold = m_Shooting.FindAction("ADSHold", throwIfNotFound: true);
             m_Shooting_ADSTap = m_Shooting.FindAction("ADSTap", throwIfNotFound: true);
-            m_Shooting_Peek = m_Shooting.FindAction("Peek", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -852,7 +809,6 @@ namespace XtremeFPS.Common.InputSystem
         private readonly InputAction m_Shooting_Reload;
         private readonly InputAction m_Shooting_ADSHold;
         private readonly InputAction m_Shooting_ADSTap;
-        private readonly InputAction m_Shooting_Peek;
         public struct ShootingActions
         {
             private @PlayerInputAction m_Wrapper;
@@ -862,7 +818,6 @@ namespace XtremeFPS.Common.InputSystem
             public InputAction @Reload => m_Wrapper.m_Shooting_Reload;
             public InputAction @ADSHold => m_Wrapper.m_Shooting_ADSHold;
             public InputAction @ADSTap => m_Wrapper.m_Shooting_ADSTap;
-            public InputAction @Peek => m_Wrapper.m_Shooting_Peek;
             public InputActionMap Get() { return m_Wrapper.m_Shooting; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -887,9 +842,6 @@ namespace XtremeFPS.Common.InputSystem
                 @ADSTap.started += instance.OnADSTap;
                 @ADSTap.performed += instance.OnADSTap;
                 @ADSTap.canceled += instance.OnADSTap;
-                @Peek.started += instance.OnPeek;
-                @Peek.performed += instance.OnPeek;
-                @Peek.canceled += instance.OnPeek;
             }
 
             private void UnregisterCallbacks(IShootingActions instance)
@@ -909,9 +861,6 @@ namespace XtremeFPS.Common.InputSystem
                 @ADSTap.started -= instance.OnADSTap;
                 @ADSTap.performed -= instance.OnADSTap;
                 @ADSTap.canceled -= instance.OnADSTap;
-                @Peek.started -= instance.OnPeek;
-                @Peek.performed -= instance.OnPeek;
-                @Peek.canceled -= instance.OnPeek;
             }
 
             public void RemoveCallbacks(IShootingActions instance)
@@ -975,7 +924,6 @@ namespace XtremeFPS.Common.InputSystem
             void OnReload(InputAction.CallbackContext context);
             void OnADSHold(InputAction.CallbackContext context);
             void OnADSTap(InputAction.CallbackContext context);
-            void OnPeek(InputAction.CallbackContext context);
         }
     }
 }

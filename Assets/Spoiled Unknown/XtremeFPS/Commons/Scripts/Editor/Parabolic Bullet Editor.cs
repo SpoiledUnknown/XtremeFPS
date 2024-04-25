@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(ParabolicBullet)), CanEditMultipleObjects]
-public class ParabolicBulletEditor : Editor
+public class ParabolicBulletEditor : UnityEditor.Editor
 {
     ParabolicBullet parabolicBullet;
     SerializedObject serParabolicBullet_UI;

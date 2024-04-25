@@ -7,7 +7,7 @@ using XtremeFPS.Common.InputSystem;
 using UnityEngine;
 
 [CustomEditor(typeof(FPSInputManager)), CanEditMultipleObjects]
-public class FPSInputManagerEditor : Editor
+public class FPSInputManagerEditor : UnityEditor.Editor
 {
     FPSInputManager inputM_UI;
     SerializedObject serInputM_UI;

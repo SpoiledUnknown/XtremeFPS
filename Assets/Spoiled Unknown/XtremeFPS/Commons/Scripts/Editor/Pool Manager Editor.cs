@@ -5,7 +5,7 @@ using UnityEditor;
 using XtremeFPS.Common.Pool;
 
 [CustomEditor(typeof(PoolManager)), CanEditMultipleObjects]
-public class PoolManagerEditor : Editor
+public class PoolManagerEditor : UnityEditor.Editor
 {
     private PoolManager poolManager;
     private SerializedObject serializedPoolManager;

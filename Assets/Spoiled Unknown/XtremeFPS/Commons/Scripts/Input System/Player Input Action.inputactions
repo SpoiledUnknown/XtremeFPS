@@ -457,15 +457,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Peek",
-                    "type": "Value",
-                    "id": "29675c3e-b034-4f16-ab88-360c8df3375f",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -578,39 +569,6 @@
                     "action": "ADSTap",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "Q and E",
-                    "id": "e1191312-18a1-457d-942b-cb23e2bc0065",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Peek",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "left",
-                    "id": "2022db2e-e02d-4a72-8dc2-a7588181d4d4",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Peek",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "115a9c74-d79b-449f-aa2f-80c25d914c3a",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Peek",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         }
