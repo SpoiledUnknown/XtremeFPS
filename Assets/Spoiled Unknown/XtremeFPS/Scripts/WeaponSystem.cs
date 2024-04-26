@@ -12,7 +12,7 @@ using System.Collections;
 namespace XtremeFPS.WeaponSystem
 {
     [RequireComponent(typeof(AudioSource))]
-    [AddComponentMenu("Spoiled Unknown/XtremeFPS/Non-Arm Weapon System")]
+    [AddComponentMenu("Spoiled Unknown/XtremeFPS/Weapon System")]
     public class WeaponSystem : MonoBehaviour
     {
         #region Variables

@@ -12,7 +12,7 @@ namespace XtremeFPS.FirstPersonController
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(FPSInputManager))]
     [RequireComponent(typeof(AudioSource))]
-    [AddComponentMenu("Spoiled Unknown/XtremeFPS/Non-Arm First Person Controller")]
+    [AddComponentMenu("Spoiled Unknown/XtremeFPS/First Person Controller")]
     public class FirstPersonController : MonoBehaviour
     {
         #region Variables
