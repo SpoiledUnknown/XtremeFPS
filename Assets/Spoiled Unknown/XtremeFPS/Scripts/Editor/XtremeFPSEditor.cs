@@ -15,14 +15,18 @@ using XtremeFPS.WeaponSystem;
 public class XtremeFPSEditor : EditorWindow
 {
     #region Setup
-    [MenuItem("Window/Spoiled Unknown/Xtreme FPS")]
+    [MenuItem("Window/Spoiled Unknown/XtremeFPS")]
     public static void ShowWindow()
     {
         // Create a new Editor Window instance and show it
-        XtremeFPSEditor window = GetWindow<XtremeFPSEditor>("XtremeFPS");
-        window.Show();
+        XtremeFPSEditor XtremeFPSEditorWindow = GetWindow<XtremeFPSEditor>("XtremeFPS");
+        XtremeFPSEditorWindow.Show();
     }
 
+    private void OnEnable()
+    {
+        this.minSize = new Vector2(650, 410);
+    }
 
 
     #endregion
@@ -223,13 +227,13 @@ public class XtremeFPSEditor : EditorWindow
             GUI.color = Color.black;
             GUILayout.Label("Player Setup:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
             GUI.color = Color.white;
-            Rect buttonRect = GUILayoutUtility.GetRect(200, 50);
             playerArmature = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Player GameObject", "The referrence to the player gameObject (Leave empty if none exists already)."), playerArmature, typeof(GameObject), true);
+            cameraFollow = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Player Camera Root", "The referrence to the player gameObject (Automatically setted by the editor)."), cameraFollow, typeof(GameObject), true);
+            Rect buttonRect = GUILayoutUtility.GetRect(200, 50);
             if (GUI.Button(buttonRect, "Create Player"))
             {
                 CreateThePlayer();
             }
-            cameraFollow = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Player Camera Root", "The referrence to the player gameObject (Automatically setted by the editor)."), cameraFollow, typeof(GameObject), true);
             NearClipingPlanes = EditorGUILayout.Slider(new GUIContent("Near Clipping Planes", "The near limit after which the camera should stop rendering."), NearClipingPlanes, 0.001f, 0.1f);
             FieldOfView = EditorGUILayout.Slider(new GUIContent("Field Of View", "The Field Of View of the camera."), FieldOfView, 30f, 90f);
             Rect setDefaultValues = GUILayoutUtility.GetRect(200, 50);
@@ -412,6 +416,12 @@ public class XtremeFPSEditor : EditorWindow
         {
             virtualCamera.AddCinemachineComponent<CinemachineSameAsFollowTarget>();
         }
+
+        FirstPersonController fpsPlayer = playerArmature.GetComponent<FirstPersonController>();
+        fpsPlayer.characterController = playerArmature.GetComponent<CharacterController>();
+        fpsPlayer.FOV = FieldOfView;
+        fpsPlayer.playerVirtualCamera = virtualCamera;
+        fpsPlayer.cameraFollow = cameraFollow.transform;
     }
     #endregion
 

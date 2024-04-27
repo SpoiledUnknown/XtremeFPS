@@ -35,7 +35,8 @@ public class FPSInputManagerEditor : UnityEditor.Editor
         #endregion
 #if UNITY_ANDROID || UNITY_IOS
         inputM_UI.maxTouchLimit = EditorGUILayout.IntField(new GUIContent("Max Touch Limit", "Maximum number of touches that should be handled by the input manager."), inputM_UI.maxTouchLimit);
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("touchDetectionMode"));
+        SerializedProperty touchDetectionMode = serializedObject.FindProperty("touchDetectionMode");
+        EditorGUILayout.PropertyField(touchDetectionMode, new GUIContent("Touch Detection Mode", "Determines the mode at which the touch will be calculated."), true);
         serializedObject.ApplyModifiedProperties();
 #endif
         #region Update Changes
