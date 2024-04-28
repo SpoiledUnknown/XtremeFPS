@@ -4,26 +4,29 @@
 using UnityEngine;
 using XtremeFPS.PoolingSystem;
 
-[RequireComponent(typeof(Rigidbody))]
-public class ShellEjection : MonoBehaviour
+namespace XtremeFPS.Demo
 {
-    public float minForce;
-    public float maxForce;
-    public float lifeTime;
-    private Rigidbody rb;
-
-    private void OnEnable()
+    [RequireComponent(typeof(Rigidbody))]
+    public class ShellEjection : MonoBehaviour
     {
-        rb = GetComponent<Rigidbody>();
-        float force = Random.Range(minForce, maxForce);
-        rb.AddForce(transform.right * force);
-        rb.AddTorque(Random.insideUnitSphere * force);
+        public float minForce;
+        public float maxForce;
+        public float lifeTime;
+        private Rigidbody rb;
 
-        Invoke(nameof(DestroyShell), lifeTime);
-    }
+        private void OnEnable()
+        {
+            rb = GetComponent<Rigidbody>();
+            float force = Random.Range(minForce, maxForce);
+            rb.AddForce(transform.right * force);
+            rb.AddTorque(Random.insideUnitSphere * force);
 
-    private void DestroyShell()
-    {
-        PoolManager.Instance.ReturnObjectToPool(this.gameObject);
+            Invoke(nameof(DestroyShell), lifeTime);
+        }
+
+        private void DestroyShell()
+        {
+            PoolManager.Instance.ReturnObjectToPool(this.gameObject);
+        }
     }
 }

@@ -5,15 +5,20 @@ using UnityEngine;
 //using XtremeFPS.Common.PoolingSystem;
 using XtremeFPS.WeaponSystem;
 
-public class MovableGameobjectHit : ShootableObject
+namespace XtremeFPS.Demo
 {
-    public GameObject particlesPrefab;
-    public float impactForce;
-
-    public override void OnHit(RaycastHit hit)
+    public class MovableGameobjectHit : ShootableObject
     {
-        //PoolManager.Spawn(particlesPrefab.transform, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
+        public GameObject particlesPrefab;
+        public float impactForce;
 
-        GetComponent<Rigidbody>().AddForceAtPosition(-hit.normal * impactForce, hit.point);
+        public override void OnHit(RaycastHit hit)
+        {
+            //PoolManager.Spawn(particlesPrefab.transform, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
+
+            GetComponent<Rigidbody>().AddForceAtPosition(-hit.normal * impactForce, hit.point);
+        }
     }
 }
+
+

@@ -4,12 +4,16 @@
 using UnityEngine;
 using XtremeFPS.WeaponSystem;
 
-public class WallHit : ShootableObject
+namespace XtremeFPS.Demo
 {
-    public GameObject particlesPrefab;
-
-    public override void OnHit(RaycastHit hit)
+    public class WallHit : ShootableObject
     {
-      //Spawn(particlesPrefab.transform, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
+        public GameObject particlesPrefab;
+
+        public override void OnHit(RaycastHit hit)
+        {
+            //Spawn(particlesPrefab.transform, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
+        }
     }
 }
+
