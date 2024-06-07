@@ -234,6 +234,7 @@ PlayerSettings:
   iOSMetalForceHardShadows: 0
   metalEditorSupport: 1
   metalAPIValidation: 1
+  metalCompileShaderBinary: 0
   iOSRenderExtraFrameOnPause: 0
   iosCopyPluginsCodeInsteadOfSymlink: 0
   appleDeveloperTeamID: 
@@ -745,7 +746,7 @@ PlayerSettings:
     PS5: UNITY_POST_PROCESSING_STACK_V2
     QNX: UNITY_POST_PROCESSING_STACK_V2
     Stadia: UNITY_POST_PROCESSING_STACK_V2
-    Standalone: CROSS_PLATFORM_INPUT;UNITY_POST_PROCESSING_STACK_V2;FIRST_PERSON_CONTROLLER;ULTIMATE_CHARACTER_CONTROLLER_SHOOTER;FIRST_PERSON_SHOOTER
+    Standalone: CROSS_PLATFORM_INPUT;UNITY_POST_PROCESSING_STACK_V2;FIRST_PERSON_CONTROLLER;ULTIMATE_CHARACTER_CONTROLLER_SHOOTER;FIRST_PERSON_SHOOTER;UNITY_PIPELINE_URP
     VisionOS: UNITY_POST_PROCESSING_STACK_V2
     WebGL: UNITY_POST_PROCESSING_STACK_V2
     Windows Store Apps: MOBILE_INPUT;UNITY_POST_PROCESSING_STACK_V2
@@ -809,6 +810,7 @@ PlayerSettings:
   metroSplashScreenBackgroundColor: {r: 0.12941177, g: 0.17254902, b: 0.21568628,
     a: 1}
   metroSplashScreenUseBackgroundColor: 0
+  syncCapabilities: 0
   platformCapabilities: {}
   metroTargetDeviceFamilies: {}
   metroFTAName: 

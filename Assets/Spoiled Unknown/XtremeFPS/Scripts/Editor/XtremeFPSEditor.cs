@@ -7,7 +7,12 @@ using System;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
+#if UNITY_PIPELINE_URP
 using UnityEngine.Rendering.Universal;
+#endif
+#if UNITY_PIPELINE_HDRP
+using UnityEngine.Rendering.HighDefinition;
+#endif
 using XtremeFPS.PoolingSystem;
 
 namespace XtremeFPS.Editor
@@ -355,8 +360,15 @@ namespace XtremeFPS.Editor
                 playerCamera.transform.parent = playerParent.transform;
                 playerCamera.AddComponent<Camera>();
                 playerCamera.AddComponent<AudioListener>();
-                playerCamera.AddComponent<UniversalAdditionalCameraData>();
                 playerCamera.AddComponent<CinemachineBrain>();
+
+#if UNITY_PIPELINE_URP
+                playerCamera.AddComponent<UniversalAdditionalCameraData>();
+
+#elif UNITY_PIPELINE_HDRP
+                playerCamera.gameObject.AddComponent<HDAdditionalCameraData>();
+
+#endif
             }
 
             if (virtualCamera == null)
@@ -426,7 +438,7 @@ namespace XtremeFPS.Editor
             fpsPlayer.playerVirtualCamera = virtualCamera;
             fpsPlayer.cameraFollow = cameraFollow.transform;
         }
-        #endregion
+#endregion
 
         #region Weapon Setup
         private void SetupTheWeapon()

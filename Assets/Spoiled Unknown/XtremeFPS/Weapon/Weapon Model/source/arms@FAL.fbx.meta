@@ -3,7 +3,17 @@ guid: c2146ef04ebe96b42ab0ec20bad64288
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FAL
+    second: {fileID: 2100000, guid: 430b972d9b968c241bcd349b0dee242b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: arms
+    second: {fileID: 2100000, guid: efc0ee783fdc22f43b37552baedaebfb, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
