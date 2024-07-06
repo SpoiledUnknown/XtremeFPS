@@ -24,6 +24,7 @@ namespace XtremeFPS.FirstPersonController
         public float walkSoundSpeed;
 
         private FPSInputManager inputManager;
+
         private enum PlayerMovementState
         {
             Sprinting,
@@ -88,7 +89,8 @@ namespace XtremeFPS.FirstPersonController
         public float FOV;
 
         private float rotationY;
-
+        float mouseDirectionX;
+        float mouseDirectionY;
 
         //Zooming
         public bool enableZoom;
@@ -155,13 +157,8 @@ namespace XtremeFPS.FirstPersonController
 
             Cursor.lockState = isCursorLocked ? CursorLockMode.Locked : CursorLockMode.None;
 
-            // If canPush is true, get the layer mask from the pushLayersID
             if (canPush) pushLayers = LayerMaskFromLayer(pushLayersID);
-
-            // Start the coroutine for senseSteps
             if (canPlaySound) StartCoroutine(SenseSteps());
-
-            // If hasStaminaBar is true and unlimitedSprinting is true, deactivate the stamina slider
             if (hasStaminaBar && unlimitedSprinting) staminaSlider.gameObject.SetActive(false);
 
             initialHeight = characterController.height;
@@ -171,13 +168,13 @@ namespace XtremeFPS.FirstPersonController
 
         private void Update()
         {
+            PlayerInputs();
             transitionDelta = Time.deltaTime * transitionSpeed;
             GravityAndJump();
             HandleMovements();
             Crouch();
             SoundSense();
             HandleZoom();
-            HandleSprinting();
 
             if (!canHeadBob) return;
             CheckMotion();
@@ -200,28 +197,109 @@ namespace XtremeFPS.FirstPersonController
 
         #endregion
         #region Private Methods
+        private void PlayerInputs()
+        {
+            mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime + hRecoil;
+            mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime + vRecoil;
 
-        // Get the layer mask from the layer ID
+            if (isSprintHold) isSprinting = inputManager.isSprintingHold;
+            else isSprinting = inputManager.isSprintingTap;
+
+            if (isZoomingHold) isZoomed = inputManager.isZoomingHold && !isSprinting;
+            else isZoomed = inputManager.isZoomingTap && !isSprinting;
+        }
         LayerMask LayerMaskFromLayer(int layer)
         {
             return 1 << layer;
         }
+        #region Camera
+        /// <summary>
+        /// The method assigns the horizontal recoil and vertical recoil values provided as parameters to the camera.
+        /// </summary>
+        /// <param name="hRecoil">Float</param>
+        /// <param name="vRecoil">Float</param>
+        public void AddRecoil(float hRecoil, float vRecoil)
+        {
+            if (!haveCameraRecoil) return;
+            this.hRecoil = hRecoil;
+            this.vRecoil = vRecoil;
+        }
+
+        private void HandleCameraLook()
+        {
+            rotationY -= mouseDirectionY;
+            rotationY = Mathf.Clamp(rotationY, minimumClamp, maximumClamp);
+
+            transform.Rotate(mouseDirectionX * transform.up);
+            cameraFollow.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
+            inputManager.mouseDirection = Vector2.zero;
+        }
+
+        private void HandleZoom()
+        {
+            if (!enableZoom) return;
+
+            if (isZoomed) 
+                playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, zoomFOV, transitionDelta);
+            else if (!isZoomed && !isSprinting) 
+                playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, FOV, transitionDelta);
+        }
+
+        private void AdjustFOVSettings(float targetFOV)
+        {
+            if (isZoomed) return;
+            if (!moving) targetFOV = FOV;
+
+            float currentFOV = playerVirtualCamera.m_Lens.FieldOfView;
+            float newFOV = Mathf.Lerp(currentFOV, targetFOV, transitionDelta);
+            playerVirtualCamera.m_Lens.FieldOfView = newFOV;
+        }
+        #region Head Bobbing
+        private Vector3 FootStepMotion()
+        {
+            Vector3 pos = Vector3.zero;
+            pos.y += Mathf.Sin(Time.time * headBobFrequency) * headBobAmplitude;
+            pos.x += Mathf.Cos(Time.time * headBobFrequency / 2) * headBobAmplitude * 2;
+            return pos;
+        }
+
+        private void CheckMotion()
+        {
+            if (!moving || !IsGrounded)
+            {
+                return;
+            }
+            PlayMotion(FootStepMotion());
+        }
+
+        private void PlayMotion(Vector3 motion)
+        {
+            cameraFollow.localPosition += motion;
+        }
+
+        private Vector3 FocusTarget()
+        {
+            Vector3 pos = new Vector3(transform.position.x, transform.position.y + cameraFollow.localPosition.y, transform.position.z);
+            pos += cameraFollow.forward * 15.0f;
+            return pos;
+        }
+
+        private void ResetPosition()
+        {
+            if (cameraFollow.localPosition != _startPos)
+            {
+                cameraFollow.localPosition = Vector3.Lerp(cameraFollow.localPosition, _startPos, 1f * Time.deltaTime);
+            }
+        }
+        #endregion
+        #endregion
+
 
         private void HandleSprinting()
         {
 
             // If player cannot sprint, exit the function
             if (!canPlayerSprint) return;
-
-            // Determine if the player is sprinting based on input
-            if (isSprintHold) 
-            {
-                isSprinting = inputManager.isSprintingHold;
-            }
-            else 
-            {
-                isSprinting = inputManager.isSprintingTap;
-            }
 
             // Check if the player is sprinting and has non-zero velocity
             if (isSprinting && characterController.velocity.magnitude > 0)
@@ -345,66 +423,9 @@ namespace XtremeFPS.FirstPersonController
         }
         #endregion
 
-        /// <summary>
-        /// The method assigns the horizontal recoil and vertical recoil values provided as parameters to the camera.
-        /// </summary>
-        /// <param name="hRecoil">Float</param>
-        /// <param name="vRecoil">Float</param>
-        public void AddRecoil(float hRecoil, float vRecoil)
-        {
-            if (!haveCameraRecoil) return;
-            this.hRecoil = hRecoil;
-            this.vRecoil = vRecoil;
-        }
+        
 
-        //Basic Camera Motion
-        private void HandleCameraLook()
-        {
-            float mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime + hRecoil;
-            float mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime + vRecoil;
-
-            rotationY -= mouseDirectionY;
-            rotationY = Mathf.Clamp(rotationY, minimumClamp, maximumClamp);
-
-            transform.Rotate(mouseDirectionX * transform.up);
-            cameraFollow.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
-            inputManager.mouseDirection = Vector2.zero;
-        }
-        private void HandleZoom()
-        {
-            if (!enableZoom) return;
-            if (isZoomingHold) isZoomed = inputManager.isZoomingHold && !isSprinting;
-            else isZoomed = inputManager.isZoomingTap && !isSprinting;
-
-            if (isZoomed)
-            {
-                playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, zoomFOV, transitionDelta);
-            }
-            else if (!isZoomed && !isSprinting)
-            {
-                playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, FOV, transitionDelta);
-            }
-        }
-        private void AdjustFOVSettings(float targetFOV) 
-        {
-            // If already zoomed, exit the function
-            if (isZoomed) return;
-
-            // If not moving, set the target field of view to FOV
-            if (!moving)
-            {
-                targetFOV = FOV;
-            }
-
-            // Get the current field of view of the player virtual camera
-            float currentFOV = playerVirtualCamera.m_Lens.FieldOfView;
-
-            // Calculate the new field of view using linear interpolation
-            float newFOV = Mathf.Lerp(currentFOV, targetFOV, transitionDelta);
-
-            // Set the field of view of the player virtual camera to the new calculated value
-            playerVirtualCamera.m_Lens.FieldOfView = newFOV;
-        }
+        
         private void HandleMovements()
         {
             // If player cannot move, exit the function
@@ -449,6 +470,7 @@ namespace XtremeFPS.FirstPersonController
                     AudioEffectSpeed = sprintSoundSpeed;
                     targetSpeed = sprintSpeed;
                     AdjustFOVSettings(sprintFOV);
+                    HandleSprinting();
                     break;
 
                 case PlayerMovementState.Crouching:
@@ -531,54 +553,6 @@ namespace XtremeFPS.FirstPersonController
             Vector3 pushDir = new Vector3(hit.moveDirection.x, 0.0f, hit.moveDirection.z);
             body.AddForce(pushDir * pushStrength, ForceMode.Impulse);
         }
-
-        #region Head Bobbing
-        // Calculate the footstep motion based on head bobbing parameters
-        private Vector3 FootStepMotion()
-        {
-            Vector3 pos = Vector3.zero;
-            pos.y += Mathf.Sin(Time.time * headBobFrequency) * headBobAmplitude;
-            pos.x += Mathf.Cos(Time.time * headBobFrequency / 2) * headBobAmplitude * 2;
-            return pos;
-        }
-
-        // Check motion to determine if the character is moving
-        private void CheckMotion()
-        {
-            if (!moving || !IsGrounded)
-            {
-                // If the character is not moving or not grounded, return without further action
-                return;
-            }
-
-            // If the character is moving and grounded, play the calculated motion
-            PlayMotion(FootStepMotion());
-        }
-
-        // Apply the calculated motion to the camera follow position
-        private void PlayMotion(Vector3 motion)
-        {
-            cameraFollow.localPosition += motion;
-        }
-
-        // Calculate the focus target position based on the character's position and camera follow position
-        private Vector3 FocusTarget()
-        {
-            Vector3 pos = new Vector3(transform.position.x, transform.position.y + cameraFollow.localPosition.y, transform.position.z);
-            pos += cameraFollow.forward * 15.0f;
-            return pos;
-        }
-
-        // Reset the position of the camera follow to the starting position with interpolation
-        private void ResetPosition()
-        {
-            if (cameraFollow.localPosition != _startPos)
-            {
-                // If the camera follow position is not at the starting position, interpolate towards the starting position
-                cameraFollow.localPosition = Vector3.Lerp(cameraFollow.localPosition, _startPos, 1f * Time.deltaTime);
-            }
-        }
-        #endregion
 
         #region Sound Management
         // Method to sense the floor material and player movement

@@ -34,6 +34,7 @@ namespace XtremeFPS.Editor
         private void OnEnable()
         {
             this.minSize = new Vector2(650, 410);
+            this.maxSize = new Vector2(650, 410);
         }
 
 
@@ -105,7 +106,6 @@ namespace XtremeFPS.Editor
             }
             if (GUILayout.Button("Complete/Reset Setup", GUILayout.Width(200), GUILayout.Height(100)))
             {
-                Debug.Log("Completing the Setup.......");
                 CompleteTheSettup();
             }
             #endregion

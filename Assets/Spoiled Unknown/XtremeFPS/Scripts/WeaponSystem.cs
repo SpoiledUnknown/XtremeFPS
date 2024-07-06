@@ -4,10 +4,7 @@
 using UnityEngine;
 using TMPro;
 using XtremeFPS.InputHandler;
-using XtremeFPS.WeaponSystem;
-using XtremeFPS.FirstPersonController;
 using XtremeFPS.PoolingSystem;
-using System.Collections;
 
 namespace XtremeFPS.WeaponSystem
 {
@@ -172,7 +169,7 @@ namespace XtremeFPS.WeaponSystem
         }
         private void Update()
         {
-            MyInput();
+            PlayerWeaponsInput();
             DetermineAim();
             HandleWeaponSway();
             HandleTilt();
@@ -188,7 +185,7 @@ namespace XtremeFPS.WeaponSystem
         #endregion
 
         #region Private Methods
-        private void MyInput()
+        private void PlayerWeaponsInput()
         {
              if (isGunAuto) shooting = inputManager.isFiringHold;
              else shooting = inputManager.isFiringTap;
