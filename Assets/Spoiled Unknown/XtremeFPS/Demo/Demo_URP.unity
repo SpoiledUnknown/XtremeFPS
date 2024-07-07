@@ -9703,8 +9703,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bb6c08ac52b93c4e91f8542c6881e04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 4934612450773687217}
-  canPlayerMove: 1
   transitionSpeed: 10
   walkSpeed: 2
   walkSoundSpeed: 0.3
@@ -9714,8 +9712,7 @@ MonoBehaviour:
   sprintSpeed: 4
   sprintDuration: 8
   sprintCooldown: 0.1
-  hasStaminaBar: 1
-  staminaSlider: {fileID: 1850769482495317801}
+  staminaBar: {fileID: 1850769482495317801}
   sprintSoundSpeed: 0.25
   canJump: 1
   jumpHeight: 1.89
@@ -9726,7 +9723,7 @@ MonoBehaviour:
   crouchedHeight: 1
   crouchedSpeed: 1
   crouchSoundPlayTime: 0.3
-  isCursorLocked: 0
+  isCursorLocked: 1
   cameraFollow: {fileID: 6755873227692369839}
   playerVirtualCamera: {fileID: 5437113378753652824}
   mouseSensitivity: 50
@@ -9737,11 +9734,9 @@ MonoBehaviour:
   enableZoom: 0
   isZoomingHold: 0
   zoomFOV: 30
-  canHeadBob: 1
+  canHeadBob: 0
   headBobAmplitude: 0.045
   headBobFrequency: 18.5
-  canPlaySound: 1
-  audioSource: {fileID: 1517855245855476543}
   grassTag: Grass
   soundGrass:
   - {fileID: 8300000, guid: 23f537bc838b6224a8b22680c3ec0477, type: 3}
@@ -9776,9 +9771,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 763ef6481f64ff044b076930e3e76ba2, type: 3}
   woodTag: Wood
   soundWood: []
-  landClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
-  jumpClip: {fileID: 8300000, guid: 1115d113be1d7124baf942c6588d006a, type: 3}
-  footstepSensitivity: 0
+  landingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
+  jumpingAudioClip: {fileID: 8300000, guid: 1115d113be1d7124baf942c6588d006a, type: 3}
+  footstepSensitivity: 0.05
   canPush: 1
   pushLayersID: 3
   pushStrength: 3.4

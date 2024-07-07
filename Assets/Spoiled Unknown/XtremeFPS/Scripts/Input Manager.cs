@@ -120,11 +120,12 @@ namespace XtremeFPS.InputHandler
 
             #endregion
 
-
+#if UNITY_ANDROID || UNITY_IOS
             if (EventSystem.current != null)
                 eventStytem = EventSystem.current;
             else Debug.LogError($"Scene has no Event System!");
             SetIsTouchDelegate();
+#endif
 
         }
 
@@ -158,6 +159,24 @@ namespace XtremeFPS.InputHandler
                 }
             }
         }
+
+        #region Other Methods
+        public void SetIsTouchDelegate()
+        {
+            switch (touchDetectionMode)
+            {
+                case TouchDetectMode.FirstTouch:
+                    isTouchAvailable = (TouchControl touch) => { return touch.touchId.ReadValue().ToString() == availableTouchIds[0]; };
+                    break;
+                case TouchDetectMode.LastTouch:
+                    isTouchAvailable = (TouchControl touch) => { return touch.touchId.ReadValue().ToString() == availableTouchIds[availableTouchIds.Count - 1]; };
+                    break;
+                case TouchDetectMode.All:
+                    isTouchAvailable = (TouchControl touch) => { return availableTouchIds.Contains(touch.touchId.ReadValue().ToString()); };
+                    break;
+            }
+        }
+        #endregion
 #endif
 
 #endregion
@@ -270,23 +289,7 @@ namespace XtremeFPS.InputHandler
         }
         #endregion
 
-        #region Other Methods
-        public void SetIsTouchDelegate()
-        {
-            switch (touchDetectionMode)
-            {
-                case TouchDetectMode.FirstTouch:
-                    isTouchAvailable = (TouchControl touch) => { return touch.touchId.ReadValue().ToString() == availableTouchIds[0]; };
-                    break;
-                case TouchDetectMode.LastTouch:
-                    isTouchAvailable = (TouchControl touch) => { return touch.touchId.ReadValue().ToString() == availableTouchIds[availableTouchIds.Count - 1]; };
-                    break;
-                case TouchDetectMode.All:
-                    isTouchAvailable = (TouchControl touch) => { return availableTouchIds.Contains(touch.touchId.ReadValue().ToString()); };
-                    break;
-            }
-        }
-        #endregion
+        
     }
 }
 

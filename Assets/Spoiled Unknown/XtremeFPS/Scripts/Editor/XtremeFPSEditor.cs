@@ -433,7 +433,6 @@ namespace XtremeFPS.Editor
             }
 
             FirstPersonController fpsPlayer = playerArmature.GetComponent<FirstPersonController>();
-            fpsPlayer.characterController = playerArmature.GetComponent<CharacterController>();
             fpsPlayer.FOV = FieldOfView;
             fpsPlayer.playerVirtualCamera = virtualCamera;
             fpsPlayer.cameraFollow = cameraFollow.transform;

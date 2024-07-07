@@ -45,38 +45,28 @@ namespace XtremeFPS.Editor
             GUI.color = Color.blue;
             GUILayout.Label("Walk Settings", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
             GUI.color = Color.white;
-            fpsController.characterController = (CharacterController)EditorGUILayout.ObjectField(new GUIContent("Character Crontroller", "Referrence to character controller attached to the player."), fpsController.characterController, typeof(CharacterController), true);
+            fpsController.walkSpeed = EditorGUILayout.Slider(new GUIContent("Walk Speed", "Determines how fast the player will move while walking."), fpsController.walkSpeed, .1f, fpsController.sprintSpeed);
+            fpsController.walkSoundSpeed = EditorGUILayout.Slider(new GUIContent("Sound Playback Speed", "Determines the speed at which footstep sounds will play while walking."), fpsController.walkSoundSpeed, 0.1f, 0.5f);
             fpsController.transitionSpeed = EditorGUILayout.Slider(new GUIContent("Transition Speed", "The speed at which any animation should play."), fpsController.transitionSpeed, 1f, 30f);
-            GUILayout.Space(10);
-            fpsController.canPlayerMove = EditorGUILayout.ToggleLeft(new GUIContent("Enable Player Movement", "Determines if the player is allowed to move."), fpsController.canPlayerMove);
-            if (fpsController.canPlayerMove)
+            EditorGUILayout.Space();
+            GUI.color = Color.blue;
+            GUILayout.Label("Sprint Settings", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+            GUI.color = Color.white;
+            fpsController.canPlayerSprint = EditorGUILayout.ToggleLeft(new GUIContent("Enable Sprinting", "Determines if the player is allowed to sprint."), fpsController.canPlayerSprint);
+            if (fpsController.canPlayerSprint)
             {
-                fpsController.walkSpeed = EditorGUILayout.Slider(new GUIContent("Walk Speed", "Determines how fast the player will move while walking."), fpsController.walkSpeed, .1f, fpsController.sprintSpeed);
-                fpsController.walkSoundSpeed = EditorGUILayout.Slider(new GUIContent("Sound Playback Speed", "Determines the speed at which footstep sounds will play while walking."), fpsController.walkSoundSpeed, 0.1f, 0.5f);
-                EditorGUILayout.Space();
-                GUI.color = Color.blue;
-                GUILayout.Label("Sprint Settings", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-                GUI.color = Color.white;
-                fpsController.canPlayerSprint = EditorGUILayout.ToggleLeft(new GUIContent("Enable Sprinting", "Determines if the player is allowed to sprint."), fpsController.canPlayerSprint);
-                if (fpsController.canPlayerSprint)
-                {
-                    fpsController.isSprintHold = EditorGUILayout.ToggleLeft(new GUIContent("Is Sprint Hold", "Determines if the player has to hold sprint key or press/tap."), fpsController.isSprintHold);
-                    fpsController.sprintSpeed = EditorGUILayout.Slider(new GUIContent("Sprint Speed", "Determines how fast the player will move while sprinting."), fpsController.sprintSpeed, fpsController.walkSpeed, 20f);
-                    fpsController.sprintSoundSpeed = EditorGUILayout.Slider(new GUIContent("Sound Playback Speed", "Determines the speed at which footstep sounds will play while sprinting."), fpsController.sprintSoundSpeed, 0.1f, 0.5f);
-                    fpsController.sprintFOV = EditorGUILayout.Slider(new GUIContent("Sprint FOV", "Determines the change in fov while sprinting."), fpsController.sprintFOV, fpsController.FOV, fpsController.FOV + 30f);
+                fpsController.isSprintHold = EditorGUILayout.ToggleLeft(new GUIContent("Is Sprint Hold", "Determines if the player has to hold sprint key or press/tap."), fpsController.isSprintHold);
+                fpsController.sprintSpeed = EditorGUILayout.Slider(new GUIContent("Sprint Speed", "Determines how fast the player will move while sprinting."), fpsController.sprintSpeed, fpsController.walkSpeed, 20f);
+                fpsController.sprintSoundSpeed = EditorGUILayout.Slider(new GUIContent("Sound Playback Speed", "Determines the speed at which footstep sounds will play while sprinting."), fpsController.sprintSoundSpeed, 0.1f, 0.5f);
+                fpsController.sprintFOV = EditorGUILayout.Slider(new GUIContent("Sprint FOV", "Determines the change in fov while sprinting."), fpsController.sprintFOV, fpsController.FOV, fpsController.FOV + 30f);
 
-                    EditorGUI.indentLevel++;
-                    fpsController.unlimitedSprinting = EditorGUILayout.ToggleLeft(new GUIContent("Unlimited Sprint", "Determines if 'Sprint Duration' is enabled. Turning this on will allow for unlimited sprint."), fpsController.unlimitedSprinting);
-                    GUI.enabled = !fpsController.unlimitedSprinting;
-                    fpsController.sprintDuration = EditorGUILayout.Slider(new GUIContent("Sprint Duration", "Determines how long the player can sprint while unlimited sprint is disabled."), fpsController.sprintDuration, 1f, 20f);
-                    fpsController.sprintCooldown = EditorGUILayout.Slider(new GUIContent("Sprint Cooldown", "Determines how long the recovery time is when the player runs out of sprint."), fpsController.sprintCooldown, .1f, fpsController.sprintDuration);
-                    fpsController.hasStaminaBar = EditorGUILayout.ToggleLeft(new GUIContent("Has Stamina Bar", "Determines whether a stamina bar is used or not."), fpsController.hasStaminaBar);
-                    if (fpsController.hasStaminaBar)
-                    {
-                        fpsController.staminaSlider = (Slider)EditorGUILayout.ObjectField(new GUIContent("Stamina Bar", "Reference to the stamina bar itself."), fpsController.staminaSlider, typeof(Slider), true);
-                    }
-                    EditorGUI.indentLevel--;
-                }
+                EditorGUI.indentLevel++;
+                fpsController.unlimitedSprinting = EditorGUILayout.ToggleLeft(new GUIContent("Unlimited Sprint", "Determines if 'Sprint Duration' is enabled. Turning this on will allow for unlimited sprint."), fpsController.unlimitedSprinting);
+                GUI.enabled = !fpsController.unlimitedSprinting;
+                fpsController.sprintDuration = EditorGUILayout.Slider(new GUIContent("Sprint Duration", "Determines how long the player can sprint while unlimited sprint is disabled."), fpsController.sprintDuration, 1f, 20f);
+                fpsController.sprintCooldown = EditorGUILayout.Slider(new GUIContent("Sprint Cooldown", "Determines how long the recovery time is when the player runs out of sprint."), fpsController.sprintCooldown, .1f, fpsController.sprintDuration);
+                fpsController.staminaBar = (Slider)EditorGUILayout.ObjectField(new GUIContent("Stamina Bar (Optional)", "Reference to the stamina bar itself."), fpsController.staminaBar, typeof(Slider), true);
+                EditorGUI.indentLevel--;
             }
             EditorGUILayout.Space();
             GUI.enabled = true;
@@ -102,7 +92,7 @@ namespace XtremeFPS.Editor
             if (fpsController.canPlayerCrouch)
             {
                 fpsController.isCrouchHold = EditorGUILayout.ToggleLeft(new GUIContent("Is Crouch Hold", "Determines if the player has to hold crouch key or press/tap."), fpsController.isCrouchHold);
-                fpsController.crouchedHeight = EditorGUILayout.Slider(new GUIContent("Crouched Height", "Determines the height at which player should crouch."), fpsController.crouchedHeight, 0.5f, fpsController.characterController.height);
+                fpsController.crouchedHeight = EditorGUILayout.FloatField(new GUIContent("Crouched Height", "Determines the height at which player should crouch."), fpsController.crouchedHeight);
                 fpsController.crouchedSpeed = EditorGUILayout.Slider(new GUIContent("Crouched Speed", "Determines the speed at which player will move while crouched."), fpsController.crouchedSpeed, 1f, 5f);
                 fpsController.crouchSoundPlayTime = EditorGUILayout.Slider(new GUIContent("Sound Playback Speed", "Determines the speed at which footstep sounds will play while crouched."), fpsController.crouchSoundPlayTime, 0.1f, 0.5f);
             }
@@ -122,7 +112,7 @@ namespace XtremeFPS.Editor
             fpsController.cameraFollow = (Transform)EditorGUILayout.ObjectField(new GUIContent("Camera Root", "Camera root object which acts as look at point for cinemachine."), fpsController.cameraFollow, typeof(Transform), true);
             fpsController.playerVirtualCamera = (CinemachineVirtualCamera)EditorGUILayout.ObjectField(new GUIContent("Player Virtual Camera", "virtual Camera which player uses."), fpsController.playerVirtualCamera, typeof(CinemachineVirtualCamera), true);
             fpsController.FOV = EditorGUILayout.Slider(new GUIContent("Field Of View", "Determines the default Field Of View for the camera."), fpsController.FOV, 60f, 110f);
-            fpsController.mouseSensitivity = EditorGUILayout.Slider(new GUIContent("Sensitivity", "Determines the senstivity at which camera will rotate."), fpsController.mouseSensitivity, 50f, 150f);
+            fpsController.mouseSensitivity = EditorGUILayout.Slider(new GUIContent("Sensitivity", "Determines the senstivity at which camera will rotate."), fpsController.mouseSensitivity, 0f, 200f);
             fpsController.maximumClamp = EditorGUILayout.Slider(new GUIContent("Maximum Clamp Angle", "Determines the maximum angle at which the camera can reach while being rotated."), fpsController.maximumClamp, 0f, 90f);
             fpsController.minimumClamp = EditorGUILayout.Slider(new GUIContent("Minimum Clamp Angle", "Determines the minimum angle at which the camera can reach while being rotated."), fpsController.minimumClamp, 0f, -90f);
             EditorGUILayout.Space();
@@ -157,38 +147,33 @@ namespace XtremeFPS.Editor
             EditorGUILayout.Space();
 
             GUI.color = Color.white;
-            fpsController.canPlaySound = EditorGUILayout.ToggleLeft(new GUIContent("Can Play Sound", "Determines whether player should make footsteps sounds or not."), fpsController.canPlaySound);
-            if (fpsController.canPlaySound)
-            {
-                fpsController.audioSource = (AudioSource)EditorGUILayout.ObjectField(new GUIContent("Audio Source", "Referrence to the audio source attached to the player."), fpsController.audioSource, typeof(AudioSource), true);
-                fpsController.grassTag = EditorGUILayout.TagField(new GUIContent("Grass Tag", "Tag of the gameObject that will act as grass."), fpsController.grassTag);
-                SerializedProperty soundGrassProperty = serializedObject.FindProperty("soundGrass");
-                EditorGUILayout.PropertyField(soundGrassProperty, new GUIContent("Grass Sound Effect", "The sound that plays as footstep while walking on a grassy surface."), true);
-                serializedObject.ApplyModifiedProperties();
-                fpsController.concreteTag = EditorGUILayout.TagField(new GUIContent("Concrete Tag", "Tag of the gameObject that will act as concrete."), fpsController.concreteTag);
-                SerializedProperty soundConcreteProperty = serializedObject.FindProperty("soundConcrete");
-                EditorGUILayout.PropertyField(soundConcreteProperty, new GUIContent("Concrete Sound Effect", "The sound that plays as footstep while walking on a concrete."), true);
-                serializedObject.ApplyModifiedProperties();
-                fpsController.waterTag = EditorGUILayout.TagField(new GUIContent("Water Tag", "Tag of the gameObject that will act as water."), fpsController.waterTag);
-                SerializedProperty soundWaterProperty = serializedObject.FindProperty("soundWater");
-                EditorGUILayout.PropertyField(soundWaterProperty, new GUIContent("Water Sound Effect", "The sound that plays as footstep while walking on a water."), true);
-                serializedObject.ApplyModifiedProperties();
-                fpsController.metalTag = EditorGUILayout.TagField(new GUIContent("Metal Tag", "Tag of the gameObject that will act as metal."), fpsController.metalTag);
-                SerializedProperty soundMetalProperty = serializedObject.FindProperty("soundMetal");
-                EditorGUILayout.PropertyField(soundMetalProperty, new GUIContent("Metal Sound Effect", "The sound that plays as footstep while walking on a metallic surface."), true);
-                serializedObject.ApplyModifiedProperties();
-                fpsController.gravelTag = EditorGUILayout.TagField(new GUIContent("Gravel Tag", "Tag of the gameObject that will act as gravel."), fpsController.gravelTag);
-                SerializedProperty soundGravelProperty = serializedObject.FindProperty("soundGravel");
-                EditorGUILayout.PropertyField(soundGravelProperty, new GUIContent("Gravel Sound Effect", "The sound that plays as footstep while walking on a gravel."), true);
-                fpsController.woodTag = EditorGUILayout.TagField(new GUIContent("Wood Tag", "Tag of the gameObject that will act as wood."), fpsController.woodTag);
-                serializedObject.ApplyModifiedProperties();
-                SerializedProperty soundWoodProperty = serializedObject.FindProperty("soundWood");
-                EditorGUILayout.PropertyField(soundWoodProperty, new GUIContent("Wood Sound Effect", "The sound that plays as footstep while walking on wooden surface."), true);
-                serializedObject.ApplyModifiedProperties();
-                fpsController.jumpClip = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Jump Sound Effect", "The sound that plays when the player jumps."), fpsController.jumpClip, typeof(AudioClip), true);
-                fpsController.landClip = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Land Sound Effect", "The sound that plays when the player Lands."), fpsController.landClip, typeof(AudioClip), true);
-                fpsController.footstepSensitivity = EditorGUILayout.Slider(new GUIContent("Footstep Sensitivity", "Determines how fast the player should move before the footstep plays."), fpsController.footstepSensitivity, 0f, 5f);
-            }
+            fpsController.grassTag = EditorGUILayout.TagField(new GUIContent("Grass Tag", "Tag of the gameObject that will act as grass."), fpsController.grassTag);
+            SerializedProperty soundGrassProperty = serializedObject.FindProperty("soundGrass");
+            EditorGUILayout.PropertyField(soundGrassProperty, new GUIContent("Grass Sound Effect", "The sound that plays as footstep while walking on a grassy surface."), true);
+            serializedObject.ApplyModifiedProperties();
+            fpsController.concreteTag = EditorGUILayout.TagField(new GUIContent("Concrete Tag", "Tag of the gameObject that will act as concrete."), fpsController.concreteTag);
+            SerializedProperty soundConcreteProperty = serializedObject.FindProperty("soundConcrete");
+            EditorGUILayout.PropertyField(soundConcreteProperty, new GUIContent("Concrete Sound Effect", "The sound that plays as footstep while walking on a concrete."), true);
+            serializedObject.ApplyModifiedProperties();
+            fpsController.waterTag = EditorGUILayout.TagField(new GUIContent("Water Tag", "Tag of the gameObject that will act as water."), fpsController.waterTag);
+            SerializedProperty soundWaterProperty = serializedObject.FindProperty("soundWater");
+            EditorGUILayout.PropertyField(soundWaterProperty, new GUIContent("Water Sound Effect", "The sound that plays as footstep while walking on a water."), true);
+            serializedObject.ApplyModifiedProperties();
+            fpsController.metalTag = EditorGUILayout.TagField(new GUIContent("Metal Tag", "Tag of the gameObject that will act as metal."), fpsController.metalTag);
+            SerializedProperty soundMetalProperty = serializedObject.FindProperty("soundMetal");
+            EditorGUILayout.PropertyField(soundMetalProperty, new GUIContent("Metal Sound Effect", "The sound that plays as footstep while walking on a metallic surface."), true);
+            serializedObject.ApplyModifiedProperties();
+            fpsController.gravelTag = EditorGUILayout.TagField(new GUIContent("Gravel Tag", "Tag of the gameObject that will act as gravel."), fpsController.gravelTag);
+            SerializedProperty soundGravelProperty = serializedObject.FindProperty("soundGravel");
+            EditorGUILayout.PropertyField(soundGravelProperty, new GUIContent("Gravel Sound Effect", "The sound that plays as footstep while walking on a gravel."), true);
+            fpsController.woodTag = EditorGUILayout.TagField(new GUIContent("Wood Tag", "Tag of the gameObject that will act as wood."), fpsController.woodTag);
+            serializedObject.ApplyModifiedProperties();
+            SerializedProperty soundWoodProperty = serializedObject.FindProperty("soundWood");
+            EditorGUILayout.PropertyField(soundWoodProperty, new GUIContent("Wood Sound Effect", "The sound that plays as footstep while walking on wooden surface."), true);
+            serializedObject.ApplyModifiedProperties();
+            fpsController.jumpingAudioClip = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Jump Sound Effect", "The sound that plays when the player jumps."), fpsController.jumpingAudioClip, typeof(AudioClip), true);
+            fpsController.landingAudioClip = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Land Sound Effect", "The sound that plays when the player Lands."), fpsController.landingAudioClip, typeof(AudioClip), true);
+            fpsController.footstepSensitivity = EditorGUILayout.Slider(new GUIContent("Footstep Sensitivity", "Determines how fast the player should move before the footstep plays."), fpsController.footstepSensitivity, 0f, 5f);
             EditorGUILayout.Space();
             #endregion
             #region Physics

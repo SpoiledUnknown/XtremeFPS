@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using XtremeFPS.PoolingSystem;
@@ -24,7 +22,7 @@ namespace XtremeFPS.Editor
             foldoutStates = new bool[listSize];
             for (int i = 0; i < listSize; i++)
             {
-                foldoutStates[i] = true; // Initially, all foldouts are expanded
+                foldoutStates[i] = false;
             }
         }
 
@@ -51,51 +49,48 @@ namespace XtremeFPS.Editor
             GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout);
             foldoutStyle.fontStyle = FontStyle.Bold;
             foldoutStyle.fontSize = 13;
-            showObjectPoolItems = EditorGUILayout.Foldout(showObjectPoolItems, new GUIContent("Items To Pool", "Store the Referrence and Properties of all the object that needs to be pooled."), true, foldoutStyle);
-            if (showObjectPoolItems)
+            GUILayout.Label("Items To Pool", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+            EditorGUI.indentLevel++;
+            int listSize = itemsToPoolProperty.arraySize;
+            for (int i = 0; i < listSize; i++)
             {
-                EditorGUI.indentLevel++;
-                int listSize = itemsToPoolProperty.arraySize;
-                for (int i = 0; i < listSize; i++)
+                SerializedProperty itemProperty = itemsToPoolProperty.GetArrayElementAtIndex(i);
+                SerializedProperty objectToPoolProperty = itemProperty.FindPropertyRelative("objectToPool");
+                SerializedProperty amountToPoolProperty = itemProperty.FindPropertyRelative("amountToPool");
+                SerializedProperty shouldExpandProperty = itemProperty.FindPropertyRelative("shouldExpand");
+                SerializedProperty shouldRecycleProperty = itemProperty.FindPropertyRelative("shouldRecycle");
+
+                // Display foldout for each ObjectPoolItem with dynamically generated name
+                foldoutStates[i] = EditorGUILayout.Foldout(foldoutStates[i], new GUIContent("Element " + i, "Contains all the property required by the element " + i + "."));
+                if (foldoutStates[i])
                 {
-                    SerializedProperty itemProperty = itemsToPoolProperty.GetArrayElementAtIndex(i);
-                    SerializedProperty objectToPoolProperty = itemProperty.FindPropertyRelative("objectToPool");
-                    SerializedProperty amountToPoolProperty = itemProperty.FindPropertyRelative("amountToPool");
-                    SerializedProperty shouldExpandProperty = itemProperty.FindPropertyRelative("shouldExpand");
-                    SerializedProperty shouldRecycleProperty = itemProperty.FindPropertyRelative("shouldRecycle");
+                    EditorGUI.indentLevel++;
 
-                    // Display foldout for each ObjectPoolItem with dynamically generated name
-                    foldoutStates[i] = EditorGUILayout.Foldout(foldoutStates[i], new GUIContent("Element " + i, "Contains all the property required by the element " + i + "."));
-                    if (foldoutStates[i])
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(objectToPoolProperty, new GUIContent("Pooled Item", "Referrence to the object that should be pooled."), true);
+                    if (GUILayout.Button("Remove"))
                     {
-                        EditorGUI.indentLevel++;
-
-                        EditorGUILayout.PropertyField(objectToPoolProperty, new GUIContent("Pooled Item", "Referrence to the object that should be pooled."), true);
-                        EditorGUILayout.PropertyField(amountToPoolProperty, new GUIContent("Pool Size", "How many items should be stored in the pool."), true);
-                        EditorGUILayout.PropertyField(shouldExpandProperty, new GUIContent("Can Pool Expand", "Should the pool expand (if not enough items are left in the pool)."), true);
-                        EditorGUILayout.PropertyField(shouldRecycleProperty, new GUIContent("Can Pool Recycle", "Should the pool recycle the oldest element store in pool (if not enough items are left in the pool)."), true);
-
-                        if (GUILayout.Button("Remove Element " + i))
-                        {
-                            RemoveObjectPoolItem(i);
-                            break;
-                        }
-
-                        EditorGUILayout.Space();
-                        EditorGUI.indentLevel--;
+                        RemoveObjectPoolItem(i);
+                        break;
                     }
-                }
-                EditorGUI.indentLevel--;
-            }
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.PropertyField(amountToPoolProperty, new GUIContent("Pool Size", "How many items should be stored in the pool."), true);
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(shouldExpandProperty, new GUIContent("Expand Pool", "Should the pool expand (if not enough items are left in the pool)."), true);
+                    EditorGUILayout.PropertyField(shouldRecycleProperty, new GUIContent("Recycle", "Should the pool recycle the oldest element store in pool (if not enough items are left in the pool)."), true);
+                    EditorGUILayout.EndHorizontal();
 
+
+                    EditorGUILayout.Space();
+                    EditorGUI.indentLevel--;
+                }
+            }
+            EditorGUI.indentLevel--;
 
 
             // Add button to add new ObjectPoolItem
-            EditorGUILayout.Space(25);
-            if (GUILayout.Button("Add New Item To Pool"))
-            {
-                AddObjectPoolItem();
-            }
+            Rect itemRect = GUILayoutUtility.GetRect(100, 25);
+            if (GUI.Button(itemRect, "Add Item")) AddObjectPoolItem();
 
             serializedPoolManager.ApplyModifiedProperties();
         }
@@ -111,7 +106,7 @@ namespace XtremeFPS.Editor
             {
                 newFoldoutStates[i] = foldoutStates[i];
             }
-            newFoldoutStates[newFoldoutStates.Length - 1] = true; // Newly added foldout is expanded by default
+            newFoldoutStates[newFoldoutStates.Length - 1] = false;
             foldoutStates = newFoldoutStates;
         }
 
@@ -120,7 +115,4 @@ namespace XtremeFPS.Editor
             itemsToPoolProperty.DeleteArrayElementAtIndex(index);
         }
     }
-
 }
-
-

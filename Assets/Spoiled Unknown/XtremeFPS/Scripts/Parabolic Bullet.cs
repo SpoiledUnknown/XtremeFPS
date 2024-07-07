@@ -34,7 +34,6 @@ namespace XtremeFPS.WeaponSystem
         #endregion
 
         #region MonoBehaviour Callbacks
-
         void OnEnable()
         {
             StartCoroutine(DestroyBullets());
@@ -44,7 +43,6 @@ namespace XtremeFPS.WeaponSystem
 
         private void FixedUpdate()
         {
-
             if (startTime < 0) startTime = Time.time;
 
             float currentTime = Time.time - startTime;
@@ -77,7 +75,6 @@ namespace XtremeFPS.WeaponSystem
             currentPoint = FindPointOnParabola(currentTime);
             transform.position = currentPoint;
         }
-
         #endregion
 
         #region Private Methods
@@ -119,9 +116,6 @@ namespace XtremeFPS.WeaponSystem
         {
             PoolManager.Instance.ReturnObjectToPool(this.gameObject);
         }
-
-        
         #endregion
     }
 }
-
