@@ -16,11 +16,9 @@ namespace XtremeFPS.InputHandler
     {
         public static FPSInputManager instance;
 
-
+        #region Variables
         public int maxTouchLimit = 10;
         public TouchDetectMode touchDetectionMode;
-
-        #region Variables
 
         [HideInInspector] private PlayerInputAction playerInputAction;
         //sprinting
@@ -55,8 +53,6 @@ namespace XtremeFPS.InputHandler
         private List<string> availableTouchIds = new List<string>();     // Get all the touches that began without colliding with any UI Image/Button
         private EventSystem eventStytem;
         #endregion
-
-
         #endregion
 
         #region Initialization
@@ -64,15 +60,8 @@ namespace XtremeFPS.InputHandler
         {
             playerInputAction = new PlayerInputAction();
 
-
-            if (instance != null)
-            {
-                Destroy(instance);
-            }
-            else
-            {
-                instance = this;
-            }
+            if (instance != null) Destroy(instance);
+            else instance = this;
         }
         private void OnEnable()
         {
@@ -96,7 +85,6 @@ namespace XtremeFPS.InputHandler
             playerInputAction.Player.ZoomHold.performed += ZoomHoldInput;
             playerInputAction.Player.ZoomTap.performed += ZoomTapInput;
 
-
             // Subscribe to input cancellation events 
             playerInputAction.Player.Movements.canceled += MovementInput;
             playerInputAction.Player.Look.canceled += MouseInput;
@@ -112,7 +100,6 @@ namespace XtremeFPS.InputHandler
             playerInputAction.Shooting.ADSTap.performed += ADSTapInput;
             playerInputAction.Shooting.ADSHold.performed += ADSHoldInput;
 
-
             playerInputAction.Shooting.Reload.canceled += ReloadingInput;
             playerInputAction.Shooting.FireHold.canceled += ShootInput;
             playerInputAction.Shooting.ADSHold.canceled += ADSHoldInput;
@@ -121,14 +108,11 @@ namespace XtremeFPS.InputHandler
             #endregion
 
 #if UNITY_ANDROID || UNITY_IOS
-            if (EventSystem.current != null)
-                eventStytem = EventSystem.current;
+            if (EventSystem.current != null) eventStytem = EventSystem.current;
             else Debug.LogError($"Scene has no Event System!");
             SetIsTouchDelegate();
 #endif
-
         }
-
 
 #if UNITY_ANDROID || UNITY_IOS
         private void Update()
@@ -160,7 +144,6 @@ namespace XtremeFPS.InputHandler
             }
         }
 
-        #region Other Methods
         public void SetIsTouchDelegate()
         {
             switch (touchDetectionMode)
@@ -176,12 +159,11 @@ namespace XtremeFPS.InputHandler
                     break;
             }
         }
-        #endregion
 #endif
 
 #endregion
 
-        #region Input Handling
+        #region Player Inputs
         private void MouseInput(InputAction.CallbackContext context)
         {
             mouseDirection = context.ReadValue<Vector2>();
@@ -196,14 +178,7 @@ namespace XtremeFPS.InputHandler
         }
         private void CrouchTapInput(InputAction.CallbackContext context)
         {
-            if(isCrouchingTap)
-            {
-                isCrouchingTap = false;
-            }
-            else
-            {
-                isCrouchingTap = true;
-            }
+            isCrouchingTap = !isCrouchingTap;
         }
         private void SprintHoldInput(InputAction.CallbackContext context)
         {
@@ -211,14 +186,7 @@ namespace XtremeFPS.InputHandler
         }
         private void SprintTapInput(InputAction.CallbackContext context)
         {
-            if(isSprintingTap)
-            {
-                isSprintingTap = false;
-            }
-            else
-            {
-                isSprintingTap = true;
-            }
+            isSprintingTap = !isSprintingTap;
         }
         private void ZoomHoldInput(InputAction.CallbackContext context)
         {
@@ -226,14 +194,7 @@ namespace XtremeFPS.InputHandler
         }
         private void ZoomTapInput(InputAction.CallbackContext context)
         {
-            if(isZoomingTap)
-            {
-                isZoomingTap = false;
-            }
-            else
-            {
-                isZoomingTap = true;
-            }
+            isZoomingTap = !isZoomingTap;
         }
         private void JumpInput(InputAction.CallbackContext context)
         {
@@ -249,10 +210,22 @@ namespace XtremeFPS.InputHandler
         }
         #endregion
 
-        #region Shooting
+        #region Weapon Inputs
         private void ShootInput(InputAction.CallbackContext context)
         {
             isFiringHold = context.ReadValueAsButton();
+        }
+
+        private void ShootTapInput(InputAction.CallbackContext context)
+        {
+            if (isFiringTap) return;
+            isFiringTap = true;
+            StartCoroutine(CancelFire());
+        }
+        IEnumerator CancelFire()
+        {
+            yield return new WaitForSeconds(0.05f);
+            isFiringTap = false;
         }
 
         private void ReloadingInput(InputAction.CallbackContext context)
@@ -267,29 +240,8 @@ namespace XtremeFPS.InputHandler
 
         private void ADSTapInput(InputAction.CallbackContext context)
         {
-            if (isAimingTap)
-            {
-                isAimingTap = false;
-            }
-            else
-            {
-                isAimingTap = true;
-            }
-        }
-        private void ShootTapInput(InputAction.CallbackContext context)
-        {
-            if (isFiringTap) return;
-            isFiringTap = true;
-            StartCoroutine(CancelFire());
-        }
-        IEnumerator CancelFire()
-        {
-            yield return new WaitForSeconds(0.05f);
-            isFiringTap = false;
+            isAimingTap = !isAimingTap;
         }
         #endregion
-
-        
     }
 }
-

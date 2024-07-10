@@ -43,8 +43,6 @@ namespace XtremeFPS.WeaponSystem
         public int bulletsPerTap;
         public float muzzelEffectLifeTime;
         public float reloadTime;
-        public bool haveProceduralReload;
-        public bool reloading;
         public bool aiming;
         public bool hardMode;
 
@@ -52,6 +50,7 @@ namespace XtremeFPS.WeaponSystem
         private int bulletsShot;
         private bool readyToShoot;
         private bool shooting;
+        private bool reloading;
         private Quaternion originalReloadRotation;
 
         //Aiming
@@ -61,7 +60,6 @@ namespace XtremeFPS.WeaponSystem
         public float aimSmoothing = 10;
 
         private Vector3 normalLocalPosition;
-
        
         //Camera Recoil 
         public bool haveCameraRecoil;
@@ -70,8 +68,6 @@ namespace XtremeFPS.WeaponSystem
         public float recoilReturnSpeed;
         public Vector3 hipFireRecoil = new Vector3(2f, 2f, 2f);
         public Vector3 adsFireRecoil = new Vector3(0.5f, 0.5f, 0.5f);
-
-        public bool haveSensyRecoil;
         public float hRecoil;
         public float vRecoil;
 
@@ -94,16 +90,6 @@ namespace XtremeFPS.WeaponSystem
         private Vector3 positionRecoil;
         private Vector3 rot;
 
-        //Weapon Positional sway
-        public bool havePositionalSway;
-        public float swayIntensity;
-        public float swayAmount;
-        public float swaySmoothness;
-
-        private Vector3 originPosition;
-        private float mouseX;
-        private float mouseY;
-
         //Weapon Rotational Sway
         public bool haveRotationalSway;
         public float rotaionSwayIntensity;
@@ -122,15 +108,18 @@ namespace XtremeFPS.WeaponSystem
         private float impactForce = 0;
 
         //Weapon Rotational Tilt
-        public bool haveRotationalTilt;
+        public bool haveTilt;
         public float tiltIntensity;
         public float tiltAmount;
         public float tiltSmoothness;
+        public float swaySmoothness;
         public bool rotateX;
         public bool rotateY;
         public bool rotateZ;
 
         private Quaternion originRotation;
+        private float mouseX;
+        private float mouseY;
 
         //Weapon Move Bobbing
         public bool haveBobbing;
@@ -149,39 +138,41 @@ namespace XtremeFPS.WeaponSystem
         public AudioClip bulletReloadClip;
         public float soundVolume;
 
-        private AudioSource bulletSound;
+        private AudioSource bulletSoundSource;
         #endregion
 
         #region MonoBehaviour Callbacks
-
         private void Start()
         {
             inputManager = FPSInputManager.instance;
-            fpsController.haveCameraRecoil = haveSensyRecoil;
+            bulletSoundSource = GetComponent<AudioSource>();
+
             bulletsLeft = magazineSize;
-            bulletSound = GetComponent<AudioSource>();
-            originRotation = transform.localRotation;
-            originPosition = transform.localPosition;
+
             lastPosition = transform.position;
-            originalReloadRotation = gunPositionHolder.localRotation;
             normalLocalPosition = weaponHolder.transform.localPosition;
+
+            originRotation = transform.localRotation;
+            originalReloadRotation = gunPositionHolder.localRotation;
+
+            SetBulletCountUI();
             readyToShoot = true;
         }
+
         private void Update()
         {
             PlayerWeaponsInput();
-            DetermineAim();
-            HandleWeaponSway();
-            HandleTilt();
-            HandleCameraRotation();
-            HandleGunRecoil();
-            WeaponRotationSway();
-            WeaponMoveBobbing();
-            JumpSwayEffect();
-            SetUIElements();
-            HandleReloadAnimation();
-        }
 
+            DetermineAim();
+
+            HandleWeaponRecoil();
+            HandleCameraRecoil();
+
+            HandleTilt();
+            WeaponRotationSway();
+            WeaponBobbing();
+            JumpSwayEffect();
+        }
         #endregion
 
         #region Private Methods
@@ -205,27 +196,15 @@ namespace XtremeFPS.WeaponSystem
                 bulletsShot = bulletsPerTap;
                 Shoot();
             }
-            else
-            {
-                fpsController.AddRecoil(0f, 0f);
-            }
+            else fpsController.AddRecoil(0f, 0f);
         }
-        private void DetermineAim()
-        {
-            if (!canAim) return;
-            Vector3 target = normalLocalPosition;
-            if (aiming) target = aimingLocalPosition;
 
-            Vector3 desiredPosition = Vector3.Lerp(weaponHolder.transform.localPosition, target, Time.deltaTime * aimSmoothing);
-
-            weaponHolder.transform.localPosition = desiredPosition;
-        }
+        #region Shooting && Reloading
         private void Shoot()
         {
             readyToShoot = false;
 
-            //Parabolic shoot code here
-            GameObject bulletObject = PoolManager.Instance.GetPooledObject(bulletPrefab, shootPoint.position, Quaternion.identity);
+            GameObject bulletObject = PoolManager.Instance.SpawnObject(bulletPrefab, shootPoint.position, Quaternion.identity);
             ParabolicBullet parabolicBullet = bulletObject.GetComponent<ParabolicBullet>();
             parabolicBullet.Initialize(shootPoint, bulletSpeed, bulletGravitationalForce, bulletLifeTime, particlesPrefab);
 
@@ -233,82 +212,58 @@ namespace XtremeFPS.WeaponSystem
             muzzleFlash.Play();
             Invoke(nameof(StopMuzzleEffect), muzzelEffectLifeTime);
 
-            PoolManager.Instance.GetPooledObject(Shell, ShellPosition.position, ShellPosition.rotation);
-            bulletSound.PlayOneShot(bulletSoundClip, soundVolume * 0.01f);
+            PoolManager.Instance.SpawnObject(Shell, ShellPosition.position, ShellPosition.rotation);
+            bulletSoundSource.PlayOneShot(bulletSoundClip, soundVolume * 0.01f);
             float hRecoil = Random.Range(-this.hRecoil, this.hRecoil);
-            switch (aiming)
+
+            if (aiming)
             {
-                case true:
-                    // Adjust current rotation with aiming-specific recoil.
-                    currentRotation += new Vector3(-adsFireRecoil.x, Random.Range(-adsFireRecoil.y, adsFireRecoil.y), Random.Range(-adsFireRecoil.z, adsFireRecoil.z));
+                currentRotation += new Vector3(-adsFireRecoil.x, Random.Range(-adsFireRecoil.y, adsFireRecoil.y), Random.Range(-adsFireRecoil.z, adsFireRecoil.z));
+                rotationRecoil += new Vector3(-recoilRotationAds.x, Random.Range(-recoilRotationAds.y, recoilRotationAds.y), Random.Range(-recoilRotationAds.z, recoilRotationAds.z));
+                positionRecoil += new Vector3(Random.Range(-recoilKickBackAds.x, recoilKickBackAds.y), Random.Range(-recoilKickBackAds.y, recoilKickBackAds.y), recoilKickBackAds.z);
 
-                    // Adjust rotation recoil with aiming-specific values.
-                    rotationRecoil += new Vector3(-recoilRotationAds.x, Random.Range(-recoilRotationAds.y, recoilRotationAds.y), Random.Range(-recoilRotationAds.z, recoilRotationAds.z));
+                fpsController.AddRecoil(hRecoil * 0.5f, vRecoil * 0.5f);
+            }
+            else
+            {
+                currentRotation += new Vector3(-hipFireRecoil.x, Random.Range(-hipFireRecoil.y, hipFireRecoil.y), Random.Range(-hipFireRecoil.z, hipFireRecoil.z));
+                rotationRecoil += new Vector3(-recoilRotationHip.x, Random.Range(-recoilRotationHip.y, recoilRotationHip.y), Random.Range(-recoilRotationHip.z, recoilRotationHip.z));
+                positionRecoil += new Vector3(Random.Range(-recoilKickBackHip.x, recoilKickBackHip.y), Random.Range(-recoilKickBackHip.y, recoilKickBackHip.y), recoilKickBackHip.z);
 
-                    // Adjust position recoil with aiming-specific values.
-                    positionRecoil += new Vector3(Random.Range(-recoilKickBackAds.x, recoilKickBackAds.y), Random.Range(-recoilKickBackAds.y, recoilKickBackAds.y), recoilKickBackAds.z);
-
-                    // Add aiming recoil to the first-person controller.
-                    fpsController.AddRecoil(hRecoil * 0.5f, vRecoil * 0.5f);
-                    break;
-
-                case false:
-                    // Adjust current rotation with hip fire-specific recoil.
-                    currentRotation += new Vector3(-hipFireRecoil.x, Random.Range(-hipFireRecoil.y, hipFireRecoil.y), Random.Range(-hipFireRecoil.z, hipFireRecoil.z));
-
-                    // Adjust rotation recoil with hip fire-specific values.
-                    rotationRecoil += new Vector3(-recoilRotationHip.x, Random.Range(-recoilRotationHip.y, recoilRotationHip.y), Random.Range(-recoilRotationHip.z, recoilRotationHip.z));
-
-                    // Adjust position recoil with hip fire-specific values.
-                    positionRecoil += new Vector3(Random.Range(-recoilKickBackHip.x, recoilKickBackHip.y), Random.Range(-recoilKickBackHip.y, recoilKickBackHip.y), recoilKickBackHip.z);
-
-                    // Add hip fire recoil to the first-person controller.
-                    fpsController.AddRecoil(hRecoil, vRecoil);
-                    break;
+                fpsController.AddRecoil(hRecoil, vRecoil);
             }
 
             bulletsLeft--;
             bulletsShot--;
 
+            SetBulletCountUI();
+
             Invoke(nameof(ResetShot), timeBetweenShooting);
-
-            if (bulletsShot > 0 && bulletsLeft > 0)
-                Invoke(nameof(Shoot), timeBetweenEachShots);
-        }
-
-        private void StopMuzzleEffect()
-        {
-            muzzleFlash.Stop();
+            if (bulletsShot > 0 && bulletsLeft > 0) Invoke(nameof(Shoot), timeBetweenEachShots);
         }
         private void ResetShot()
         {
             readyToShoot = true;
         }
-        private void HandleReloadAnimation()
+        private void StopMuzzleEffect()
         {
-            if (!haveProceduralReload) return;
-            switch (reloading)
-            {
-                case true:
-                    animator.SetBool("IsReloading", true);
-                    // You can add more code here if needed when reloading is true.
-                    break;
-                case false:
-                    animator.SetBool("IsReloading", false);
-                    // You can add more code here if needed when reloading is false.
-                    break;
-            }
+            muzzleFlash.Stop();
         }
         private void Reload()
         {
             reloading = true;
-            bulletSound.PlayOneShot(bulletReloadClip, soundVolume * 0.01f);
+            HandleReloadAnimation();
+            bulletSoundSource.PlayOneShot(bulletReloadClip, soundVolume * 0.01f);
             Invoke(nameof(ReloadFinished), reloadTime);
         }
-
-
+        private void HandleReloadAnimation()
+        {
+            animator.SetBool("IsReloading", reloading);
+        }
         private void ReloadFinished()
         {
+            reloading = false;
+            HandleReloadAnimation();
             if (hardMode)
             {
                 switch (totalBullets.CompareTo(magazineSize))
@@ -316,17 +271,14 @@ namespace XtremeFPS.WeaponSystem
                     case 1:  // totalBullets > magazineSize
                         bulletsLeft = magazineSize;
                         totalBullets -= magazineSize;
-                        reloading = false;
                         break;
                     case 0:  // totalBullets == magazineSize
                         bulletsLeft = magazineSize;
                         totalBullets -= magazineSize;
-                        reloading = false;
                         break;
                     case -1: // totalBullets < magazineSize
                         bulletsLeft = totalBullets;
                         totalBullets = 0;
-                        reloading = false;
                         break;
                     default:
                         // Handle the case when totalBullets and magazineSize cannot be compared directly
@@ -341,7 +293,6 @@ namespace XtremeFPS.WeaponSystem
                     int bulletsNeededForReload = magazineSize - bulletsLeft;
                     bulletsLeft += bulletsNeededForReload;
                     totalBullets -= bulletsNeededForReload;
-                    reloading = false;
                 }
                 else
                 {
@@ -349,24 +300,49 @@ namespace XtremeFPS.WeaponSystem
                     bulletsLeft += Mathf.Min(bulletsNeededForReload, totalBullets);
                     totalBullets -= bulletsNeededForReload;
                     totalBullets = Mathf.Max(0, totalBullets);
-                    reloading = false;
                 }
             }
+            SetBulletCountUI();
         }
-
-        private void HandleWeaponSway()
+        private void SetBulletCountUI()
         {
-            if (!havePositionalSway) return;
-
-            float tiltX = Mathf.Clamp(mouseX * swayIntensity * -1f, -swayAmount, swayAmount);
-            float tiltY = Mathf.Clamp(mouseY * swayIntensity * -1f, -swayAmount, swayAmount);
-
-            Vector3 finalPosition = new Vector3(0, tiltY, tiltX);
-            transform.localPosition = Vector3.Lerp(transform.localPosition, finalPosition + originPosition, Time.deltaTime * swaySmoothness);
+            bulletCount.SetText(bulletsLeft + " / " + totalBullets);
         }
+        #endregion
+        #region Recoil
+        private void HandleWeaponRecoil()
+        {
+            if(!haveWeaponRecoil) return;
+            rotationRecoil = Vector3.Lerp(rotationRecoil, Vector3.zero, gunRotationReturnSpeed * Time.deltaTime);
+            positionRecoil = Vector3.Lerp(positionRecoil, Vector3.zero, gunPositionReturnSpeed * Time.deltaTime);
+
+            gunPositionHolder.localPosition = Vector3.Slerp(gunPositionHolder.localPosition, positionRecoil, gunRecoilPositionSpeed * Time.deltaTime);
+            rot = Vector3.Slerp(rot, rotationRecoil, gunRecoilRotationSpeed* Time.deltaTime);
+            gunPositionHolder.localRotation = Quaternion.Euler(rot);
+        }
+        private void HandleCameraRecoil()
+        {
+            if (!haveCameraRecoil) return;
+
+            currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, recoilReturnSpeed * Time.deltaTime);
+            Rot = Vector3.Slerp(Rot, currentRotation, recoilRotationSpeed * Time.deltaTime);
+            cameraRecoilHolder.transform.localRotation = Quaternion.Euler(Rot);
+        }
+        #endregion
+        private void DetermineAim()
+        {
+            if (!canAim) return;
+
+            Vector3 target = normalLocalPosition;
+            if (aiming) target = aimingLocalPosition;
+
+            Vector3 desiredPosition = Vector3.Lerp(weaponHolder.transform.localPosition, target, Time.deltaTime * aimSmoothing);
+            weaponHolder.transform.localPosition = desiredPosition;
+        }
+        #region Effects
         private void HandleTilt()
         {
-            if (!haveRotationalTilt) return;
+            if (!haveTilt) return;
             float tiltX = Mathf.Clamp(mouseX * tiltIntensity, -tiltAmount, tiltAmount);
             float tiltY = Mathf.Clamp(mouseY * tiltIntensity, -tiltAmount, tiltAmount);
 
@@ -377,62 +353,39 @@ namespace XtremeFPS.WeaponSystem
                 ));
             transform.localRotation = Quaternion.Slerp(transform.localRotation, finalRotation * originRotation, swaySmoothness * Time.deltaTime);
         }
-        private void HandleCameraRotation()
-        {
-            if (!haveCameraRecoil) return;
-
-            currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, recoilReturnSpeed * Time.deltaTime);
-            Rot = Vector3.Slerp(Rot, currentRotation, recoilRotationSpeed * Time.deltaTime);
-            cameraRecoilHolder.transform.localRotation = Quaternion.Euler(Rot);
-        }
-        private void HandleGunRecoil()
-        {
-            if(!haveWeaponRecoil) return;
-            rotationRecoil = Vector3.Lerp(rotationRecoil, Vector3.zero, gunRotationReturnSpeed * Time.deltaTime);
-            positionRecoil = Vector3.Lerp(positionRecoil, Vector3.zero, gunPositionReturnSpeed * Time.deltaTime);
-
-            gunPositionHolder.localPosition = Vector3.Slerp(gunPositionHolder.localPosition, positionRecoil, gunRecoilPositionSpeed * Time.deltaTime);
-            rot = Vector3.Slerp(rot, rotationRecoil, gunRecoilRotationSpeed* Time.deltaTime);
-            gunPositionHolder.localRotation = Quaternion.Euler(rot);
-        }
         private void WeaponRotationSway()
         {
             if(!haveRotationalSway) return;
 
             Quaternion newAdjustedRotationX = Quaternion.AngleAxis(rotaionSwayIntensity * mouseX * -1f, Vector3.up);
             Quaternion targetRotation = originRotation * newAdjustedRotationX;
-
             transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, rotationSwaySmoothness * Time.deltaTime);
-
         }
-        private void WeaponMoveBobbing()
+        private void WeaponBobbing()
         {
             if(!haveBobbing) return;
 
-            switch (fpsController.IsGrounded)
+            if (!fpsController.IsGrounded)
             {
-                case true:
-                    // Calculate delta time based on the player's movement speed.
-                    float delta = Time.deltaTime * idleSpeed;
-                    float velocity = (lastPosition - transform.position).magnitude * walkSpeedMultiplier;
-                    delta += Mathf.Clamp(velocity, 0, walkSpeedMax);
-
-                    // Update the sinX and sinY values to create a bobbing effect.
-                    sinX += delta / 2;
-                    sinY += delta;
-                    sinX %= Mathf.PI * 2;
-                    sinY %= Mathf.PI * 2;
-
-                    // Adjust the weapon's local position to create the bobbing effect.
-                    float magnitude = aiming ? this.magnitude / aimReduction : this.magnitude;
-                    transform.localPosition = Vector3.zero + magnitude * Mathf.Sin(sinY) * Vector3.up;
-                    transform.localPosition += magnitude * Mathf.Sin(sinX) * Vector3.right;
-                    break;
-
-                case false:
-                    transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime);
-                    break;
+                transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime);
+                return;
             }
+
+            // Calculate delta time based on the player's movement speed.
+            float delta = Time.deltaTime * idleSpeed;
+            float velocity = (lastPosition - transform.position).magnitude * walkSpeedMultiplier;
+            delta += Mathf.Clamp(velocity, 0, walkSpeedMax);
+
+            // Update the sinX and sinY values to create a bobbing effect.
+            sinX += delta / 2;
+            sinY += delta;
+            sinX %= Mathf.PI * 2;
+            sinY %= Mathf.PI * 2;
+
+            // Adjust the weapon's local position to create the bobbing effect.
+            float magnitude = aiming ? this.magnitude / aimReduction : this.magnitude;
+            transform.localPosition = Vector3.zero + magnitude * Mathf.Sin(sinY) * Vector3.up;
+            transform.localPosition += magnitude * Mathf.Sin(sinX) * Vector3.right;
 
             lastPosition = transform.position;
         }
@@ -456,28 +409,18 @@ namespace XtremeFPS.WeaponSystem
                     // Update the weapon's local rotation to simulate the jump sway effect.
                     this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(0f, 0f, yVelocity * jumpIntensity), Time.deltaTime * jumpSmooth);
                     break;
-
                 case true when impactForce >= 0:
-
                     // If the player is grounded and has impact force, adjust the weapon's rotation accordingly.
                     this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(0, 0, impactForce), Time.deltaTime * landingSmooth);
                     impactForce -= recoverySpeed * Time.deltaTime;
                     break;
-
                 case true:
-
                     // If the player is grounded and there's no impact force, reset the weapon's rotation.
                     this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.identity, Time.deltaTime * landingSmooth);
                     break;
             }
-
         }
-        private void SetUIElements()
-        {
-            if (bulletCount == null) return;
-            //SetText
-            bulletCount.SetText(bulletsLeft + " / " + totalBullets);
-        }
+        #endregion
         #endregion
     }
 }

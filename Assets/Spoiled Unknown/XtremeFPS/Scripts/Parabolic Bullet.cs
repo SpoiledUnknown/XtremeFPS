@@ -38,7 +38,6 @@ namespace XtremeFPS.WeaponSystem
         {
             StartCoroutine(DestroyBullets());
             startTime = -1f;
-            //currentPoint = startPosition;
         }
 
         private void FixedUpdate()
@@ -55,17 +54,11 @@ namespace XtremeFPS.WeaponSystem
             if (prevTime > 0)
             {
                 Vector3 prevPoint = FindPointOnParabola(prevTime);
-                if (CastRayBetweenPoints(prevPoint, currentPoint, out hit))
-                {
-                    OnHit(hit);
-                }
+                if (CastRayBetweenPoints(prevPoint, currentPoint, out hit)) OnHit(hit);
             }
 
             Vector3 nextPoint = FindPointOnParabola(nextTime);
-            if (CastRayBetweenPoints(currentPoint, nextPoint, out hit))
-            {
-                OnHit(hit);
-            }
+            if (CastRayBetweenPoints(currentPoint, nextPoint, out hit)) OnHit(hit);
         }
         private void Update()
         {
@@ -80,8 +73,8 @@ namespace XtremeFPS.WeaponSystem
         #region Private Methods
         private Vector3 FindPointOnParabola(float time)
         {
-            Vector3 point = startPosition + (startForward * time * speed);
-            Vector3 gravityVec = Vector3.down * time * time * gravity;
+            Vector3 point = startPosition + (speed * time * startForward);
+            Vector3 gravityVec = gravity * time * time * Vector3.down;
             return point + gravityVec;
         }
 
@@ -93,15 +86,14 @@ namespace XtremeFPS.WeaponSystem
 
         private void OnHit(RaycastHit hit)
         {
-            ShootableObject shootableObject = hit.transform.GetComponent<ShootableObject>();
-            if (shootableObject)
+            if (hit.transform.TryGetComponent<ShootableObject>(out ShootableObject shootableObject))
             {
-                PoolManager.Instance.GetPooledObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
+                PoolManager.Instance.SpawnObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
                 shootableObject.OnHit(hit);
             }
             else
             {
-                PoolManager.Instance.GetPooledObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
+                PoolManager.Instance.SpawnObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
             }
             OnBulletDestroy();
         }
@@ -114,7 +106,7 @@ namespace XtremeFPS.WeaponSystem
 
         private void OnBulletDestroy()
         {
-            PoolManager.Instance.ReturnObjectToPool(this.gameObject);
+            PoolManager.Instance.DespawnObject(this.gameObject);
         }
         #endregion
     }

@@ -52,21 +52,10 @@ namespace XtremeFPS.Editor
             uni_WeaponSystem.bulletCount = (TextMeshProUGUI)EditorGUILayout.ObjectField(new GUIContent("Bullet Count", "Reference to the text that shows number of bullets on UI."), uni_WeaponSystem.bulletCount, typeof(TextMeshProUGUI), true);
             uni_WeaponSystem.Shell = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Bullet Shell", "Reference to the GameObject that spawns and works as the bullet shell."), uni_WeaponSystem.Shell, typeof(GameObject), true);
             uni_WeaponSystem.ShellPosition = (Transform)EditorGUILayout.ObjectField(new GUIContent("Shell Position", "Reference to the GameObject where shell will spawn."), uni_WeaponSystem.ShellPosition, typeof(Transform), true);
+            uni_WeaponSystem.animator = (Animator)EditorGUILayout.ObjectField(new GUIContent("Animator", "Reference to the Animator where animations are stored/setted up."), uni_WeaponSystem.animator, typeof(Animator), true);
             EditorGUILayout.Space();
             #endregion
-            #region Bullet Physics
-
-            GUI.color = Color.black;
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-            GUILayout.Label("Bullet Physics", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-            EditorGUILayout.Space();
-
-            GUI.color = Color.white;
-            uni_WeaponSystem.bulletSpeed = EditorGUILayout.Slider(new GUIContent("Bullet Velocity", "The velocity at which the bullet will move."), uni_WeaponSystem.bulletSpeed, 50f, 1500f);
-            uni_WeaponSystem.bulletLifeTime = EditorGUILayout.Slider(new GUIContent("Bullet Life", "The time after which the bullet will despawn itself."), uni_WeaponSystem.bulletLifeTime, 1f, 100f);
-            uni_WeaponSystem.bulletGravitationalForce = EditorGUILayout.Slider(new GUIContent("Bullet Gravity", "Defines the value of gravity that will act on the bullet."), uni_WeaponSystem.bulletGravitationalForce, 0f, 300f);
-            EditorGUILayout.Space();
-            #endregion
+            
             #region Weapon Stats
 
             GUI.color = Color.black;
@@ -86,15 +75,17 @@ namespace XtremeFPS.Editor
             uni_WeaponSystem.hardMode = EditorGUILayout.ToggleLeft(new GUIContent("Hard Mode", "If enabled ammo management and reloading will ac realistically."), uni_WeaponSystem.hardMode);
             EditorGUILayout.Space();
             #endregion
-            #region Reloading
-            GUI.color = Color.blue;
-            GUILayout.Label("Reload Animation", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+            #region Bullet Physics
+
+            GUI.color = Color.black;
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("Bullet Physics", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+            EditorGUILayout.Space();
+
             GUI.color = Color.white;
-            uni_WeaponSystem.haveProceduralReload = EditorGUILayout.ToggleLeft(new GUIContent("Have Animation", "Determines if the gun should play provided animation or not (turn off if you have another animation handler)."), uni_WeaponSystem.haveProceduralReload);
-            if (uni_WeaponSystem.haveProceduralReload)
-            {
-                uni_WeaponSystem.animator = (Animator)EditorGUILayout.ObjectField(new GUIContent("Animator", "Reference to the Animator where animations are stored/setted up."), uni_WeaponSystem.animator, typeof(Animator), true);
-            }
+            uni_WeaponSystem.bulletSpeed = EditorGUILayout.Slider(new GUIContent("Bullet Velocity", "The velocity at which the bullet will move."), uni_WeaponSystem.bulletSpeed, 50f, 1500f);
+            uni_WeaponSystem.bulletLifeTime = EditorGUILayout.Slider(new GUIContent("Bullet Life", "The time after which the bullet will despawn itself."), uni_WeaponSystem.bulletLifeTime, 1f, 100f);
+            uni_WeaponSystem.bulletGravitationalForce = EditorGUILayout.Slider(new GUIContent("Bullet Gravity", "Defines the value of gravity that will act on the bullet."), uni_WeaponSystem.bulletGravitationalForce, 0f, 300f);
             EditorGUILayout.Space();
             #endregion
             #region Aiming Settings
@@ -152,15 +143,6 @@ namespace XtremeFPS.Editor
                 uni_WeaponSystem.recoilReturnSpeed = EditorGUILayout.Slider(new GUIContent("Recoil Return Speed", "Determines the speed at which the camera will return to its usual position."), uni_WeaponSystem.recoilReturnSpeed, 0f, 50f);
                 uni_WeaponSystem.adsFireRecoil = EditorGUILayout.Vector3Field(new GUIContent("Recoil (ADS)", "Determines the recoil camera will feel while aiming."), uni_WeaponSystem.adsFireRecoil);
                 uni_WeaponSystem.hipFireRecoil = EditorGUILayout.Vector3Field(new GUIContent("Recoil (Hip)", "Determines the recoil camera will feel while hipfire."), uni_WeaponSystem.hipFireRecoil);
-            }
-            EditorGUILayout.Space();
-
-            GUI.color = Color.blue;
-            GUILayout.Label("Camera Roational Recoil", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-            GUI.color = Color.white;
-            uni_WeaponSystem.haveSensyRecoil = EditorGUILayout.ToggleLeft(new GUIContent("Have Camera Recoil", "Determines if the camera should have recoil or not."), uni_WeaponSystem.haveSensyRecoil);
-            if (uni_WeaponSystem.haveSensyRecoil)
-            {
                 uni_WeaponSystem.hRecoil = EditorGUILayout.Slider(new GUIContent("Horizontal Recoil Sensitivity", "Determines the speed at which the camera will move horizontally."), uni_WeaponSystem.hRecoil, 0f, 1f);
                 uni_WeaponSystem.vRecoil = EditorGUILayout.Slider(new GUIContent("Vertical Recoil Sensitivity", "Determines the speed at which the camera will move vertically."), uni_WeaponSystem.vRecoil, 0f, 1f);
             }
@@ -199,8 +181,8 @@ namespace XtremeFPS.Editor
             GUI.color = Color.blue;
             GUILayout.Label("Weapon Tilt", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
             GUI.color = Color.white;
-            uni_WeaponSystem.haveRotationalTilt = EditorGUILayout.ToggleLeft(new GUIContent("Have Tilt", "Determines if the gun can tilt or not."), uni_WeaponSystem.haveRotationalTilt);
-            if (uni_WeaponSystem.haveRotationalTilt)
+            uni_WeaponSystem.haveTilt = EditorGUILayout.ToggleLeft(new GUIContent("Have Tilt", "Determines if the gun can tilt or not."), uni_WeaponSystem.haveTilt);
+            if (uni_WeaponSystem.haveTilt)
             {
                 uni_WeaponSystem.tiltIntensity = EditorGUILayout.Slider(new GUIContent("Intensity", "Determines the intensity of the tilting."), uni_WeaponSystem.tiltIntensity, 0f, 25f);
                 uni_WeaponSystem.tiltAmount = EditorGUILayout.Slider(new GUIContent("Amount", "Determines the amount of the tilting."), uni_WeaponSystem.tiltAmount, 0f, 25f);

@@ -26,7 +26,7 @@ namespace XtremeFPS.Demo
 
         private void DestroyShell()
         {
-            PoolManager.Instance.ReturnObjectToPool(this.gameObject);
+            PoolManager.Instance.DespawnObject(this.gameObject);
         }
     }
 }

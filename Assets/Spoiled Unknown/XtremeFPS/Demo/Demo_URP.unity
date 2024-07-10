@@ -5143,21 +5143,18 @@ MonoBehaviour:
   bulletsPerTap: 1
   muzzelEffectLifeTime: 1
   reloadTime: 2.3
-  haveProceduralReload: 1
-  reloading: 0
   aiming: 0
   hardMode: 0
   canAim: 1
   weaponHolder: {fileID: 508177144245654784}
   aimingLocalPosition: {x: 0, y: -0.12, z: 0.2336001}
   aimSmoothing: 6
-  haveCameraRecoil: 0
-  cameraRecoilHolder: {fileID: 6755873227692369839}
+  haveCameraRecoil: 1
+  cameraRecoilHolder: {fileID: 7624139605317006962}
   recoilRotationSpeed: 6
   recoilReturnSpeed: 25
   hipFireRecoil: {x: 4, y: 4, z: 4}
   adsFireRecoil: {x: 2, y: 2, z: 2}
-  haveSensyRecoil: 0
   hRecoil: 0.215
   vRecoil: 0.221
   haveWeaponRecoil: 1
@@ -5170,10 +5167,6 @@ MonoBehaviour:
   gunRotationReturnSpeed: 38
   recoilRotationHip: {x: 10, y: 5, z: 7}
   recoilRotationAds: {x: 10, y: 4, z: 6}
-  havePositionalSway: 0
-  swayIntensity: 0.674
-  swayAmount: 6.1
-  swaySmoothness: 5
   haveRotationalSway: 1
   rotaionSwayIntensity: 10
   rotationSwaySmoothness: 2.3
@@ -5185,10 +5178,11 @@ MonoBehaviour:
   landingIntensity: 5
   landingSmooth: 15
   recoverySpeed: 50
-  haveRotationalTilt: 1
+  haveTilt: 0
   tiltIntensity: 6.4
   tiltAmount: 16.5
   tiltSmoothness: 10
+  swaySmoothness: 5
   rotateX: 1
   rotateY: 0
   rotateZ: 1
@@ -6422,7 +6416,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 161, y: -27.2}
+  m_AnchoredPosition: {x: 161, y: -27.199951}
   m_SizeDelta: {x: 225.72, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &2179367337387718182
@@ -6591,19 +6585,19 @@ MonoBehaviour:
   itemsToPool:
   - objectToPool: {fileID: 1660800468149884, guid: afc9c0a592c2d3e408e67df46bacd613,
       type: 3}
-    amountToPool: 30
-    shouldExpand: 0
-    shouldRecycle: 0
+    objectAmount: 30
+    canExpand: 0
+    canRecycle: 0
   - objectToPool: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d,
       type: 3}
-    amountToPool: 2
-    shouldExpand: 0
-    shouldRecycle: 1
+    objectAmount: 30
+    canExpand: 0
+    canRecycle: 1
   - objectToPool: {fileID: 2046857199201600465, guid: adb843424a0f88a4ea26c84473f521d2,
       type: 3}
-    amountToPool: 30
-    shouldExpand: 0
-    shouldRecycle: 0
+    objectAmount: 30
+    canExpand: 0
+    canRecycle: 0
 --- !u!1 &2392361374229779744
 GameObject:
   m_ObjectHideFlags: 0
@@ -9777,7 +9771,6 @@ MonoBehaviour:
   canPush: 1
   pushLayersID: 3
   pushStrength: 3.4
-  haveCameraRecoil: 0
 --- !u!1 &7567250270538676038
 GameObject:
   m_ObjectHideFlags: 0

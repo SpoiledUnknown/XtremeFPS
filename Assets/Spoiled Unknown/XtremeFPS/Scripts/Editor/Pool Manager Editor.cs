@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using XtremeFPS.PoolingSystem;
+using TMPro;
 
 namespace XtremeFPS.Editor
 {
@@ -10,7 +11,6 @@ namespace XtremeFPS.Editor
         private PoolManager poolManager;
         private SerializedObject serializedPoolManager;
         private SerializedProperty itemsToPoolProperty;
-        private bool showObjectPoolItems = true;
         private bool[] foldoutStates;
 
         private void OnEnable()
@@ -56,12 +56,16 @@ namespace XtremeFPS.Editor
             {
                 SerializedProperty itemProperty = itemsToPoolProperty.GetArrayElementAtIndex(i);
                 SerializedProperty objectToPoolProperty = itemProperty.FindPropertyRelative("objectToPool");
-                SerializedProperty amountToPoolProperty = itemProperty.FindPropertyRelative("amountToPool");
-                SerializedProperty shouldExpandProperty = itemProperty.FindPropertyRelative("shouldExpand");
-                SerializedProperty shouldRecycleProperty = itemProperty.FindPropertyRelative("shouldRecycle");
+                SerializedProperty objectAmountToPoolProperty = itemProperty.FindPropertyRelative("objectAmount");
+                SerializedProperty canExpandProperty = itemProperty.FindPropertyRelative("canExpand");
+                SerializedProperty canRecycleProperty = itemProperty.FindPropertyRelative("canRecycle");
 
-                // Display foldout for each ObjectPoolItem with dynamically generated name
-                foldoutStates[i] = EditorGUILayout.Foldout(foldoutStates[i], new GUIContent("Element " + i, "Contains all the property required by the element " + i + "."));
+                // Get the GameObject reference
+                GameObject objectToPool = objectToPoolProperty.objectReferenceValue as GameObject;
+                string objectName = objectToPool != null ? objectToPool.name : "Element " + i.ToString();
+
+                // Display foldout for each ObjectPoolItem with the GameObject name
+                foldoutStates[i] = EditorGUILayout.Foldout(foldoutStates[i], new GUIContent(objectName, "Contains all the property required by the element " + i + "."));
                 if (foldoutStates[i])
                 {
                     EditorGUI.indentLevel++;
@@ -74,16 +78,19 @@ namespace XtremeFPS.Editor
                         break;
                     }
                     EditorGUILayout.EndHorizontal();
-                    EditorGUILayout.PropertyField(amountToPoolProperty, new GUIContent("Pool Size", "How many items should be stored in the pool."), true);
+                    EditorGUILayout.PropertyField(objectAmountToPoolProperty, new GUIContent("Pool Size", "How many items should be stored in the pool."), true);
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PropertyField(shouldExpandProperty, new GUIContent("Expand Pool", "Should the pool expand (if not enough items are left in the pool)."), true);
-                    EditorGUILayout.PropertyField(shouldRecycleProperty, new GUIContent("Recycle", "Should the pool recycle the oldest element store in pool (if not enough items are left in the pool)."), true);
+                    EditorGUILayout.PropertyField(canExpandProperty, new GUIContent("Expand Pool", "Should the pool expand (if not enough items are left in the pool)."), true);
+                    EditorGUILayout.PropertyField(canRecycleProperty, new GUIContent("Recycle", "Should the pool recycle the oldest element store in pool (if not enough items are left in the pool)."), true);
                     EditorGUILayout.EndHorizontal();
 
+                    if (canExpandProperty.boolValue) canRecycleProperty.boolValue = false;
+                    if (canRecycleProperty.boolValue) canExpandProperty.boolValue = false;
 
                     EditorGUILayout.Space();
                     EditorGUI.indentLevel--;
                 }
+                //foldoutStates[i] = EditorGUILayout.Foldout(foldoutStates[i], new GUIContent(objectToPoolProperty.name, "Contains all the property required by the element " + i + "."));
             }
             EditorGUI.indentLevel--;
 

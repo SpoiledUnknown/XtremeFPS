@@ -13,9 +13,9 @@ namespace XtremeFPS.PoolingSystem
         public class ObjectPoolItem
         {
             public GameObject objectToPool;
-            public int amountToPool;
-            public bool shouldExpand;
-            public bool shouldRecycle;
+            public int objectAmount;
+            public bool canExpand;
+            public bool canRecycle;
         }
     
         public List<ObjectPoolItem> itemsToPool;
@@ -25,14 +25,9 @@ namespace XtremeFPS.PoolingSystem
 
         private void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(this);
-            }
-            else
-            {
-                Instance = this;
-            }
+            if (Instance != null) Destroy(this);
+            else Instance = this;
+
             InitializeObjectPools();
         }
     
@@ -40,11 +35,16 @@ namespace XtremeFPS.PoolingSystem
         {
             foreach (ObjectPoolItem item in itemsToPool)
             {
+                if (item.objectToPool == null)
+                {
+                    Debug.LogError("The \"Object To Pool\" is null!");
+                    return;
+                }
                 GameObject parentGameObject = new GameObject(item.objectToPool.name + " Pool");
                 parentGameObject.transform.parent = transform;
 
                 List<GameObject> objectPool = new List<GameObject>();
-                for (int i = 0; i < item.amountToPool; i++)
+                for (int i = 0; i < item.objectAmount; i++)
                 {
                     GameObject obj = Instantiate(item.objectToPool);
                     obj.SetActive(false);
@@ -56,94 +56,92 @@ namespace XtremeFPS.PoolingSystem
             }
         }
 
-        public GameObject GetPooledObject(GameObject objectToPool, Vector3 position, Quaternion rotation)
-        {
-            if (pooledObjects.ContainsKey(objectToPool))
-            {
-                List<GameObject> objectPool = pooledObjects[objectToPool];
-                foreach (GameObject obj in objectPool)
-                {
-                    if (!obj.activeInHierarchy)
-                    {
-                        obj.transform.SetPositionAndRotation(position, rotation);
-                        obj.SetActive(true);
-                        return obj;
-                    }
-                }
-
-                ObjectPoolItem item = FindObjectPoolItem(objectToPool);
-                if (item != null && item.shouldExpand)
-                {
-                    GameObject newObj = Instantiate(objectToPool, position, rotation);
-                    GameObject parentGameObject = prefabParents[objectToPool];
-                    newObj.transform.parent = parentGameObject.transform;
-                    newObj.SetActive(true);
-                    objectPool.Add(newObj);
-                    return newObj;
-                }
-
-                if (item != null && item.shouldRecycle)
-                {
-                    // Cycle through the pool to recycle objects
-                    for (int i = lastRecycledIndex + 1; i < objectPool.Count; i++)
-                    {
-                        GameObject recycledObj = objectPool[i];
-                        if (recycledObj.activeInHierarchy)
-                        {
-                            recycledObj.transform.SetPositionAndRotation(position, rotation);
-                            recycledObj.SetActive(true);
-                            lastRecycledIndex = i;
-                            return recycledObj;
-                        }
-                    }
-                    // If no inactive objects are found, loop back to the beginning of the pool
-                    for (int i = 0; i < lastRecycledIndex; i++)
-                    {
-                        GameObject recycledObj = objectPool[i];
-                        if (recycledObj.activeInHierarchy)
-                        {
-                            recycledObj.transform.SetPositionAndRotation(position, rotation);
-                            recycledObj.SetActive(true);
-                            lastRecycledIndex = i;
-                            return recycledObj;
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-
-
         private ObjectPoolItem FindObjectPoolItem(GameObject objectToPool)
         {
             foreach (ObjectPoolItem item in itemsToPool)
             {
-                if (item.objectToPool == objectToPool)
-                {
-                    return item;
-                }
+                if (item.objectToPool != objectToPool) continue;
+                return item;
             }
             return null;
         }
 
-        public void ReturnObjectToPool(GameObject obj)
+        public GameObject SpawnObject(GameObject objectToPool, Vector3 position, Quaternion rotation)
         {
-            bool foundInPool = false;
-
-            foreach (var objectPool in pooledObjects.Values)
+            ObjectPoolItem item = FindObjectPoolItem(objectToPool);
+            if (item == null)
             {
-                if (objectPool.Contains(obj))
+                Debug.LogWarning($"{objectToPool.name} passed in SpawnObject() not found in the \"itemsToPool\"!");
+                return null;
+            }
+
+            if (!pooledObjects.ContainsKey(objectToPool))
+            {
+                Debug.LogWarning($"{objectToPool.name} passed in SpawnObject() not found in the Pool!");
+                return null;
+            }
+
+            List<GameObject> objectPool = pooledObjects[objectToPool];
+            foreach (GameObject obj in objectPool)
+            {
+                if (obj.activeInHierarchy) continue;
+
+                obj.transform.SetPositionAndRotation(position, rotation);
+                obj.SetActive(true);
+                return obj;
+            }
+
+            if (item.canExpand)
+            {
+                GameObject newObj = Instantiate(objectToPool, position, rotation);
+                GameObject parentGameObject = prefabParents[objectToPool];
+                newObj.transform.parent = parentGameObject.transform;
+                newObj.SetActive(true);
+                objectPool.Add(newObj);
+                return newObj;
+            }
+            else
+            {
+                // Cycle through the pool to recycle objects
+                for (int i = lastRecycledIndex + 1; i < objectPool.Count; i++)
                 {
-                    obj.SetActive(false);
-                    foundInPool = true;
-                    break;
+                    GameObject recycledObj = objectPool[i];
+                    if (!recycledObj.activeInHierarchy) continue;
+
+                    recycledObj.transform.SetPositionAndRotation(position, rotation);
+                    recycledObj.SetActive(true);
+                    lastRecycledIndex = i;
+                    return recycledObj;
+                }
+                // If no inactive objects are found, loop back to the beginning of the pool
+                for (int i = 0; i < lastRecycledIndex; i++)
+                {
+                    GameObject recycledObj = objectPool[i];
+                    if (!recycledObj.activeInHierarchy) continue;
+
+                    recycledObj.transform.SetPositionAndRotation(position, rotation);
+                    recycledObj.SetActive(true);
+                    lastRecycledIndex = i;
+                    return recycledObj;
                 }
             }
 
-            if (!foundInPool)
+            return null;
+        }
+
+        public void DespawnObject(GameObject obj)
+        {
+            bool foundInPool = false;
+            foreach (var objectPool in pooledObjects.Values)
             {
-                Debug.LogWarning("The object to return to pool is not managed by the object pool system.");
+                if (!objectPool.Contains(obj)) continue;
+
+                obj.SetActive(false);
+                foundInPool = true;
+                break;
             }
+
+            if (!foundInPool) Debug.LogWarning("The object to return to pool is not managed by the object pool system.");
         }
     }
 }

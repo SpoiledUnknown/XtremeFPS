@@ -133,10 +133,6 @@ namespace XtremeFPS.FirstPersonController
         public int pushLayersID;
         public float pushStrength = 1.1f;
 
-
-        //Recoil For Weapon System;
-        public bool haveCameraRecoil = false;
-
         private float hRecoil = 0f;
         private float vRecoil = 0f;
         #endregion
@@ -220,14 +216,8 @@ namespace XtremeFPS.FirstPersonController
             else isZoomed = inputManager.isZoomingTap && !isSprinting;
         }
         #region Camera
-        /// <summary>
-        /// The method assigns the horizontal recoil and vertical recoil values provided as parameters to the camera.
-        /// </summary>
-        /// <param name="hRecoil">Float</param>
-        /// <param name="vRecoil">Float</param>
         public void AddRecoil(float hRecoil, float vRecoil)
         {
-            if (!haveCameraRecoil) return;
             this.hRecoil = hRecoil;
             this.vRecoil = vRecoil;
         }
@@ -419,7 +409,7 @@ namespace XtremeFPS.FirstPersonController
         #region Sound Management
         private void DetectSurfaceAndMovement()
         {
-            Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 5f);
+            if (!Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 5f)) return;
             floortag = hit.collider.tag.ToLower() switch
             {
                 "grass" => "grass",
