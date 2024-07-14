@@ -356,7 +356,7 @@ namespace XtremeFPS.FPSController
                 nextSlopeCheckTime = Time.time + slopeCheckInterval;
                 isOnSlope = CheckIfOnSlope();
             }
-            if (!isOnSlope) slidingTime -= Time.deltaTime;
+            if (!isOnSlope && IsGrounded) slidingTime -= Time.deltaTime;
             if (slidingTime <= 0)
             {
                 inputManager.isSprintingHold = false;
