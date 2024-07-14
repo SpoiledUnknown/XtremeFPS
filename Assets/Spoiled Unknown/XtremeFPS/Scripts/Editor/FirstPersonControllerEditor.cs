@@ -95,6 +95,9 @@ namespace XtremeFPS.Editor
                 fpsController.crouchedHeight = EditorGUILayout.FloatField(new GUIContent("Crouched Height", "Determines the height at which player should crouch."), fpsController.crouchedHeight);
                 fpsController.crouchedSpeed = EditorGUILayout.Slider(new GUIContent("Crouched Speed", "Determines the speed at which player will move while crouched."), fpsController.crouchedSpeed, 1f, 5f);
                 fpsController.crouchSoundPlayTime = EditorGUILayout.Slider(new GUIContent("Sound Playback Speed", "Determines the speed at which footstep sounds will play while crouched."), fpsController.crouchSoundPlayTime, 0.1f, 0.5f);
+                EditorGUILayout.Space();
+                fpsController.slidingSpeed = EditorGUILayout.Slider(new GUIContent("Sliding Speed", "Determines the speed at which the player will slide."), fpsController.slidingSpeed, fpsController.sprintSpeed, fpsController.sprintSpeed + 15);
+                fpsController.slidingDuration = EditorGUILayout.Slider(new GUIContent("sliding Duration", "Determines how long the player will slide"), fpsController.slidingDuration, 0f, 5f);
             }
             EditorGUILayout.Space();
             #endregion
@@ -190,6 +193,7 @@ namespace XtremeFPS.Editor
             }
             GUI.color = Color.black;
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            EditorGUILayout.Space();
             #endregion
             #region Update Changes
             //Sets any changes from the prefab

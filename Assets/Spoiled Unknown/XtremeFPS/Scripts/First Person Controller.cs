@@ -23,17 +23,17 @@ namespace XtremeFPS.FirstPersonController
 
         public CharacterController CharacterController {  get; private set; }
         private FPSInputManager inputManager;
-        private PlayerMovementState movementState;
-        private enum PlayerMovementState
+        public PlayerMovementState MovementState {  get; private set; }
+        public enum PlayerMovementState
         {
             Sprinting,
             Crouching,
             Walking,
+            Sliding,
             Default
         }
-        private float targetSpeed;
+        public float targetSpeed;
         private float transitionDelta;
-        private Vector3 moveDirection;
 
         //sprinting
         public bool canPlayerSprint;
@@ -69,6 +69,12 @@ namespace XtremeFPS.FirstPersonController
         private float initialHeight;
         private Vector3 initialCameraPosition;
 
+        //Sliding
+        public float slidingSpeed;
+        public float slidingDuration;
+
+        private bool canSlide;
+        private float slidingTime;
 
         // Camera
         public bool isCursorLocked;
@@ -124,7 +130,7 @@ namespace XtremeFPS.FirstPersonController
 
         private AudioSource audioSource;
         private float AudioEffectSpeed;
-        private bool moving = false;
+        private bool isMoving = false;
         private string floortag;
 
 
@@ -160,15 +166,23 @@ namespace XtremeFPS.FirstPersonController
         private void Update()
         {
             transitionDelta = Time.deltaTime * transitionSpeed;
+            Vector3 horizontalMovement = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right +
+                  inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
+            Vector3 verticalMovement = jumpVelocity.y * Time.deltaTime * transform.up;
+            CharacterController.Move(horizontalMovement + verticalMovement);
+
+            Vector3 localVelocity = transform.InverseTransformDirection(CharacterController.velocity);
+            isMoving = Mathf.Abs(localVelocity.z) > footstepSensitivity || Mathf.Abs(localVelocity.x) > footstepSensitivity;
 
             PlayerInputs();
             HandleZoom();
             HandleSprintCooldown();
             GravityAndJump();
-            HandleMovementStateMachine();
+            HandleStateMachine();
             DetectSurfaceAndMovement();
+            if (MovementState == PlayerMovementState.Sliding) HanldeSliding();
 
-            if (!canHeadBob) return;
+            if (!canHeadBob || MovementState == PlayerMovementState.Sliding) return;
             CheckMotion();
             ResetPosition();
             cameraFollow.LookAt(FocusTarget());
@@ -214,6 +228,8 @@ namespace XtremeFPS.FirstPersonController
 
             if (isZoomingHold) isZoomed = inputManager.isZoomingHold && !isSprinting;
             else isZoomed = inputManager.isZoomingTap && !isSprinting;
+
+            canSlide = isCrouching && isSprinting && canPlayerCrouch;
         }
         #region Camera
         public void AddRecoil(float hRecoil, float vRecoil)
@@ -235,7 +251,7 @@ namespace XtremeFPS.FirstPersonController
         private void AdjustFOVSettings(float targetFOV)
         {
             if (isZoomed) return;
-            if (!moving) targetFOV = FOV;
+            if (!isMoving) targetFOV = FOV;
 
             float currentFOV = playerVirtualCamera.m_Lens.FieldOfView;
             float newFOV = Mathf.Lerp(currentFOV, targetFOV, transitionDelta);
@@ -252,7 +268,7 @@ namespace XtremeFPS.FirstPersonController
 
         private void CheckMotion()
         {
-            if (!moving || !IsGrounded)
+            if (!isMoving || !IsGrounded)
             {
                 return;
             }
@@ -285,7 +301,7 @@ namespace XtremeFPS.FirstPersonController
         {
             if (unlimitedSprinting) return;
 
-            if (isSprinting &&
+            if (MovementState == PlayerMovementState.Sprinting &&
                 CharacterController.velocity.magnitude > 0)
             {
                 sprintRemaining -= 1 * Time.deltaTime;
@@ -326,28 +342,29 @@ namespace XtremeFPS.FirstPersonController
             cameraFollow.localPosition = newCameraHeight;
         }
 
-        private void HandleMovementStateMachine()
+        private void HanldeSliding()
         {
-            if (isSprinting && canPlayerSprint && !isCrouching)
+            slidingTime -= Time.deltaTime;
+            if (slidingTime <= 0)
             {
-                movementState = PlayerMovementState.Sprinting;
+                inputManager.isSprintingHold = false;
+                inputManager.isSprintingTap = false;
+                MovementState = PlayerMovementState.Crouching;
             }
-            else if (isCrouching && canPlayerCrouch)
-            {
-                movementState = PlayerMovementState.Crouching;
-            }
-            else if (!isSprinting && !isCrouching)
-            {
-                movementState = PlayerMovementState.Walking;
-            }
+        }
 
-            SwitchMoveState(movementState);
+        private void HandleStateMachine()
+        {
+            if (canSlide && Mathf.Approximately(CharacterController.velocity.magnitude, sprintSpeed) && MovementState != PlayerMovementState.Sliding)
+            {
+                slidingTime = slidingDuration;
+                MovementState = PlayerMovementState.Sliding;
+            }
+            else if (canPlayerSprint && isSprinting && !isCrouching) MovementState = PlayerMovementState.Sprinting;
+            else if (canPlayerCrouch && isCrouching && !isSprinting) MovementState = PlayerMovementState.Crouching;
+            else if (!isSprinting && !isCrouching) MovementState = PlayerMovementState.Walking;
 
-            //Controller Movement
-            moveDirection = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right +
-                            inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward +
-                            jumpVelocity.y * Time.deltaTime * transform.up;
-            CharacterController.Move(moveDirection);
+            SwitchMoveState(MovementState);
         }
 
         private void SwitchMoveState(PlayerMovementState movementState)
@@ -355,22 +372,29 @@ namespace XtremeFPS.FirstPersonController
             switch (movementState)
             {
                 case PlayerMovementState.Sprinting:
-                    targetSpeed = sprintSpeed;
+                    targetSpeed = Mathf.Lerp(targetSpeed, sprintSpeed, transitionDelta);
                     AudioEffectSpeed = sprintSoundSpeed;
+                    AdjustCrouchHeight(initialHeight, true);
                     AdjustFOVSettings(sprintFOV);
                     break;
 
                 case PlayerMovementState.Crouching:
-                    targetSpeed = crouchedSpeed;
-                    AudioEffectSpeed = crouchSoundPlayTime; 
+                    targetSpeed = Mathf.Lerp(targetSpeed, crouchedSpeed, transitionDelta);
+                    AudioEffectSpeed = crouchSoundPlayTime;
                     AdjustCrouchHeight(crouchedHeight, false);
                     break;
 
                 case PlayerMovementState.Walking:
-                    targetSpeed = walkSpeed;
+                    targetSpeed = Mathf.Lerp(targetSpeed, walkSpeed, transitionDelta);
                     AudioEffectSpeed = walkSoundSpeed;
                     AdjustFOVSettings(FOV);
                     AdjustCrouchHeight(initialHeight, true);
+                    break;
+
+                case PlayerMovementState.Sliding:
+                    targetSpeed = Mathf.Lerp(targetSpeed, slidingSpeed, transitionDelta);
+                    AdjustCrouchHeight(crouchedHeight, false);
+                    canSlide = false;
                     break;
 
                 case PlayerMovementState.Default:
@@ -398,14 +422,13 @@ namespace XtremeFPS.FirstPersonController
                 return;
             }
 
-            if (inputManager.haveJumped && !isCrouching)
+            if (inputManager.haveJumped && MovementState != PlayerMovementState.Crouching)
             {
                 jumpVelocity.y = Mathf.Sqrt(jumpHeight * 2f * gravitationalForce);
                 if (!hasPreviouslyJumped) audioSource.PlayOneShot(jumpingAudioClip);
             }
             else if (!IsGrounded && jumpVelocity.y < 0f) jumpVelocity.y = -1f;
         }
-
         #region Sound Management
         private void DetectSurfaceAndMovement()
         {
@@ -420,19 +443,13 @@ namespace XtremeFPS.FirstPersonController
                 "wood" => "wood",
                 _ => "",
             };
-
-            Vector3 localVelocity = transform.InverseTransformDirection(CharacterController.velocity);
-            moving = (localVelocity.z > footstepSensitivity ||
-                localVelocity.z < -footstepSensitivity ||
-                localVelocity.x > footstepSensitivity ||
-                localVelocity.x < -footstepSensitivity);
         }
 
         private IEnumerator PlayFootstepSounds()
         {
             while (true)
             {
-                if (!IsGrounded || !moving)
+                if (!IsGrounded || !isMoving)
                 {
                     yield return null;
                     continue;
