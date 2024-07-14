@@ -7,7 +7,7 @@ using XtremeFPS.InputHandler;
 using Cinemachine;
 using UnityEngine.UI;
 
-namespace XtremeFPS.FirstPersonController
+namespace XtremeFPS.FPSController
 {
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(FPSInputManager))]
@@ -75,6 +75,10 @@ namespace XtremeFPS.FirstPersonController
 
         private bool canSlide;
         private float slidingTime;
+        private bool isOnSlope;
+        private readonly float slopeCheckInterval = 0.2f;
+        private float nextSlopeCheckTime;
+        private RaycastHit slopeHit;
 
         // Camera
         public bool isCursorLocked;
@@ -126,6 +130,7 @@ namespace XtremeFPS.FirstPersonController
 
         public AudioClip landingAudioClip;
         public AudioClip jumpingAudioClip;
+        public AudioClip slidingAudioClip;
         public float footstepSensitivity;
 
         private AudioSource audioSource;
@@ -221,13 +226,13 @@ namespace XtremeFPS.FirstPersonController
             mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime + vRecoil;
 
             if (isSprintHold) isSprinting = inputManager.isSprintingHold;
-            else isSprinting = inputManager.isSprintingTap;
+            else isSprinting = inputManager.isSprintingTapped;
 
             if (isCrouchHold) isCrouching = inputManager.isCrouchingHold;
-            else isCrouching = inputManager.isCrouchingTap;
+            else isCrouching = inputManager.isCrouchingTapped;
 
             if (isZoomingHold) isZoomed = inputManager.isZoomingHold && !isSprinting;
-            else isZoomed = inputManager.isZoomingTap && !isSprinting;
+            else isZoomed = inputManager.isZoomingTapped && !isSprinting;
 
             canSlide = isCrouching && isSprinting && canPlayerCrouch;
         }
@@ -307,7 +312,8 @@ namespace XtremeFPS.FirstPersonController
                 sprintRemaining -= 1 * Time.deltaTime;
                 if (sprintRemaining <= 0)
                 {
-                    isSprinting = false;
+                    inputManager.isSprintingTapped = false;
+                    inputManager.isSprintingHold = false;
                     sprintCooldown -= 1 * Time.deltaTime;
                 }
                 else sprintCooldown = sprintCooldownReset;
@@ -342,20 +348,42 @@ namespace XtremeFPS.FirstPersonController
             cameraFollow.localPosition = newCameraHeight;
         }
 
+        #region Sliding
         private void HanldeSliding()
         {
-            slidingTime -= Time.deltaTime;
+            if (Time.time >= nextSlopeCheckTime)
+            {
+                nextSlopeCheckTime = Time.time + slopeCheckInterval;
+                isOnSlope = CheckIfOnSlope();
+            }
+            if (!isOnSlope) slidingTime -= Time.deltaTime;
             if (slidingTime <= 0)
             {
                 inputManager.isSprintingHold = false;
-                inputManager.isSprintingTap = false;
+                inputManager.isSprintingTapped = false;
+                audioSource.clip = null;
+                audioSource.loop = false;
                 MovementState = PlayerMovementState.Crouching;
             }
         }
 
+        private bool CheckIfOnSlope()
+        {
+            if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, CharacterController.height * 0.5f + 0.3f))
+            {
+                float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+                if (angle > CharacterController.slopeLimit || angle == 0) return false;
+                Vector3 slopeDirection = Vector3.ProjectOnPlane(Vector3.down, slopeHit.normal).normalized;
+                Vector3 movementDirection = new Vector3(CharacterController.velocity.x, 0, CharacterController.velocity.z).normalized;
+                float dotProduct = Vector3.Dot(movementDirection, slopeDirection);
+                return dotProduct > 0;
+            }
+            return false;
+        }
+        #endregion
         private void HandleStateMachine()
         {
-            if (canSlide && Mathf.Approximately(CharacterController.velocity.magnitude, sprintSpeed) && MovementState != PlayerMovementState.Sliding)
+            if (canSlide && (targetSpeed > (sprintSpeed * 0.5f + 1.0f)) && MovementState != PlayerMovementState.Sliding)
             {
                 slidingTime = slidingDuration;
                 MovementState = PlayerMovementState.Sliding;
@@ -394,6 +422,9 @@ namespace XtremeFPS.FirstPersonController
                 case PlayerMovementState.Sliding:
                     targetSpeed = Mathf.Lerp(targetSpeed, slidingSpeed, transitionDelta);
                     AdjustCrouchHeight(crouchedHeight, false);
+                    audioSource.clip = slidingAudioClip;
+                    audioSource.loop = true;
+                    audioSource.Play();
                     canSlide = false;
                     break;
 

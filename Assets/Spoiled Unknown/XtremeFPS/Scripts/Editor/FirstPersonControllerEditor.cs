@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace XtremeFPS.Editor
 {
-    using XtremeFPS.FirstPersonController;
+    using XtremeFPS.FPSController;
 
     [CustomEditor(typeof(FirstPersonController)), CanEditMultipleObjects]
     public class FirstPersonControllerEditor : UnityEditor.Editor
@@ -176,6 +176,7 @@ namespace XtremeFPS.Editor
             serializedObject.ApplyModifiedProperties();
             fpsController.jumpingAudioClip = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Jump Sound Effect", "The sound that plays when the player jumps."), fpsController.jumpingAudioClip, typeof(AudioClip), true);
             fpsController.landingAudioClip = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Land Sound Effect", "The sound that plays when the player Lands."), fpsController.landingAudioClip, typeof(AudioClip), true);
+            fpsController.slidingAudioClip = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Sliding Sound Effect", "The sound that plays when the player is sliding."), fpsController.slidingAudioClip, typeof(AudioClip), true);
             fpsController.footstepSensitivity = EditorGUILayout.Slider(new GUIContent("Footstep Sensitivity", "Determines how fast the player should move before the footstep plays."), fpsController.footstepSensitivity, 0f, 5f);
             EditorGUILayout.Space();
             #endregion

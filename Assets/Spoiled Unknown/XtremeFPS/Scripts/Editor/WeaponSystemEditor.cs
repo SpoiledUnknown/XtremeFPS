@@ -9,7 +9,7 @@ using UnityEngine;
 namespace XtremeFPS.Editor
 {
     using XtremeFPS.WeaponSystem;
-    using XtremeFPS.FirstPersonController;
+    using XtremeFPS.FPSController;
 
     [CustomEditor(typeof(WeaponSystem)), CanEditMultipleObjects]
     public class WeaponSystemEditor : UnityEditor.Editor

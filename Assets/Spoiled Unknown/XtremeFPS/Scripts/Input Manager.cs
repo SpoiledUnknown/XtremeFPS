@@ -23,10 +23,10 @@ namespace XtremeFPS.InputHandler
         [HideInInspector] private PlayerInputAction playerInputAction;
         //sprinting
         [HideInInspector] public bool isSprintingHold;
-        [HideInInspector] public bool isSprintingTap;
+        [HideInInspector] public bool isSprintingTapped;
         //crouching
-        [HideInInspector] public bool isCrouchingTap;
         [HideInInspector] public bool isCrouchingHold;
+        [HideInInspector] public bool isCrouchingTapped;
         //Vectors
         [HideInInspector] public Vector2 moveDirection;
          public Vector2 mouseDirection;
@@ -34,13 +34,13 @@ namespace XtremeFPS.InputHandler
         [HideInInspector] public bool haveJumped;
         //Zooming
         [HideInInspector] public bool isZoomingHold;
-        [HideInInspector] public bool isZoomingTap;
+        [HideInInspector] public bool isZoomingTapped;
         //Weapon
         [HideInInspector] public bool isFiringHold;
-        [HideInInspector] public bool isFiringTap;
+        [HideInInspector] public bool isFiringTapped;
         [HideInInspector] public bool isReloading;
-        [HideInInspector] public bool isAimingTap;
         [HideInInspector] public bool isAimingHold;
+        [HideInInspector] public bool isAimingTapped;
 
         #region Touch Controls
         public enum TouchDetectMode
@@ -178,7 +178,7 @@ namespace XtremeFPS.InputHandler
         }
         private void CrouchTapInput(InputAction.CallbackContext context)
         {
-            isCrouchingTap = !isCrouchingTap;
+            isCrouchingTapped = !isCrouchingTapped;
         }
         private void SprintHoldInput(InputAction.CallbackContext context)
         {
@@ -186,7 +186,7 @@ namespace XtremeFPS.InputHandler
         }
         private void SprintTapInput(InputAction.CallbackContext context)
         {
-            isSprintingTap = !isSprintingTap;
+            isSprintingTapped = !isSprintingTapped;
         }
         private void ZoomHoldInput(InputAction.CallbackContext context)
         {
@@ -194,7 +194,7 @@ namespace XtremeFPS.InputHandler
         }
         private void ZoomTapInput(InputAction.CallbackContext context)
         {
-            isZoomingTap = !isZoomingTap;
+            isZoomingTapped = !isZoomingTapped;
         }
         private void JumpInput(InputAction.CallbackContext context)
         {
@@ -218,14 +218,14 @@ namespace XtremeFPS.InputHandler
 
         private void ShootTapInput(InputAction.CallbackContext context)
         {
-            if (isFiringTap) return;
-            isFiringTap = true;
+            if (isFiringTapped) return;
+            isFiringTapped = true;
             StartCoroutine(CancelFire());
         }
         IEnumerator CancelFire()
         {
             yield return new WaitForSeconds(0.05f);
-            isFiringTap = false;
+            isFiringTapped = false;
         }
 
         private void ReloadingInput(InputAction.CallbackContext context)
@@ -240,7 +240,7 @@ namespace XtremeFPS.InputHandler
 
         private void ADSTapInput(InputAction.CallbackContext context)
         {
-            isAimingTap = !isAimingTap;
+            isAimingTapped = !isAimingTapped;
         }
         #endregion
     }

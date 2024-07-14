@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using XtremeFPS.FirstPersonController;
+using XtremeFPS.FPSController;
 
 public class Speed : MonoBehaviour
 {

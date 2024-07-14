@@ -17,7 +17,7 @@ using XtremeFPS.PoolingSystem;
 
 namespace XtremeFPS.Editor
 {
-    using XtremeFPS.FirstPersonController;
+    using XtremeFPS.FPSController;
     using XtremeFPS.WeaponSystem;
 
     public class XtremeFPSEditor : EditorWindow
