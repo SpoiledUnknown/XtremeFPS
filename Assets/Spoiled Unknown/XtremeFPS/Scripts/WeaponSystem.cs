@@ -42,7 +42,6 @@ namespace XtremeFPS.WeaponSystem
         public int magazineSize;
         public int totalBullets;
         public int bulletsPerTap;
-        public float muzzelEffectLifeTime;
         public float reloadTime;
         public bool aiming;
         public bool hardMode;
@@ -52,7 +51,6 @@ namespace XtremeFPS.WeaponSystem
         private bool readyToShoot;
         private bool shooting;
         private bool reloading;
-        private Quaternion originalReloadRotation;
 
         //Aiming
         public bool canAim;
@@ -96,6 +94,10 @@ namespace XtremeFPS.WeaponSystem
         public float rotaionSwayIntensity;
         public float rotationSwaySmoothness;
 
+        private Quaternion originRotation;
+        private float mouseX;
+        private float mouseY;
+
         //Jump Sway
         public bool haveJumpSway;
         public float jumpIntensity;
@@ -107,20 +109,6 @@ namespace XtremeFPS.WeaponSystem
         public float recoverySpeed;
 
         private float impactForce = 0;
-
-        //Weapon Rotational Tilt
-        public bool haveTilt;
-        public float tiltIntensity;
-        public float tiltAmount;
-        public float tiltSmoothness;
-        public float swaySmoothness;
-        public bool rotateX;
-        public bool rotateY;
-        public bool rotateZ;
-
-        private Quaternion originRotation;
-        private float mouseX;
-        private float mouseY;
 
         //Weapon Move Bobbing
         public bool haveBobbing;
@@ -137,7 +125,6 @@ namespace XtremeFPS.WeaponSystem
         //Audio Setup
         public AudioClip bulletSoundClip;
         public AudioClip bulletReloadClip;
-        public float soundVolume;
 
         private AudioSource bulletSoundSource;
         #endregion
@@ -151,10 +138,8 @@ namespace XtremeFPS.WeaponSystem
             bulletsLeft = magazineSize;
 
             lastPosition = transform.position;
-            normalLocalPosition = weaponHolder.transform.localPosition;
-
-            originRotation = transform.localRotation;
-            originalReloadRotation = gunPositionHolder.localRotation;
+            if (canAim) normalLocalPosition = weaponHolder.transform.localPosition;
+            if (haveRotationalSway) originRotation = transform.localRotation;
 
             SetBulletCountUI();
             readyToShoot = true;
@@ -169,7 +154,6 @@ namespace XtremeFPS.WeaponSystem
             HandleWeaponRecoil();
             HandleCameraRecoil();
 
-            HandleTilt();
             WeaponRotationSway();
             WeaponBobbing();
             JumpSwayEffect();
@@ -211,10 +195,9 @@ namespace XtremeFPS.WeaponSystem
 
             //Graphics
             muzzleFlash.Play();
-            Invoke(nameof(StopMuzzleEffect), muzzelEffectLifeTime);
 
             PoolManager.Instance.SpawnObject(Shell, ShellPosition.position, ShellPosition.rotation);
-            bulletSoundSource.PlayOneShot(bulletSoundClip, soundVolume * 0.01f);
+            bulletSoundSource.PlayOneShot(bulletSoundClip);
             float hRecoil = Random.Range(-this.hRecoil, this.hRecoil);
 
             if (aiming)
@@ -246,15 +229,11 @@ namespace XtremeFPS.WeaponSystem
         {
             readyToShoot = true;
         }
-        private void StopMuzzleEffect()
-        {
-            muzzleFlash.Stop();
-        }
         private void Reload()
         {
             reloading = true;
             HandleReloadAnimation();
-            bulletSoundSource.PlayOneShot(bulletReloadClip, soundVolume * 0.01f);
+            bulletSoundSource.PlayOneShot(bulletReloadClip);
             Invoke(nameof(ReloadFinished), reloadTime);
         }
         private void HandleReloadAnimation()
@@ -341,19 +320,6 @@ namespace XtremeFPS.WeaponSystem
             weaponHolder.transform.localPosition = desiredPosition;
         }
         #region Effects
-        private void HandleTilt()
-        {
-            if (!haveTilt) return;
-            float tiltX = Mathf.Clamp(mouseX * tiltIntensity, -tiltAmount, tiltAmount);
-            float tiltY = Mathf.Clamp(mouseY * tiltIntensity, -tiltAmount, tiltAmount);
-
-            Quaternion finalRotation = Quaternion.Euler(new Vector3(
-                rotateX ? tiltX : 0f,
-                rotateY ? tiltY : 0f,
-                rotateZ ? tiltY : 0f
-                ));
-            transform.localRotation = Quaternion.Slerp(transform.localRotation, finalRotation * originRotation, swaySmoothness * Time.deltaTime);
-        }
         private void WeaponRotationSway()
         {
             if(!haveRotationalSway) return;

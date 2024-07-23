@@ -70,7 +70,6 @@ namespace XtremeFPS.Editor
             uni_WeaponSystem.magazineSize = EditorGUILayout.IntSlider(new GUIContent("Magazine Size", "Determines the number of bullet the weapon will hold."), uni_WeaponSystem.magazineSize, 0, 200);
             uni_WeaponSystem.totalBullets = EditorGUILayout.IntSlider(new GUIContent("Total Bullets", "Determines the number of bullet the player have."), uni_WeaponSystem.totalBullets, 0, 999);
             uni_WeaponSystem.bulletsPerTap = EditorGUILayout.IntSlider(new GUIContent("Bullet Per Shoot", "Determines the number of bullet the player will shoot in single tap/shoot cycle."), uni_WeaponSystem.bulletsPerTap, 0, 30);
-            uni_WeaponSystem.muzzelEffectLifeTime = EditorGUILayout.Slider(new GUIContent("Muzzle LifeTime", "Determines the time muzzle flash will saty before going out of existence for good."), uni_WeaponSystem.muzzelEffectLifeTime, 0f, 10f);
             uni_WeaponSystem.reloadTime = EditorGUILayout.Slider(new GUIContent("Reloading Time", "Determines the time weapon takes to reload."), uni_WeaponSystem.reloadTime, 0f, 10f);
             uni_WeaponSystem.hardMode = EditorGUILayout.ToggleLeft(new GUIContent("Hard Mode", "If enabled ammo management and reloading will ac realistically."), uni_WeaponSystem.hardMode);
             EditorGUILayout.Space();
@@ -151,7 +150,7 @@ namespace XtremeFPS.Editor
             #region Sway & Tilt
             GUI.color = Color.black;
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-            GUILayout.Label("Weapon Sway & Tilt Settings", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+            GUILayout.Label("Weapon Sway Settings", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
             EditorGUILayout.Space();
             GUI.color = Color.blue;
             GUILayout.Label("Rotational Sway", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
@@ -159,8 +158,8 @@ namespace XtremeFPS.Editor
             uni_WeaponSystem.haveRotationalSway = EditorGUILayout.ToggleLeft(new GUIContent("Have Rotational Sway", "Determines if the gun have rotational sway or not."), uni_WeaponSystem.haveRotationalSway);
             if (uni_WeaponSystem.haveRotationalSway)
             {
-                uni_WeaponSystem.rotaionSwayIntensity = EditorGUILayout.Slider(new GUIContent("Intensity", "Determines the intensity at which the gun will rotationally sway."), uni_WeaponSystem.rotaionSwayIntensity, 0f, 10f);
-                uni_WeaponSystem.rotationSwaySmoothness = EditorGUILayout.Slider(new GUIContent("Speed", "Determines the speed at which the gun will rotationally sway."), uni_WeaponSystem.rotationSwaySmoothness, 0f, 50f);
+                uni_WeaponSystem.rotaionSwayIntensity = EditorGUILayout.Slider(new GUIContent("Intensity", "Determines the intensity at which the gun will rotationally sway."), uni_WeaponSystem.rotaionSwayIntensity, 0f, 25f);
+                uni_WeaponSystem.rotationSwaySmoothness = EditorGUILayout.Slider(new GUIContent("Speed", "Determines the speed at which the gun will rotationally sway."), uni_WeaponSystem.rotationSwaySmoothness, 0f, 5f);
             }
             EditorGUILayout.Space();
             GUI.color = Color.blue;
@@ -176,20 +175,6 @@ namespace XtremeFPS.Editor
                 uni_WeaponSystem.landingIntensity = EditorGUILayout.Slider(new GUIContent("Landing Intensity", "Determines the intensity of rotation when landing."), uni_WeaponSystem.landingIntensity, 0f, 25f);
                 uni_WeaponSystem.landingSmooth = EditorGUILayout.Slider(new GUIContent("Landing Smooth", "Determines the speed at which gun will change rotation when landing."), uni_WeaponSystem.landingSmooth, 0f, 25f);
                 uni_WeaponSystem.recoverySpeed = EditorGUILayout.Slider(new GUIContent("Recovery Speed", "Determines the speed at which gun will recover and reach its usual position/rotation."), uni_WeaponSystem.recoverySpeed, 0f, 100f);
-            }
-            EditorGUILayout.Space();
-            GUI.color = Color.blue;
-            GUILayout.Label("Weapon Tilt", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-            GUI.color = Color.white;
-            uni_WeaponSystem.haveTilt = EditorGUILayout.ToggleLeft(new GUIContent("Have Tilt", "Determines if the gun can tilt or not."), uni_WeaponSystem.haveTilt);
-            if (uni_WeaponSystem.haveTilt)
-            {
-                uni_WeaponSystem.tiltIntensity = EditorGUILayout.Slider(new GUIContent("Intensity", "Determines the intensity of the tilting."), uni_WeaponSystem.tiltIntensity, 0f, 25f);
-                uni_WeaponSystem.tiltAmount = EditorGUILayout.Slider(new GUIContent("Amount", "Determines the amount of the tilting."), uni_WeaponSystem.tiltAmount, 0f, 25f);
-                uni_WeaponSystem.tiltSmoothness = EditorGUILayout.Slider(new GUIContent("Smoothness", "Determines how fast the tilting will happened."), uni_WeaponSystem.tiltSmoothness, 0f, 25f);
-                uni_WeaponSystem.rotateX = EditorGUILayout.ToggleLeft(new GUIContent("Tilt X", "Determines the axis at which the weapon will rotate (X - Axis)."), uni_WeaponSystem.rotateX);
-                uni_WeaponSystem.rotateY = EditorGUILayout.ToggleLeft(new GUIContent("Tilt Y", "Determines the axis at which the weapon will rotate (Y - Axis)."), uni_WeaponSystem.rotateY);
-                uni_WeaponSystem.rotateZ = EditorGUILayout.ToggleLeft(new GUIContent("Tilt Z", "Determines the axis at which the weapon will rotate (Z - Axis)."), uni_WeaponSystem.rotateZ);
             }
             EditorGUILayout.Space();
             #endregion
@@ -218,7 +203,6 @@ namespace XtremeFPS.Editor
             GUI.color = Color.white;
             uni_WeaponSystem.bulletSoundClip = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Fire fx", "The sound that plays when player shoots."), uni_WeaponSystem.bulletSoundClip, typeof(AudioClip), true);
             uni_WeaponSystem.bulletReloadClip = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Reload fx", "The sound that plays when the player reloads the gun."), uni_WeaponSystem.bulletReloadClip, typeof(AudioClip), true);
-            uni_WeaponSystem.soundVolume = EditorGUILayout.Slider(new GUIContent("Volume", "Determines the volume of the sound clips in percentage."), uni_WeaponSystem.soundVolume, 0f, 100f);
             EditorGUILayout.Space();
             GUI.color = Color.black;
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
