@@ -21,6 +21,7 @@ namespace XtremeFPS.WeaponSystem
         public GameObject bulletPrefab;
         public TextMeshProUGUI bulletCount;
         public Animator animator;
+        public GameObject aimUIImage;
 
         private FPSInputManager inputManager;
 
@@ -173,10 +174,16 @@ namespace XtremeFPS.WeaponSystem
             if (isAimHold) aiming = inputManager.isAimingHold;
             else aiming = inputManager.isAimingTapped;
 
-            if ((inputManager.isReloading || bulletsLeft == 0) && bulletsLeft < magazineSize && totalBullets > 0 &&!reloading) Reload();
+            if ((inputManager.isReloading || bulletsLeft == 0)
+                && bulletsLeft < magazineSize
+                && totalBullets > 0
+                && !reloading) Reload();
 
             //Shoot
-            if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
+            if (readyToShoot
+                && shooting
+                && !reloading
+                && bulletsLeft > 0)
             {
                 bulletsShot = bulletsPerTap;
                 Shoot();
@@ -318,6 +325,7 @@ namespace XtremeFPS.WeaponSystem
 
             Vector3 desiredPosition = Vector3.Lerp(weaponHolder.transform.localPosition, target, Time.deltaTime * aimSmoothing);
             weaponHolder.transform.localPosition = desiredPosition;
+            if (aimUIImage != null) aimUIImage.SetActive(aiming);
         }
         #region Effects
         private void WeaponRotationSway()

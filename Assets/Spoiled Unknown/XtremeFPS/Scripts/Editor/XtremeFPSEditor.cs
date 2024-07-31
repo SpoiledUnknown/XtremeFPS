@@ -18,6 +18,7 @@ using XtremeFPS.PoolingSystem;
 namespace XtremeFPS.Editor
 {
     using XtremeFPS.FPSController;
+    using XtremeFPS.InputHandler;
     using XtremeFPS.WeaponSystem;
 
     public class XtremeFPSEditor : EditorWindow
@@ -41,10 +42,6 @@ namespace XtremeFPS.Editor
         #endregion
         #region Varibales
 
-        //Floats
-        private float NearClipingPlanes = 0.01f;
-        private float FieldOfView = 60f;
-
         #region bools
         private bool enableAboutPanel = true;
         private bool enableInitialSetupPanel = false;
@@ -65,7 +62,7 @@ namespace XtremeFPS.Editor
 
         #region Other Components
         private GameObject playerParent;
-        private GameObject playerArmature;
+        private FirstPersonController playerArmature;
         private CinemachineVirtualCamera virtualCamera;
         private GameObject cameraFollow;
 
@@ -74,10 +71,18 @@ namespace XtremeFPS.Editor
         private GameObject particleEffect;
 
         //others
-        private GameObject objectPooler;
+        private PoolManager objectPoolerManager;
         private GameObject playerCamera;
         private GameObject cameraHolder;
         #endregion
+
+        enum DefaultPlayerTypes
+        {
+            None,
+            Realistic
+        }
+
+        private DefaultPlayerTypes defaultPlayerTypes;
 
         #endregion
         private void OnGUI()
@@ -92,13 +97,13 @@ namespace XtremeFPS.Editor
                 enableInitialSetupPanel = false;
                 enableNonArmatureSetup = false;
             }
-            if (GUILayout.Button("Initial Setup", GUILayout.Width(200), GUILayout.Height(100)))
+            if (GUILayout.Button("Player Setup", GUILayout.Width(200), GUILayout.Height(100)))
             {
                 enableInitialSetupPanel = true;
                 enableAboutPanel = false;
                 enableNonArmatureSetup = false;
             }
-            if (GUILayout.Button("Create Controller", GUILayout.Width(200), GUILayout.Height(100)))
+            if (GUILayout.Button("Weapon Setup", GUILayout.Width(200), GUILayout.Height(100)))
             {
                 enableInitialSetupPanel = false;
                 enableAboutPanel = false;
@@ -164,45 +169,13 @@ namespace XtremeFPS.Editor
             }
             if (enableInitialSetupPanel)
             {
-                EditorGUILayout.LabelField("XtremeFPS Initial Setup");
-                #region Cinemachine
+                EditorGUILayout.LabelField("XtremeFPS Player Setup");
+                #region Create Character Controller
                 GUI.color = Color.black;
-                GUILayout.Label("CineMachine Installation:- ", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-                GUI.color = Color.white;
-                Rect buttonRect = GUILayoutUtility.GetRect(200, 47);
-                if (GUI.Button(buttonRect, "Install CineMachine Package"))
-                {
-                    InstallCinemachine();
-                }
-                #endregion
-                #region Input System
-                GUI.color = Color.black;
-                GUILayout.Label("Input System:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-                GUI.color = Color.white;
-                Rect inputButtonRect = GUILayoutUtility.GetRect(200, 47);
-                if (GUI.Button(inputButtonRect, "Install InputSystem Package"))
-                {
-                    InstallInputSystem();
-                }
-                #endregion
-                GUI.color = Color.red;
-                EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-                #region Create Layers
-                GUI.color = Color.black;
-                GUILayout.Label("Layers:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-                GUI.color = Color.white;
-                Rect layerButtonRect = GUILayoutUtility.GetRect(200, 47);
-                if (GUI.Button(layerButtonRect, "Create Layers"))
-                {
-                    CreateLayer(physicsLayer);
-                }
-                #endregion
-                #region Create Tags
-                GUI.color = Color.black;
-                GUILayout.Label("Tags:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+                GUILayout.Label("Player Setup:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
                 GUI.color = Color.white;
                 Rect tagInputButtonRect = GUILayoutUtility.GetRect(200, 47);
-                if (GUI.Button(tagInputButtonRect, "Create Tags"))
+                if (GUI.Button(tagInputButtonRect, "Create Tags & Layers"))
                 {
                     CreateTag(concreteTag);
                     CreateTag(grassTag);
@@ -210,48 +183,39 @@ namespace XtremeFPS.Editor
                     CreateTag(waterTag);
                     CreateTag(metalTag);
                     CreateTag(woodTag);
+                    CreateLayer(physicsLayer);
+
                 }
-                #endregion
-                GUI.color = Color.red;
-                EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-                #region Create Parent Object
-                GUI.color = Color.black;
-                GUILayout.Label("Supporting Components:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-                GUI.color = Color.white;
+                EditorGUILayout.Space();
                 Rect parentInputButtonRect = GUILayoutUtility.GetRect(200, 47);
                 if (GUI.Button(parentInputButtonRect, "Create Parent Gameobject"))
                 {
                     CreateParentObjectAndOtherComponents();
                 }
-                EditorGUILayout.Space();
-                #endregion
-            }
-            if (enableNonArmatureSetup)
-            {
-                EditorGUILayout.LabelField("XtremeFPS Player Controller Setup");
-                EditorGUILayout.Space(20);
-                playerParent = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Player Parent", "Parent of the player gameobject that contains all the necessary components."), playerParent, typeof(GameObject), true);
-                #region Create Character Controller
-                GUI.color = Color.black;
-                GUILayout.Label("Player Setup:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-                GUI.color = Color.white;
-                playerArmature = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Player GameObject", "The referrence to the player gameObject (Leave empty if none exists already)."), playerArmature, typeof(GameObject), true);
-                cameraFollow = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Player Camera Root", "The referrence to the player gameObject (Automatically setted by the editor)."), cameraFollow, typeof(GameObject), true);
+                playerParent = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Player Parent", "The referrence to the player parent gameObject (Leave empty if none exists already)."), playerParent, typeof(GameObject), true);
+                playerCamera = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Player Camera", "The referrence to the player camera (Leave empty if none exists already)."), playerCamera, typeof(GameObject), true);
+                virtualCamera = (CinemachineVirtualCamera)EditorGUILayout.ObjectField(new GUIContent("Virtual Camera", "The referrence to the virtual camera (Leave empty if none exists already)."), virtualCamera, typeof(CinemachineVirtualCamera), true);
+                objectPoolerManager = (PoolManager)EditorGUILayout.ObjectField(new GUIContent("Pool Manager", "The referrence to the object pool manager (Leave empty if none exists already)."), objectPoolerManager, typeof(PoolManager), true);
                 Rect buttonRect = GUILayoutUtility.GetRect(200, 50);
                 if (GUI.Button(buttonRect, "Create Player"))
                 {
                     CreateThePlayer();
                 }
-                NearClipingPlanes = EditorGUILayout.Slider(new GUIContent("Near Clipping Planes", "The near limit after which the camera should stop rendering."), NearClipingPlanes, 0.001f, 0.1f);
-                FieldOfView = EditorGUILayout.Slider(new GUIContent("Field Of View", "The Field Of View of the camera."), FieldOfView, 30f, 90f);
+                playerArmature = (FirstPersonController)EditorGUILayout.ObjectField(new GUIContent("Player Armature", "The referrence to the player armature gameObject (Leave empty if none exists already)."), playerArmature, typeof(FirstPersonController), true);
+                cameraHolder = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Camera Holder", "The referrence to the player camera holder object (Leave empty if none exists already)."), cameraHolder, typeof(GameObject), true);
+                cameraFollow = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Camera Follow Root", "The referrence to the player camera root (Leave empty if none exists already)."), cameraFollow, typeof(GameObject), true);
+                defaultPlayerTypes = (DefaultPlayerTypes)EditorGUILayout.EnumPopup(new GUIContent("Default Values", "Select an option from the player type for the default settings."), defaultPlayerTypes);
                 Rect setDefaultValues = GUILayoutUtility.GetRect(200, 50);
-                if (GUI.Button(setDefaultValues, "Set Default Virtual Camera"))
+                if (GUI.Button(setDefaultValues, "Set Recommended Values"))
                 {
-                    SetVirtualCamera();
+                    SetDefaultValues();
                 }
                 EditorGUILayout.Space(25);
                 #endregion
-
+            }
+            if (enableNonArmatureSetup)
+            {
+                EditorGUILayout.LabelField("XtremeFPS Weapon Setup");
                 #region Weapon Setup
                 GUI.color = Color.black;
                 GUILayout.Label("Weapon Setup:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
@@ -279,25 +243,12 @@ namespace XtremeFPS.Editor
             virtualCamera = null;
             cameraFollow = null;
             playerParent = null;
-            objectPooler = null;
+            objectPoolerManager = null;
             playerCamera = null;
             cameraHolder = null;
             Debug.Log("Setup Finish.");
         }
-
-        #region CineMachine
-        private void InstallCinemachine()
-        {
-            Client.Add("com.unity.cinemachine");
-        }
-        #endregion
-        #region Input System
-        public void InstallInputSystem()
-        {
-            Client.Add("com.unity.inputsystem");
-        }
-        #endregion
-        #region Create Layers
+        #region Create Tags And Layer
         void CreateLayer(string layerName)
         {
             SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
@@ -316,8 +267,7 @@ namespace XtremeFPS.Editor
 
             Debug.LogError("No available layer slot to create the layer: " + layerName);
         }
-        #endregion
-        #region Create Tags
+
         private bool TagExists(string tagName)
         {
             SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
@@ -378,11 +328,11 @@ namespace XtremeFPS.Editor
                 virtualCamera = playerVirtualCamera.AddComponent<CinemachineVirtualCamera>();
             }
 
-            if (objectPooler == null)
+            if (objectPoolerManager == null)
             {
-                objectPooler = new GameObject("Pool Manager");
+                GameObject objectPooler = new GameObject("Pool Manager");
                 objectPooler.transform.parent = playerParent.transform;
-                objectPooler.AddComponent<PoolManager>();
+                objectPoolerManager = objectPooler.AddComponent<PoolManager>();
             }
         }
         private void CreateThePlayer()
@@ -394,11 +344,11 @@ namespace XtremeFPS.Editor
 
             if (playerArmature == null)
             {
-                playerArmature = new GameObject("Player Armature");
+                GameObject player = new GameObject("Player Armature");
+                playerArmature = player.AddComponent<FirstPersonController>();
             }
 
             playerArmature.transform.parent = playerParent.transform;
-            playerArmature.AddComponent<FirstPersonController>();
 
             if (cameraHolder == null)
             {
@@ -412,32 +362,59 @@ namespace XtremeFPS.Editor
                 cameraFollow.transform.parent = cameraHolder.transform;
             }
         }
-        private void SetVirtualCamera()
+        private void SetDefaultValues()
+        {
+            if (defaultPlayerTypes == DefaultPlayerTypes.None) return;
+            else if (defaultPlayerTypes == DefaultPlayerTypes.Realistic) RealisticPlayerValues();
+        }
+
+        void RealisticPlayerValues()
         {
             virtualCamera.Follow = cameraFollow.transform;
-            virtualCamera.m_Lens.NearClipPlane = NearClipingPlanes;
-            virtualCamera.m_Lens.FieldOfView = FieldOfView;
+
+            playerArmature.transitionSpeed = 10f;
+            playerArmature.walkSpeed = 2f;
+            playerArmature.walkSoundSpeed = 0.3f;
+            playerArmature.canPlayerSprint = true;
+            playerArmature.sprintSpeed = 4f;
+            playerArmature.sprintDuration = 8f;
+            playerArmature.sprintCooldown = 8f;
+            playerArmature.sprintSoundSpeed = 0.25f;
+            playerArmature.canJump = true;
+            playerArmature.jumpHeight = 1.89f;
+            playerArmature.gravitationalForce = 10f;
+            playerArmature.canPlayerCrouch = true;
+            playerArmature.crouchedHeight = 1f;
+            playerArmature.crouchedSpeed = 1f;
+            playerArmature.crouchSoundPlayTime = 0.3f;
+            playerArmature.slidingSpeed = 10f;
+            playerArmature.slidingDuration = 0.75f;
+            playerArmature.isCursorLocked = true;
+            playerArmature.mouseSensitivity = 50f;
+            playerArmature.maximumClamp = 90f;
+            playerArmature.minimumClamp = -90f;
+            playerArmature.sprintFOV = 75f;
+            playerArmature.FOV = 50f;
+            playerArmature.enableZoom = false;
+            playerArmature.canHeadBob = false;
+
+            playerArmature.playerVirtualCamera = virtualCamera;
+            playerArmature.cameraFollow = cameraFollow.transform;
 
             CinemachineComponentBase body = virtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Body);
-
             if (body is not CinemachineHardLockToTarget)
             {
                 virtualCamera.AddCinemachineComponent<CinemachineHardLockToTarget>();
             }
 
             CinemachineComponentBase aim = virtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Aim);
-
             if (aim is not CinemachineSameAsFollowTarget)
             {
                 virtualCamera.AddCinemachineComponent<CinemachineSameAsFollowTarget>();
             }
-
-            FirstPersonController fpsPlayer = playerArmature.GetComponent<FirstPersonController>();
-            fpsPlayer.FOV = FieldOfView;
-            fpsPlayer.playerVirtualCamera = virtualCamera;
-            fpsPlayer.cameraFollow = cameraFollow.transform;
+            Debug.LogWarning($"Note: Although all values are automatically set to {defaultPlayerTypes},\n but you still have to set some values yourself (like sound files).");
         }
-#endregion
+        #endregion
 
         #region Weapon Setup
         private void SetupTheWeapon()
