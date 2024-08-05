@@ -20,6 +20,7 @@ namespace XtremeFPS.Editor
     using XtremeFPS.FPSController;
     using XtremeFPS.InputHandler;
     using XtremeFPS.WeaponSystem;
+    using static UnityEngine.GridBrushBase;
 
     public class XtremeFPSEditor : EditorWindow
     {
@@ -254,13 +255,24 @@ namespace XtremeFPS.Editor
             SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
             SerializedProperty layers = tagManager.FindProperty("layers");
 
-            for (int i = 8; i < layers.arraySize; i++)
+            for (int i = 0; i < layers.arraySize; i++)
+            {
+                SerializedProperty layerSP = layers.GetArrayElementAtIndex(i);
+                if (layerSP.stringValue.Equals(layerName))
+                {
+                    Debug.Log("Layer already exists: " + layerName);
+                    return;
+                }
+            }
+
+            for (int i = 0; i < layers.arraySize; i++)
             {
                 SerializedProperty layerSP = layers.GetArrayElementAtIndex(i);
                 if (string.IsNullOrEmpty(layerSP.stringValue))
                 {
                     layerSP.stringValue = layerName;
                     tagManager.ApplyModifiedProperties();
+                    Debug.Log("Layer created: " + layerName);
                     return;
                 }
             }
@@ -301,12 +313,12 @@ namespace XtremeFPS.Editor
         {
             if (playerParent == null)
             {
-                playerParent = new GameObject("Player Parent");
+                playerParent = GameObject.Find("Player Parent") ?? new GameObject("Player Parent");
             }
 
             if (playerCamera == null)
             {
-                playerCamera = new GameObject("Camera Brain");
+                playerCamera = GameObject.Find("Camera Brain") ?? new GameObject("Camera Brain");
                 playerCamera.transform.parent = playerParent.transform;
                 playerCamera.AddComponent<Camera>();
                 playerCamera.AddComponent<AudioListener>();
@@ -323,14 +335,15 @@ namespace XtremeFPS.Editor
 
             if (virtualCamera == null)
             {
-                GameObject playerVirtualCamera = new GameObject("Virtual Camera");
+                GameObject playerVirtualCamera = GameObject.Find("Virtual Camera") ?? new GameObject("Virtual Camera");
                 playerVirtualCamera.transform.parent = playerParent.transform;
-                virtualCamera = playerVirtualCamera.AddComponent<CinemachineVirtualCamera>();
+                playerVirtualCamera.AddComponent<CinemachineVirtualCamera>();
+                virtualCamera = playerVirtualCamera.GetComponent<CinemachineVirtualCamera>();
             }
 
             if (objectPoolerManager == null)
             {
-                GameObject objectPooler = new GameObject("Pool Manager");
+                GameObject objectPooler = GameObject.Find("Pool Manager") ?? new GameObject("Pool Manager");
                 objectPooler.transform.parent = playerParent.transform;
                 objectPoolerManager = objectPooler.AddComponent<PoolManager>();
             }
@@ -344,7 +357,7 @@ namespace XtremeFPS.Editor
 
             if (playerArmature == null)
             {
-                GameObject player = new GameObject("Player Armature");
+                GameObject player = GameObject.Find("Player Armature") ?? new GameObject("Player Armature");
                 playerArmature = player.AddComponent<FirstPersonController>();
             }
 
@@ -352,13 +365,13 @@ namespace XtremeFPS.Editor
 
             if (cameraHolder == null)
             {
-                cameraHolder = new GameObject("Camera Holder");
+                cameraHolder = GameObject.Find("Camera Holder") ?? new GameObject("Camera Holder");
                 cameraHolder.transform.parent = playerArmature.transform;
             }
 
             if (cameraFollow == null)
             {
-                cameraFollow = new GameObject("Camera Root");
+                cameraFollow = GameObject.Find("Camera Root") ?? new GameObject("Camera Root");
                 cameraFollow.transform.parent = cameraHolder.transform;
             }
         }
@@ -370,6 +383,9 @@ namespace XtremeFPS.Editor
 
         void RealisticPlayerValues()
         {
+            if (virtualCamera == null ||
+                cameraFollow == null ||
+                playerArmature == null) throw new VirtualCameraOrCameraFollowOrPlayerArmatureNullException();
             virtualCamera.Follow = cameraFollow.transform;
 
             playerArmature.transitionSpeed = 10f;
@@ -401,6 +417,13 @@ namespace XtremeFPS.Editor
             playerArmature.playerVirtualCamera = virtualCamera;
             playerArmature.cameraFollow = cameraFollow.transform;
 
+            cameraHolder.transform.position = new Vector3(0f, 0.6150001f, 0.1719999f);
+            playerParent.transform.position = new Vector3(
+                playerParent.transform.position.x,
+                playerParent.transform.position.y + 2f,
+                playerParent.transform.position.z
+                );
+
             CinemachineComponentBase body = virtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Body);
             if (body is not CinemachineHardLockToTarget)
             {
@@ -427,20 +450,20 @@ namespace XtremeFPS.Editor
                 throw new ParentOrCameraNullException();
             }
 
-            GameObject weaponHolder = new GameObject("Weapon Holder");
+            GameObject weaponHolder = GameObject.Find("Weapon Holder") ?? new GameObject("Weapon Holder");
             weaponHolder.transform.parent = cameraFollow.transform;
 
-            GameObject weaponRecoil = new GameObject("Weapon Recoils");
+            GameObject weaponRecoil = GameObject.Find("Weapon Recoils") ?? new GameObject("Weapon Recoils");
             weaponRecoil.transform.parent = weaponHolder.transform;
 
             GameObject weaponObject = new GameObject(weaponModel.transform.name);
             weaponObject.transform.parent = weaponRecoil.transform;
             weaponObject.AddComponent<WeaponSystem>();
 
-            GameObject shootPoint = new GameObject("Shoot Point");
+            GameObject shootPoint = GameObject.Find("Shoot Point") ?? new GameObject("Shoot Point");
             shootPoint.transform.parent = weaponObject.transform;
 
-            GameObject shellEjectionPoint = new GameObject("Shell Ejection Point");
+            GameObject shellEjectionPoint = GameObject.Find("Shell Ejection Point") ?? new GameObject("Shell Ejection Point");
             shellEjectionPoint.transform.parent = weaponObject.transform;
 
             GameObject instantiatedWeaponModel = (GameObject)PrefabUtility.InstantiatePrefab(weaponModel);
@@ -454,4 +477,5 @@ namespace XtremeFPS.Editor
     }
 
     public class ParentOrCameraNullException : Exception { }
+    public class VirtualCameraOrCameraFollowOrPlayerArmatureNullException : Exception { }
 }
