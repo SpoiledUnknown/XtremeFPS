@@ -54,35 +54,35 @@ namespace XtremeFPS.WeaponSystem
         private bool reloading;
 
         //Aiming
-        public bool canAim;
+        public bool canAim = true;
         public Transform weaponHolder;
-        public Vector3 aimingLocalPosition;
-        public float aimSmoothing = 10;
+        public Vector3 aimingLocalPosition = new Vector3(0f, -0.12f, 0.2336001f);
+        public float aimSmoothing = 6;
 
         private Vector3 normalLocalPosition;
        
         //Camera Recoil 
-        public bool haveCameraRecoil;
+        public bool haveCameraRecoil = true;
         public Transform cameraRecoilHolder;
-        public float recoilRotationSpeed;
-        public float recoilReturnSpeed;
-        public Vector3 hipFireRecoil = new Vector3(2f, 2f, 2f);
-        public Vector3 adsFireRecoil = new Vector3(0.5f, 0.5f, 0.5f);
-        public float hRecoil;
-        public float vRecoil;
+        public float recoilRotationSpeed = 6f;
+        public float recoilReturnSpeed = 25f;
+        public Vector3 hipFireRecoil = new Vector3(4f, 4f, 4f);
+        public Vector3 adsFireRecoil = new Vector3(2f, 2f, 2f);
+        public float hRecoil = 0.215f;
+        public float vRecoil = 0.221f;
 
         private Vector3 currentRotation;
         private Vector3 Rot;
 
         //Weapon Recoil 
-        public bool haveWeaponRecoil;
+        public bool haveWeaponRecoil = true;
         public Transform gunPositionHolder;
-        public float gunRecoilPositionSpeed;
-        public float gunPositionReturnSpeed;
-        public Vector3 recoilKickBackHip = new Vector3(0.015f, 0f, 0.2f);
-        public Vector3 recoilKickBackAds = new Vector3(0.005f, 0f, 0.02f);
-        public float gunRecoilRotationSpeed;
-        public float gunRotationReturnSpeed;
+        public float gunRecoilPositionSpeed = 8f;
+        public float gunPositionReturnSpeed = 10f;
+        public Vector3 recoilKickBackHip = new Vector3(0.015f, 0f, 0.05f);
+        public Vector3 recoilKickBackAds = new Vector3(-0.08f, 0.01f, 0.009f);
+        public float gunRecoilRotationSpeed = 8f;
+        public float gunRotationReturnSpeed = 38f;
         public Vector3 recoilRotationHip = new Vector3(10f, 5f, 7f);
         public Vector3 recoilRotationAds = new Vector3(10f, 4f, 6f);
 
@@ -91,33 +91,33 @@ namespace XtremeFPS.WeaponSystem
         private Vector3 rot;
 
         //Weapon Rotational Sway
-        public bool haveRotationalSway;
-        public float rotaionSwayIntensity;
-        public float rotationSwaySmoothness;
+        public bool haveRotationalSway = true;
+        public float rotaionSwayIntensity = 10f;
+        public float rotationSwaySmoothness = 2f;
 
         private Quaternion originRotation;
         private float mouseX;
         private float mouseY;
 
         //Jump Sway
-        public bool haveJumpSway;
-        public float jumpIntensity;
-        public float weaponMaxClamp;
-        public float weaponMinClamp;
-        public float jumpSmooth;
-        public float landingIntensity;
-        public float landingSmooth;
-        public float recoverySpeed;
+        public bool haveJumpSway = true;
+        public float jumpIntensity = 5f;
+        public float weaponMaxClamp = 20f;
+        public float weaponMinClamp = 20f;
+        public float jumpSmooth = 15f;
+        public float landingIntensity = 5f;
+        public float landingSmooth = 15f;
+        public float recoverySpeed = 50f;
 
         private float impactForce = 0;
 
         //Weapon Move Bobbing
-        public bool haveBobbing;
+        public bool haveBobbing = true;
         public float magnitude = 0.009f;
-        public float idleSpeed;
-        public float walkSpeedMultiplier;
-        public float walkSpeedMax;
-        public float aimReduction;
+        public float idleSpeed = 2f;
+        public float walkSpeedMultiplier = 4f;
+        public float walkSpeedMax = 6f;
+        public float aimReduction = 4f;
 
         private float sinY = 0f;
         private float sinX = 0f;

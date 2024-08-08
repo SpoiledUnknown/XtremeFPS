@@ -255,7 +255,41 @@ namespace XtremeFPS.Editor
                 Rect createWeapon = GUILayoutUtility.GetRect(200, 50);
                 if (GUI.Button(createWeapon, "Set Weapon Values"))
                 {
-                    SetupTheWeapon();
+                    switch (weaponTypes)
+                    {
+                        case WeaponTypes.Pistol:
+                            SetGun();
+                            SetPistol();
+                            break;
+
+                        case WeaponTypes.AssualtRifle:
+                            SetGun();
+                            SetAssualtRifle();
+                            break;
+
+                        case WeaponTypes.Shotgun: 
+                            SetGun();
+                            SetShotgun();
+                            break;
+
+                        case WeaponTypes.Sniper: 
+                            SetGun();
+                            SetSniper();
+                            break;
+
+                        case WeaponTypes.MachineGun: 
+                            SetGun();
+                            SetMachineGun();
+                            break;
+
+                        case WeaponTypes.SubMachineGun: 
+                            SetGun();
+                            SetSubMachineGun();
+                            break;
+
+                        default: 
+                            break;
+                    }
                 }
                 GUI.color = Color.black;
                 EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -425,7 +459,6 @@ namespace XtremeFPS.Editor
         {
             if (defaultPlayerTypes == DefaultPlayerTypes.Default) DefaultPlayerValues();
         }
-
         private void DefaultPlayerValues()
         {
             if (virtualCamera == null ||
@@ -543,6 +576,104 @@ namespace XtremeFPS.Editor
         private bool IsPrefabInstance(GameObject obj)
         {
             return PrefabUtility.GetPrefabInstanceStatus(obj) == PrefabInstanceStatus.Connected;
+        }
+
+        private void SetPistol()
+        {
+            weaponObject.timeBetweenEachShots = 0.1f;
+            weaponObject.timeBetweenShooting = 0.1f;
+            weaponObject.magazineSize = 7;
+            weaponObject.totalBullets = 35;
+            weaponObject.bulletsPerTap = 1;
+            weaponObject.reloadTime = 2.3f;
+
+            weaponObject.bulletSpeed = 200;
+            weaponObject.bulletLifeTime = 3f;
+            weaponObject.bulletGravitationalForce = 200;
+        }
+
+        private void SetAssualtRifle()
+        {
+            weaponObject.timeBetweenEachShots = 0.1f;
+            weaponObject.timeBetweenShooting = 0.1f;
+            weaponObject.magazineSize = 30;
+            weaponObject.totalBullets = 180;
+            weaponObject.bulletsPerTap = 1;
+            weaponObject.reloadTime = 2.3f;
+
+            weaponObject.bulletSpeed = 300;
+            weaponObject.bulletLifeTime = 5f;
+            weaponObject.bulletGravitationalForce = 100;
+        }
+
+        private void SetShotgun()
+        {
+            weaponObject.timeBetweenEachShots = 0.1f;
+            weaponObject.timeBetweenShooting = 0.1f;
+            weaponObject.magazineSize = 25;
+            weaponObject.totalBullets = 180;
+            weaponObject.bulletsPerTap = 25;
+            weaponObject.reloadTime = 0.25f;
+
+            weaponObject.bulletSpeed = 200;
+            weaponObject.bulletLifeTime = 2f;
+            weaponObject.bulletGravitationalForce = 200;
+        }
+
+        private void SetSniper()
+        {
+            weaponObject.timeBetweenEachShots = 1f;
+            weaponObject.timeBetweenShooting = 1f;
+            weaponObject.magazineSize = 1;
+            weaponObject.totalBullets = 7;
+            weaponObject.bulletsPerTap = 1;
+            weaponObject.reloadTime = 2.3f;
+
+            weaponObject.bulletSpeed = 600;
+            weaponObject.bulletLifeTime = 7f;
+            weaponObject.bulletGravitationalForce = 50;
+        }
+
+        private void SetMachineGun()
+        {
+            weaponObject.timeBetweenEachShots = 0.2f;
+            weaponObject.timeBetweenShooting = 0.2f;
+            weaponObject.magazineSize = 75;
+            weaponObject.totalBullets = 300;
+            weaponObject.bulletsPerTap = 1;
+            weaponObject.reloadTime = 2.3f;
+
+            weaponObject.bulletSpeed = 300;
+            weaponObject.bulletLifeTime = 3f;
+            weaponObject.bulletGravitationalForce = 150;
+        }
+
+        private void SetSubMachineGun()
+        {
+            weaponObject.timeBetweenEachShots = 0.075f;
+            weaponObject.timeBetweenShooting = 0.075f;
+            weaponObject.magazineSize = 30;
+            weaponObject.totalBullets = 180;
+            weaponObject.bulletsPerTap = 1;
+            weaponObject.reloadTime = 1.7f;
+
+            weaponObject.bulletSpeed = 200;
+            weaponObject.bulletLifeTime = 2f;
+            weaponObject.bulletGravitationalForce = 50;
+        }
+
+        private void SetGun()
+        {
+            weaponObject.fpsController = playerArmature;
+            weaponObject.shootPoint = shootPoint.transform;
+            weaponObject.muzzleFlash = instantiatedEffect;
+            weaponObject.ShellPosition = shellEjectionPoint.transform;
+
+            weaponObject.weaponHolder = weaponHolder.transform;
+            weaponObject.gunPositionHolder = weaponRecoil.transform;
+            weaponObject.cameraRecoilHolder = cameraHolder.transform;
+
+            Debug.LogWarning($"Note: Although all values are automatically set to {weaponTypes},\n but you still have to set some values yourself (like sound files and position of gameObjects).");
         }
         #endregion
     }
