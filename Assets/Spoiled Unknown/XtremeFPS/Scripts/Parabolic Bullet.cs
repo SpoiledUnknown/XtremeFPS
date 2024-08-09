@@ -86,15 +86,11 @@ namespace XtremeFPS.WeaponSystem
 
         private void OnHit(RaycastHit hit)
         {
-            if (hit.transform.TryGetComponent<ShootableObject>(out ShootableObject shootableObject))
-            {
-                PoolManager.Instance.SpawnObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
-                shootableObject.OnHit(hit);
-            }
-            else
-            {
-                PoolManager.Instance.SpawnObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
-            }
+            if (hit.transform.TryGetComponent<ShootableObject>(out ShootableObject shootableObject)) shootableObject.OnHit(hit);
+
+            GameObject HitObject = PoolManager.Instance.SpawnObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
+            HitObject.transform.parent = hit.transform;
+
             OnBulletDestroy();
         }
 

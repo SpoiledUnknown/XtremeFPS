@@ -14,8 +14,6 @@ namespace XtremeFPS.Demo
 
         public override void OnHit(RaycastHit hit)
         {
-            //PoolManager.Spawn(particlesPrefab.transform, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
-
             GetComponent<Rigidbody>().AddForceAtPosition(-hit.normal * impactForce, hit.point);
         }
     }
