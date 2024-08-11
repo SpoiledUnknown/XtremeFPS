@@ -1,4 +1,4 @@
-/*Copyright � Spoiled Unknown*/
+/*Copyright © Spoiled Unknown*/
 /*2024*/
 /*Note: This is an important editor script*/
 

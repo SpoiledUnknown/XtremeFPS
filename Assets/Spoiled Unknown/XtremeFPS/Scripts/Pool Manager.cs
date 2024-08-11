@@ -1,4 +1,6 @@
-using System.Collections;
+﻿/*Copyright © Spoiled Unknown*/
+/*2024*/
+
 using System.Collections.Generic;
 using UnityEngine;
 

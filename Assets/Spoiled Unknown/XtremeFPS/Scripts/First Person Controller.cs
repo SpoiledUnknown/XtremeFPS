@@ -1,11 +1,12 @@
-/*Copyright � Spoiled Unknown*/
+/*Copyright © Spoiled Unknown*/
 /*2024*/
-
 using System.Collections;
 using UnityEngine;
 using XtremeFPS.InputHandler;
 using Cinemachine;
 using UnityEngine.UI;
+using XtremeFPS.WeaponSystem.Pickup;
+using XtremeFPS.Interfaces;
 
 namespace XtremeFPS.FPSController
 {
@@ -18,6 +19,7 @@ namespace XtremeFPS.FPSController
         #region Variables
         // Player
         public float transitionSpeed;
+        public float interactRange;
         public float walkSpeed = 5f;
         public float walkSoundSpeed;
 
@@ -151,7 +153,7 @@ namespace XtremeFPS.FPSController
         #region MonoBehaviour Callbacks
         private void Start()
         {
-            inputManager = FPSInputManager.instance;
+            inputManager = FPSInputManager.Instance;
             audioSource = GetComponent<AudioSource>();
             CharacterController = GetComponent<CharacterController>();
 
@@ -185,6 +187,7 @@ namespace XtremeFPS.FPSController
             GravityAndJump();
             HandleStateMachine();
             DetectSurfaceAndMovement();
+            InteractionHandling();
             if (MovementState == PlayerMovementState.Sliding) HanldeSliding();
 
             if (!canHeadBob || MovementState == PlayerMovementState.Sliding) return;
@@ -520,6 +523,30 @@ namespace XtremeFPS.FPSController
             }
         }
         #endregion
+
+        private void InteractionHandling()
+        {
+            if (!inputManager.isTryingToInteract) return;
+            Collider[] colliders = Physics.OverlapSphere(transform.position, interactRange);
+            IPickup closestPickup = null;
+
+            foreach (Collider collider in colliders)
+            {
+                if (collider.TryGetComponent(out IPickup pickup))
+                {
+                    closestPickup ??= pickup;
+                    if (Vector3.Distance(transform.position, collider.transform.position) <
+                        Vector3.Distance(transform.position, closestPickup.GetTransform().position)) closestPickup = pickup;
+                }
+            }
+
+            if (closestPickup != null)
+            {
+                if (!closestPickup.IsEquiped() && !WeaponPickup.IsWeaponEquipped) closestPickup.PickUp();
+                else closestPickup.Drop();
+            }
+        }
+
         #endregion
     }
 }

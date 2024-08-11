@@ -1,11 +1,9 @@
-/*Copyright � Spoiled Unknown*/
+/*Copyright © Spoiled Unknown*/
 /*2024*/
 /*Note: This is an important editor script*/
 
 using Cinemachine;
-using System;
 using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
 #if UNITY_PIPELINE_URP
 using UnityEngine.Rendering.Universal;
@@ -18,9 +16,7 @@ using XtremeFPS.PoolingSystem;
 namespace XtremeFPS.Editor
 {
     using XtremeFPS.FPSController;
-    using XtremeFPS.InputHandler;
     using XtremeFPS.WeaponSystem;
-    using static UnityEngine.GridBrushBase;
 
     public class XtremeFPSEditor : EditorWindow
     {
@@ -355,8 +351,6 @@ namespace XtremeFPS.Editor
                     return;
                 }
             }
-
-            Debug.LogError("No available layer slot to create the layer: " + layerName);
         }
 
         private bool TagExists(string tagName)
@@ -379,7 +373,7 @@ namespace XtremeFPS.Editor
         {
             if (TagExists(tagName))
             {
-                Debug.LogWarning("No available tag slot to create the tag: " + tagName);
+                Debug.Log("Tag already exists: " + tagName);
                 return;
             }
             UnityEditorInternal.InternalEditorUtility.AddTag(tagName);

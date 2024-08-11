@@ -1,5 +1,5 @@
-/*Copyright � Spoiled Unknown*/
-/*2023*/
+/*Copyright © Spoiled Unknown*/
+/*2024*/
 /*Note: This is an important editor script*/
 
 using UnityEditor;
@@ -46,7 +46,7 @@ namespace XtremeFPS.Editor
             if (GUI.changed)
             {
                 EditorUtility.SetDirty(inputM_UI);
-                Undo.RecordObject(inputM_UI, "FPC Change");
+                Undo.RecordObject(inputM_UI, "Input Manager Change");
                 serInputM_UI.ApplyModifiedProperties();
             }
             #endregion

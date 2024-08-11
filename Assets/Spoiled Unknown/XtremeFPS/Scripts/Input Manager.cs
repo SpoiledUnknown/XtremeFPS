@@ -1,5 +1,5 @@
-/*Copyright � Non-Dynamic Studio*/
-/*2023*/
+/*Copyright © Spoiled Unknown*/
+/*2024*/
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,33 +14,40 @@ namespace XtremeFPS.InputHandler
 {
     public class FPSInputManager : MonoBehaviour
     {
-        public static FPSInputManager instance;
+        public static FPSInputManager Instance {  get; private set; }
 
         #region Variables
         public int maxTouchLimit = 10;
         public TouchDetectMode touchDetectionMode;
 
         [HideInInspector] private PlayerInputAction playerInputAction;
+
         //sprinting
         [HideInInspector] public bool isSprintingHold;
         [HideInInspector] public bool isSprintingTapped;
+
         //crouching
         [HideInInspector] public bool isCrouchingHold;
         [HideInInspector] public bool isCrouchingTapped;
+
         //Vectors
         [HideInInspector] public Vector2 moveDirection;
          public Vector2 mouseDirection;
+
         //Jump
         [HideInInspector] public bool haveJumped;
+
         //Zooming
         [HideInInspector] public bool isZoomingHold;
         [HideInInspector] public bool isZoomingTapped;
+
         //Weapon
         [HideInInspector] public bool isFiringHold;
         [HideInInspector] public bool isFiringTapped;
         [HideInInspector] public bool isReloading;
         [HideInInspector] public bool isAimingHold;
         [HideInInspector] public bool isAimingTapped;
+        [HideInInspector] public bool isTryingToInteract;
 
         #region Touch Controls
         public enum TouchDetectMode
@@ -60,8 +67,8 @@ namespace XtremeFPS.InputHandler
         {
             playerInputAction = new PlayerInputAction();
 
-            if (instance != null) Destroy(instance);
-            else instance = this;
+            if (Instance != null) Destroy(Instance);
+            else Instance = this;
         }
         private void OnEnable()
         {
@@ -104,7 +111,7 @@ namespace XtremeFPS.InputHandler
             playerInputAction.Shooting.FireHold.canceled += ShootInput;
             playerInputAction.Shooting.ADSHold.canceled += ADSHoldInput;
 
-
+            playerInputAction.Shooting.Interaction.started += Interaction_performed;
             #endregion
 
 #if UNITY_ANDROID || UNITY_IOS
@@ -161,7 +168,7 @@ namespace XtremeFPS.InputHandler
         }
 #endif
 
-#endregion
+        #endregion
 
         #region Player Inputs
         private void MouseInput(InputAction.CallbackContext context)
@@ -241,6 +248,17 @@ namespace XtremeFPS.InputHandler
         private void ADSTapInput(InputAction.CallbackContext context)
         {
             isAimingTapped = !isAimingTapped;
+        }
+
+        private void Interaction_performed(InputAction.CallbackContext obj)
+        {
+            isTryingToInteract = true;
+            Invoke(nameof(SetIsTryingToInteractToFalse), 0.001f);
+        }
+
+        private void SetIsTryingToInteractToFalse()
+        {
+            isTryingToInteract = false;
         }
         #endregion
     }

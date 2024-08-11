@@ -1,4 +1,4 @@
-/*Copyright � Spoiled Unknown*/
+/*Copyright © Spoiled Unknown*/
 /*2024*/
 
 using UnityEngine;
@@ -133,7 +133,7 @@ namespace XtremeFPS.WeaponSystem
         #region MonoBehaviour Callbacks
         private void Start()
         {
-            inputManager = FPSInputManager.instance;
+            inputManager = FPSInputManager.Instance;
             bulletSoundSource = GetComponent<AudioSource>();
 
             bulletsLeft = magazineSize;

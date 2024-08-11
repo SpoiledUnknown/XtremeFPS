@@ -481,6 +481,15 @@ namespace XtremeFPS.InputHandler
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""88bf28fa-aa0b-47cf-8ac9-aac813a0ad93"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -591,6 +600,28 @@ namespace XtremeFPS.InputHandler
                     ""processors"": """",
                     ""groups"": ""Controller"",
                     ""action"": ""ADSTap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aaad963c-bf47-499e-a1a8-fc6491641377"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard And Mouse"",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8aae1867-f312-49c1-9564-48623cdddc17"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interaction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1149,6 +1180,7 @@ namespace XtremeFPS.InputHandler
             m_Shooting_Reload = m_Shooting.FindAction("Reload", throwIfNotFound: true);
             m_Shooting_ADSHold = m_Shooting.FindAction("ADSHold", throwIfNotFound: true);
             m_Shooting_ADSTap = m_Shooting.FindAction("ADSTap", throwIfNotFound: true);
+            m_Shooting_Interaction = m_Shooting.FindAction("Interaction", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1337,6 +1369,7 @@ namespace XtremeFPS.InputHandler
         private readonly InputAction m_Shooting_Reload;
         private readonly InputAction m_Shooting_ADSHold;
         private readonly InputAction m_Shooting_ADSTap;
+        private readonly InputAction m_Shooting_Interaction;
         public struct ShootingActions
         {
             private @PlayerInputAction m_Wrapper;
@@ -1346,6 +1379,7 @@ namespace XtremeFPS.InputHandler
             public InputAction @Reload => m_Wrapper.m_Shooting_Reload;
             public InputAction @ADSHold => m_Wrapper.m_Shooting_ADSHold;
             public InputAction @ADSTap => m_Wrapper.m_Shooting_ADSTap;
+            public InputAction @Interaction => m_Wrapper.m_Shooting_Interaction;
             public InputActionMap Get() { return m_Wrapper.m_Shooting; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1370,6 +1404,9 @@ namespace XtremeFPS.InputHandler
                 @ADSTap.started += instance.OnADSTap;
                 @ADSTap.performed += instance.OnADSTap;
                 @ADSTap.canceled += instance.OnADSTap;
+                @Interaction.started += instance.OnInteraction;
+                @Interaction.performed += instance.OnInteraction;
+                @Interaction.canceled += instance.OnInteraction;
             }
 
             private void UnregisterCallbacks(IShootingActions instance)
@@ -1389,6 +1426,9 @@ namespace XtremeFPS.InputHandler
                 @ADSTap.started -= instance.OnADSTap;
                 @ADSTap.performed -= instance.OnADSTap;
                 @ADSTap.canceled -= instance.OnADSTap;
+                @Interaction.started -= instance.OnInteraction;
+                @Interaction.performed -= instance.OnInteraction;
+                @Interaction.canceled -= instance.OnInteraction;
             }
 
             public void RemoveCallbacks(IShootingActions instance)
@@ -1570,6 +1610,7 @@ namespace XtremeFPS.InputHandler
             void OnReload(InputAction.CallbackContext context);
             void OnADSHold(InputAction.CallbackContext context);
             void OnADSTap(InputAction.CallbackContext context);
+            void OnInteraction(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

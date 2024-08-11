@@ -2,7 +2,6 @@
 /*2024*/
 
 using UnityEngine;
-//using XtremeFPS.Common.PoolingSystem;
 using XtremeFPS.WeaponSystem;
 
 namespace XtremeFPS.Demo
@@ -18,5 +17,3 @@ namespace XtremeFPS.Demo
         }
     }
 }
-
-

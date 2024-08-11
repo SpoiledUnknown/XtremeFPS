@@ -1,5 +1,5 @@
-/*Copyright � Non-Dynamic Studios*/
-/*2023*/
+/*Copyright © Spoiled Unknown*/
+/*2024*/
 /*Note: This is an important editor script*/
 
 using TMPro;
@@ -45,7 +45,7 @@ namespace XtremeFPS.Editor
             //Main Movement Settings
             GUI.color = Color.white;
             uni_WeaponSystem.fpsController = (FirstPersonController)EditorGUILayout.ObjectField(new GUIContent("Player Controller", "Reference to player controller script."), uni_WeaponSystem.fpsController, typeof(FirstPersonController), true);
-            uni_WeaponSystem.shootPoint = (Transform)EditorGUILayout.ObjectField(new GUIContent("Shoot Point", "Reference to the transform of the point fro where bullets will spawn (Ideally it should be a child of gun model itself)."), uni_WeaponSystem.shootPoint, typeof(Transform), true);
+            uni_WeaponSystem.shootPoint = (Transform)EditorGUILayout.ObjectField(new GUIContent("Shoot Point", "Reference to the transform of the point from where bullets will spawn (Ideally it should be a child of gun model itself)."), uni_WeaponSystem.shootPoint, typeof(Transform), true);
             uni_WeaponSystem.muzzleFlash = (ParticleSystem)EditorGUILayout.ObjectField(new GUIContent("Muzzle Flash", "Reference to the particle system that will be played (the game object should be a child of shootPoint)."), uni_WeaponSystem.muzzleFlash, typeof(ParticleSystem), true);
             uni_WeaponSystem.particlesPrefab = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Hit Effect", "Reference to the GameObject that will be spawned at the point where bullet hits."), uni_WeaponSystem.particlesPrefab, typeof(GameObject), true);
             uni_WeaponSystem.bulletPrefab = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Bullet", "Reference to the bullet gameobject itself (it can be any same but should contain ParabolicBullet script)."), uni_WeaponSystem.bulletPrefab, typeof(GameObject), true);
@@ -213,7 +213,7 @@ namespace XtremeFPS.Editor
             if (GUI.changed)
             {
                 EditorUtility.SetDirty(uni_WeaponSystem);
-                Undo.RecordObject(uni_WeaponSystem, "FPC Change");
+                Undo.RecordObject(uni_WeaponSystem, "Weapon System Change");
                 serWeaponSystem.ApplyModifiedProperties();
             }
             #endregion

@@ -1,4 +1,4 @@
-/*Copyright � Spoiled Unknown*/
+/*Copyright © Spoiled Unknown*/
 /*2024*/
 /*Note: This is an important editor script*/
 
@@ -6,11 +6,10 @@ using UnityEditor;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
+using XtremeFPS.FPSController;
 
 namespace XtremeFPS.Editor
 {
-    using XtremeFPS.FPSController;
-
     [CustomEditor(typeof(FirstPersonController)), CanEditMultipleObjects]
     public class FirstPersonControllerEditor : UnityEditor.Editor
     {
@@ -186,6 +185,7 @@ namespace XtremeFPS.Editor
             GUILayout.Label("Physics Settings", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
             EditorGUILayout.Space();
             GUI.color = Color.white;
+            fpsController.interactRange = EditorGUILayout.Slider(new GUIContent("Interaction Range", "Determines the range in which the player can interact."), fpsController.interactRange, 0f, 5f);
             fpsController.canPush = EditorGUILayout.ToggleLeft(new GUIContent("Can Push", "Defines whether player can push other objects or not."), fpsController.canPush);
             if (fpsController.canPush)
             {
@@ -201,7 +201,7 @@ namespace XtremeFPS.Editor
             if (GUI.changed)
             {
                 EditorUtility.SetDirty(fpsController);
-                Undo.RecordObject(fpsController, "FPC Change");
+                Undo.RecordObject(fpsController, "First Person Controller Change");
                 serFPS.ApplyModifiedProperties();
             }
             #endregion

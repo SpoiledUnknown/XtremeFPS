@@ -1,7 +1,9 @@
+/*Copyright © Spoiled Unknown*/
+/*2024*/
+
 using UnityEngine;
 using UnityEditor;
 using XtremeFPS.PoolingSystem;
-using TMPro;
 
 namespace XtremeFPS.Editor
 {
@@ -90,7 +92,6 @@ namespace XtremeFPS.Editor
                     EditorGUILayout.Space();
                     EditorGUI.indentLevel--;
                 }
-                //foldoutStates[i] = EditorGUILayout.Foldout(foldoutStates[i], new GUIContent(objectToPoolProperty.name, "Contains all the property required by the element " + i + "."));
             }
             EditorGUI.indentLevel--;
 
