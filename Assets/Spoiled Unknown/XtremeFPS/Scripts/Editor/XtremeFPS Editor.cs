@@ -147,7 +147,8 @@ namespace XtremeFPS.Editor
                 EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
                 GUILayout.Space(20);
                 GUI.color = Color.black;
-                GUILayout.Label("Socials:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+                GUILayout.Label("Socials:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 });
+                GUILayout.Space(18);
                 GUI.color = Color.white;
                 #endregion
 
