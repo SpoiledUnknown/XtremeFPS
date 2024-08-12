@@ -19,7 +19,6 @@ namespace XtremeFPS.FPSController
         #region Variables
         // Player
         public float transitionSpeed;
-        public float interactRange;
         public float walkSpeed = 5f;
         public float walkSoundSpeed;
 
@@ -112,6 +111,7 @@ namespace XtremeFPS.FPSController
         private Vector3 headBobStartPosition;
 
         //Sound System
+        public string SurfaceType { get; private set; }
         public string grassTag;
         public AudioClip[] soundGrass;
 
@@ -138,7 +138,6 @@ namespace XtremeFPS.FPSController
         private AudioSource audioSource;
         private float AudioEffectSpeed;
         private bool isMoving = false;
-        private string floortag;
 
 
         // Handling Physics
@@ -148,6 +147,11 @@ namespace XtremeFPS.FPSController
 
         private float hRecoil = 0f;
         private float vRecoil = 0f;
+
+        //Interactions
+        public float interactRange;
+
+        private IPickup closestPickup = null;
         #endregion
 
         #region MonoBehaviour Callbacks
@@ -258,7 +262,7 @@ namespace XtremeFPS.FPSController
 
         private void AdjustFOVSettings(float targetFOV)
         {
-            if (isZoomed) return;
+            if (enableZoom && isZoomed) return;
             if (!isMoving) targetFOV = FOV;
 
             float currentFOV = playerVirtualCamera.m_Lens.FieldOfView;
@@ -426,8 +430,10 @@ namespace XtremeFPS.FPSController
                     targetSpeed = Mathf.Lerp(targetSpeed, slidingSpeed, transitionDelta);
                     AdjustCrouchHeight(crouchedHeight, false);
                     audioSource.clip = slidingAudioClip;
-                    audioSource.loop = true;
-                    audioSource.Play();
+
+                    if (IsGrounded) audioSource.Play();
+                    else audioSource.Stop();
+
                     canSlide = false;
                     break;
 
@@ -467,7 +473,7 @@ namespace XtremeFPS.FPSController
         private void DetectSurfaceAndMovement()
         {
             if (!Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 5f)) return;
-            floortag = hit.collider.tag.ToLower() switch
+            SurfaceType = hit.collider.tag.ToLower() switch
             {
                 "grass" => "grass",
                 "metals" => "metal",
@@ -475,7 +481,7 @@ namespace XtremeFPS.FPSController
                 "water" => "water",
                 "concrete" => "concrete",
                 "wood" => "wood",
-                _ => "",
+                _ => "Unknown",
             };
         }
 
@@ -489,7 +495,7 @@ namespace XtremeFPS.FPSController
                     continue;
                 }
 
-                switch (floortag)
+                switch (SurfaceType)
                 {
                     case "grass":
                         audioSource.clip = soundGrass[Random.Range(0, soundGrass.Length)];
@@ -528,7 +534,6 @@ namespace XtremeFPS.FPSController
         {
             if (!inputManager.isTryingToInteract) return;
             Collider[] colliders = Physics.OverlapSphere(transform.position, interactRange);
-            IPickup closestPickup = null;
 
             foreach (Collider collider in colliders)
             {
@@ -537,13 +542,11 @@ namespace XtremeFPS.FPSController
                     closestPickup ??= pickup;
                     if (Vector3.Distance(transform.position, collider.transform.position) <
                         Vector3.Distance(transform.position, closestPickup.GetTransform().position)) closestPickup = pickup;
-                }
-            }
 
-            if (closestPickup != null)
-            {
-                if (!closestPickup.IsEquiped() && !WeaponPickup.IsWeaponEquipped) closestPickup.PickUp();
-                else closestPickup.Drop();
+                    if (!closestPickup.IsEquiped() && !WeaponPickup.IsWeaponEquipped) closestPickup.PickUp();
+                    else closestPickup.Drop();
+                    break;
+                }
             }
         }
 

@@ -316,31 +316,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fpsController: {fileID: 0}
-  shootPoint: {fileID: 0}
-  muzzleFlash: {fileID: 0}
-  bulletPrefab: {fileID: 0}
+  shootPoint: {fileID: 8651637047224726082}
+  muzzleFlash: {fileID: 6410131006723836053}
+  bulletPrefab: {fileID: 1660800468149884, guid: afc9c0a592c2d3e408e67df46bacd613,
+    type: 3}
   bulletCount: {fileID: 0}
-  animator: {fileID: 0}
+  animator: {fileID: 8975891094479538454}
   aimUIImage: {fileID: 0}
-  bulletSpeed: 50
-  bulletLifeTime: 1
-  bulletGravitationalForce: 0
-  ShellPosition: {fileID: 0}
-  Shell: {fileID: 0}
-  particlesPrefab: {fileID: 0}
-  isGunAuto: 0
+  bulletSpeed: 300
+  bulletLifeTime: 5
+  bulletGravitationalForce: 15
+  ShellPosition: {fileID: 6277738445211276933}
+  Shell: {fileID: 2046857199201600465, guid: adb843424a0f88a4ea26c84473f521d2, type: 3}
+  particlesPrefab: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d,
+    type: 3}
+  isGunAuto: 1
   isAimHold: 0
-  timeBetweenEachShots: 0
-  timeBetweenShooting: 0
-  magazineSize: 0
-  totalBullets: 0
-  bulletsPerTap: 0
-  reloadTime: 0
-  aiming: 0
+  timeBetweenEachShots: 1
+  timeBetweenShooting: 1
+  magazineSize: 7
+  totalBullets: 15
+  bulletsPerTap: 1
+  reloadTime: 1.5
+  aiming: 1
   hardMode: 0
   canAim: 1
   weaponHolder: {fileID: 0}
-  aimingLocalPosition: {x: 0, y: -0.12, z: 0.2336001}
+  aimingLocalPosition: {x: 0.002, y: -0.068, z: 0.239}
   aimSmoothing: 6
   haveCameraRecoil: 1
   cameraRecoilHolder: {fileID: 0}
@@ -377,8 +379,8 @@ MonoBehaviour:
   walkSpeedMultiplier: 4
   walkSpeedMax: 6
   aimReduction: 4
-  bulletSoundClip: {fileID: 0}
-  bulletReloadClip: {fileID: 0}
+  bulletSoundClip: {fileID: 8300000, guid: aa94a48ec468c464e8c375e3650981a8, type: 3}
+  bulletReloadClip: {fileID: 8300000, guid: c35f284e9475b5f45b9edab995d9824c, type: 3}
 --- !u!65 &5864498854658109295
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -415,10 +417,11 @@ MonoBehaviour:
   playerArmature: {fileID: 0}
   weaponHolder: {fileID: 0}
   cameraRoot: {fileID: 0}
+  bulletText: {fileID: 0}
   equipped: 0
+  Priority: 0
   dropForwardForce: 5
   dropUpwardForce: 1
-  interactRange: 1
 --- !u!1001 &6506069538367957029
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -488,6 +491,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
+--- !u!198 &6410131006723836053 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198000012944515248, guid: 9defeac88977c0d448aa4541073ee9e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6506069538367957029}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6504330614284851615 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000011227296186, guid: 9defeac88977c0d448aa4541073ee9e4,

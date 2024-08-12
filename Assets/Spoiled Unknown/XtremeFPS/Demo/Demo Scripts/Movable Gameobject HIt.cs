@@ -8,8 +8,8 @@ namespace XtremeFPS.Demo
 {
     public class MovableGameobjectHit : ShootableObject
     {
-        public GameObject particlesPrefab;
-        public float impactForce;
+        [SerializeField] private GameObject particlesPrefab;
+        [SerializeField] private float impactForce;
 
         public override void OnHit(RaycastHit hit)
         {

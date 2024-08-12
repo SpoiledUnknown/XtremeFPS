@@ -11,16 +11,16 @@ namespace XtremeFPS.Editor
     using XtremeFPS.WeaponSystem;
     using XtremeFPS.FPSController;
 
-    [CustomEditor(typeof(WeaponSystem)), CanEditMultipleObjects]
+    [CustomEditor(typeof(UniversalWeaponSystem)), CanEditMultipleObjects]
     public class WeaponSystemEditor : UnityEditor.Editor
     {
-        WeaponSystem uni_WeaponSystem;
+        UniversalWeaponSystem uni_WeaponSystem;
         SerializedObject serWeaponSystem;
 
 
         private void OnEnable()
         {
-            uni_WeaponSystem = (WeaponSystem)target;
+            uni_WeaponSystem = (UniversalWeaponSystem)target;
             serWeaponSystem = new SerializedObject(uni_WeaponSystem);
         }
 

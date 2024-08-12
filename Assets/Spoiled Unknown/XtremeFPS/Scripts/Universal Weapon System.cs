@@ -11,7 +11,7 @@ namespace XtremeFPS.WeaponSystem
 {
     [RequireComponent(typeof(AudioSource))]
     [AddComponentMenu("Spoiled Unknown/XtremeFPS/Weapon System")]
-    public class WeaponSystem : MonoBehaviour
+    public class UniversalWeaponSystem : MonoBehaviour
     {
         #region Variables
         //Reference
@@ -36,6 +36,7 @@ namespace XtremeFPS.WeaponSystem
         public GameObject particlesPrefab;
 
         //Gun stats
+        public int BulletsLeft { get; private set; }
         public bool isGunAuto;
         public bool isAimHold;
         public float timeBetweenEachShots;
@@ -47,7 +48,6 @@ namespace XtremeFPS.WeaponSystem
         public bool aiming;
         public bool hardMode;
 
-        private int bulletsLeft;
         private int bulletsShot;
         private bool readyToShoot;
         private bool shooting;
@@ -136,7 +136,7 @@ namespace XtremeFPS.WeaponSystem
             inputManager = FPSInputManager.Instance;
             bulletSoundSource = GetComponent<AudioSource>();
 
-            bulletsLeft = magazineSize;
+            BulletsLeft = magazineSize;
 
             lastPosition = transform.position;
             if (canAim) normalLocalPosition = weaponHolder.transform.localPosition;
@@ -174,8 +174,8 @@ namespace XtremeFPS.WeaponSystem
             if (isAimHold) aiming = inputManager.isAimingHold;
             else aiming = inputManager.isAimingTapped;
 
-            if ((inputManager.isReloading || bulletsLeft == 0)
-                && bulletsLeft < magazineSize
+            if ((inputManager.isReloading || BulletsLeft == 0)
+                && BulletsLeft < magazineSize
                 && totalBullets > 0
                 && !reloading) Reload();
 
@@ -183,10 +183,11 @@ namespace XtremeFPS.WeaponSystem
             if (readyToShoot
                 && shooting
                 && !reloading
-                && bulletsLeft > 0)
+                && BulletsLeft > 0)
             {
                 bulletsShot = bulletsPerTap;
                 Shoot();
+                bulletSoundSource.PlayOneShot(bulletSoundClip);
             }
             else fpsController.AddRecoil(0f, 0f);
         }
@@ -204,7 +205,6 @@ namespace XtremeFPS.WeaponSystem
             muzzleFlash.Play();
 
             PoolManager.Instance.SpawnObject(Shell, ShellPosition.position, ShellPosition.rotation);
-            bulletSoundSource.PlayOneShot(bulletSoundClip);
             float hRecoil = Random.Range(-this.hRecoil, this.hRecoil);
 
             if (aiming)
@@ -224,13 +224,13 @@ namespace XtremeFPS.WeaponSystem
                 fpsController.AddRecoil(hRecoil, vRecoil);
             }
 
-            bulletsLeft--;
+            BulletsLeft--;
             bulletsShot--;
 
             SetBulletCountUI();
 
             Invoke(nameof(ResetShot), timeBetweenShooting);
-            if (bulletsShot > 0 && bulletsLeft > 0) Invoke(nameof(Shoot), timeBetweenEachShots);
+            if (bulletsShot > 0 && BulletsLeft > 0) Invoke(nameof(Shoot), timeBetweenEachShots);
         }
         private void ResetShot()
         {
@@ -256,15 +256,15 @@ namespace XtremeFPS.WeaponSystem
                 switch (totalBullets.CompareTo(magazineSize))
                 {
                     case 1:  // totalBullets > magazineSize
-                        bulletsLeft = magazineSize;
+                        BulletsLeft = magazineSize;
                         totalBullets -= magazineSize;
                         break;
                     case 0:  // totalBullets == magazineSize
-                        bulletsLeft = magazineSize;
+                        BulletsLeft = magazineSize;
                         totalBullets -= magazineSize;
                         break;
                     case -1: // totalBullets < magazineSize
-                        bulletsLeft = totalBullets;
+                        BulletsLeft = totalBullets;
                         totalBullets = 0;
                         break;
                     default:
@@ -275,16 +275,16 @@ namespace XtremeFPS.WeaponSystem
             }
             else //if hardMode is false
             {
-                if ((bulletsLeft + totalBullets) >= magazineSize)
+                if ((BulletsLeft + totalBullets) >= magazineSize)
                 {
-                    int bulletsNeededForReload = magazineSize - bulletsLeft;
-                    bulletsLeft += bulletsNeededForReload;
+                    int bulletsNeededForReload = magazineSize - BulletsLeft;
+                    BulletsLeft += bulletsNeededForReload;
                     totalBullets -= bulletsNeededForReload;
                 }
                 else
                 {
-                    int bulletsNeededForReload = magazineSize - bulletsLeft;
-                    bulletsLeft += Mathf.Min(bulletsNeededForReload, totalBullets);
+                    int bulletsNeededForReload = magazineSize - BulletsLeft;
+                    BulletsLeft += Mathf.Min(bulletsNeededForReload, totalBullets);
                     totalBullets -= bulletsNeededForReload;
                     totalBullets = Mathf.Max(0, totalBullets);
                 }
@@ -293,7 +293,8 @@ namespace XtremeFPS.WeaponSystem
         }
         private void SetBulletCountUI()
         {
-            bulletCount.SetText(bulletsLeft + " / " + totalBullets);
+            if (bulletCount == null) return;
+            bulletCount.SetText(BulletsLeft + " / " + totalBullets);
         }
         #endregion
         #region Recoil
@@ -325,10 +326,16 @@ namespace XtremeFPS.WeaponSystem
 
             Vector3 desiredPosition = Vector3.Lerp(weaponHolder.transform.localPosition, target, Time.deltaTime * aimSmoothing);
             weaponHolder.transform.localPosition = desiredPosition;
-            if (aimUIImage != null) aimUIImage.SetActive(aiming);
+            if (aimUIImage != null)
+            {
+                aimUIImage.SetActive(aiming);
+                animator.gameObject.SetActive(!aiming);
+                fpsController.enableZoom = aiming;
+            }
+
         }
         #region Effects
-        private void WeaponRotationSway()
+            private void WeaponRotationSway()
         {
             if(!haveRotationalSway) return;
 

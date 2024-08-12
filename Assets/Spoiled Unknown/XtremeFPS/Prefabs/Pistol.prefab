@@ -301,16 +301,16 @@ MonoBehaviour:
   isGunAuto: 0
   isAimHold: 0
   timeBetweenEachShots: 0.5
-  timeBetweenShooting: 0.5
+  timeBetweenShooting: 0.1
   magazineSize: 100
   totalBullets: 200
   bulletsPerTap: 1
   reloadTime: 1.5
-  aiming: 0
+  aiming: 1
   hardMode: 0
   canAim: 1
   weaponHolder: {fileID: 0}
-  aimingLocalPosition: {x: 0, y: -0.12, z: 0.2336001}
+  aimingLocalPosition: {x: 0.002, y: -0.068, z: 0.239}
   aimSmoothing: 6
   haveCameraRecoil: 1
   cameraRecoilHolder: {fileID: 0}
@@ -385,10 +385,11 @@ MonoBehaviour:
   playerArmature: {fileID: 0}
   weaponHolder: {fileID: 0}
   cameraRoot: {fileID: 0}
-  equipped: 1
+  bulletText: {fileID: 0}
+  equipped: 0
+  Priority: 0
   dropForwardForce: 5
   dropUpwardForce: 1
-  interactRange: 1
 --- !u!1 &9092669830667870639
 GameObject:
   m_ObjectHideFlags: 0

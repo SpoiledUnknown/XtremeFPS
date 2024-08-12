@@ -315,17 +315,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fpsController: {fileID: 0}
-  shootPoint: {fileID: 0}
-  muzzleFlash: {fileID: 0}
+  shootPoint: {fileID: 3287531856852553256}
+  muzzleFlash: {fileID: 1860589940189072827}
   bulletPrefab: {fileID: 1660800468149884, guid: afc9c0a592c2d3e408e67df46bacd613,
     type: 3}
   bulletCount: {fileID: 0}
-  animator: {fileID: 0}
+  animator: {fileID: 34065043958220318}
   aimUIImage: {fileID: 0}
   bulletSpeed: 200
   bulletLifeTime: 3
   bulletGravitationalForce: 25
-  ShellPosition: {fileID: 0}
+  ShellPosition: {fileID: 1674501346968122832}
   Shell: {fileID: 2046857199201600465, guid: adb843424a0f88a4ea26c84473f521d2, type: 3}
   particlesPrefab: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d,
     type: 3}
@@ -334,7 +334,7 @@ MonoBehaviour:
   timeBetweenEachShots: 0.075
   timeBetweenShooting: 0.075
   magazineSize: 30
-  totalBullets: 280
+  totalBullets: 180
   bulletsPerTap: 1
   reloadTime: 1.5
   aiming: 1
@@ -416,10 +416,11 @@ MonoBehaviour:
   playerArmature: {fileID: 0}
   weaponHolder: {fileID: 0}
   cameraRoot: {fileID: 0}
+  bulletText: {fileID: 0}
   equipped: 0
+  Priority: 0
   dropForwardForce: 5
   dropUpwardForce: 1
-  interactRange: 1
 --- !u!1001 &1976318580550413579
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -489,6 +490,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
+--- !u!198 &1860589940189072827 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198000012944515248, guid: 9defeac88977c0d448aa4541073ee9e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1976318580550413579}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1973560399533628593 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000011227296186, guid: 9defeac88977c0d448aa4541073ee9e4,

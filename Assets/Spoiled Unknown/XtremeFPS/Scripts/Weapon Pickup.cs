@@ -1,12 +1,13 @@
 /*Copyright © Spoiled Unknown*/
 /*2024*/
 
+using TMPro;
 using UnityEngine;
 using XtremeFPS.Interfaces;
 
 namespace XtremeFPS.WeaponSystem.Pickup
 {
-    [RequireComponent(typeof(WeaponSystem))]
+    [RequireComponent(typeof(UniversalWeaponSystem))]
     [RequireComponent(typeof(BoxCollider))]
     [AddComponentMenu("Spoiled Unknown/XtremeFPS/Weapon Pickup")]
     public class WeaponPickup : MonoBehaviour, IPickup
@@ -16,13 +17,14 @@ namespace XtremeFPS.WeaponSystem.Pickup
         public CharacterController playerArmature;
         public Transform weaponHolder;
         public Transform cameraRoot;
+        public TextMeshProUGUI bulletText;
 
         public bool equipped;
         public int Priority;
         public float dropForwardForce;
         public float dropUpwardForce;
 
-        private WeaponSystem weaponSystem;
+        private UniversalWeaponSystem weaponSystem;
         private BoxCollider Collider;
         private Vector3 currentVelocity;
         private Vector3 angularVelocity;
@@ -32,7 +34,7 @@ namespace XtremeFPS.WeaponSystem.Pickup
         private void Start()
         {
             Collider = GetComponent<BoxCollider>();
-            weaponSystem = GetComponent<WeaponSystem>();
+            weaponSystem = GetComponent<UniversalWeaponSystem>();
 
             if (!equipped) UnEquip();
             else Equip();
@@ -84,6 +86,7 @@ namespace XtremeFPS.WeaponSystem.Pickup
 
         public void Drop()
         {
+            bulletText.SetText("00 / 00");
             UnEquip();
             equipped = false;
             IsWeaponEquipped = false;

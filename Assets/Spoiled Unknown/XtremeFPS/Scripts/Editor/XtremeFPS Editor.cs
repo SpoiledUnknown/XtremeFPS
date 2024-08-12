@@ -74,7 +74,7 @@ namespace XtremeFPS.Editor
         //Weapon Related
         private GameObject weaponHolder;
         private GameObject weaponRecoil;
-        private WeaponSystem weaponObject;
+        private UniversalWeaponSystem weaponObject;
         private GameObject shootPoint;
         private GameObject shellEjectionPoint;
         private GameObject weaponModel;
@@ -239,7 +239,7 @@ namespace XtremeFPS.Editor
                 }
                 weaponHolder = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Weapon Holder", "The referrence to the weapon holder object (Leave empty if none exists already)."), weaponHolder, typeof(GameObject), true);
                 weaponRecoil = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Weapon Recoil", "The referrence to the weapon recoil object (Leave empty if none exists already)."), weaponRecoil, typeof(GameObject), true);
-                weaponObject = (WeaponSystem)EditorGUILayout.ObjectField(new GUIContent("Weapon", "The referrence to the weapon (Leave empty if none exists already)."), weaponObject, typeof(WeaponSystem), true);
+                weaponObject = (UniversalWeaponSystem)EditorGUILayout.ObjectField(new GUIContent("Weapon", "The referrence to the weapon (Leave empty if none exists already)."), weaponObject, typeof(UniversalWeaponSystem), true);
                 instantiatedWeaponModel = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Model", "The referrence to the model of weapon used, usually the child of 'Weapon' (Leave empty if none exists already)."), instantiatedWeaponModel, typeof(GameObject), true);
                 shootPoint = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Shoot Point", "The referrence to the shoot point (Leave empty if none exists already)."), shootPoint, typeof(GameObject), true);
                 instantiatedEffect = (ParticleSystem)EditorGUILayout.ObjectField(new GUIContent("Muzzle Particle Effect", "The referrence to the muzzle particle effect, usually the child of 'Model' (Leave empty if none exists already)."), instantiatedEffect, typeof(ParticleSystem), true);
@@ -537,11 +537,11 @@ namespace XtremeFPS.Editor
             weaponRecoil.transform.parent = weaponHolder.transform;
 
             if (weaponObject == null ||
-                !weaponObject.TryGetComponent<WeaponSystem>(out _)) 
+                !weaponObject.TryGetComponent<UniversalWeaponSystem>(out _)) 
             {
                 GameObject tempWeaponObject = GameObject.Find(weaponModel.transform.name) ?? new GameObject(weaponModel.transform.name);
-                if (!tempWeaponObject.TryGetComponent<WeaponSystem>(out _)) tempWeaponObject.AddComponent<WeaponSystem>();
-                weaponObject = tempWeaponObject.GetComponent<WeaponSystem>();
+                if (!tempWeaponObject.TryGetComponent<UniversalWeaponSystem>(out _)) tempWeaponObject.AddComponent<UniversalWeaponSystem>();
+                weaponObject = tempWeaponObject.GetComponent<UniversalWeaponSystem>();
             }
             weaponObject.transform.parent = weaponRecoil.transform;
 

@@ -47,6 +47,7 @@ namespace XtremeFPS.Editor
             weaponPickup.playerArmature = (CharacterController)EditorGUILayout.ObjectField(new GUIContent("Player Armature", "Reference to the character controller of the player."), weaponPickup.playerArmature, typeof(CharacterController), true);
             weaponPickup.weaponHolder = (Transform)EditorGUILayout.ObjectField(new GUIContent("Weapon Position", "Reference to the just parent of the weapon (can be weapon holder or weapon recoil(weapon recoild in our case))."), weaponPickup.weaponHolder, typeof(Transform), true);
             weaponPickup.cameraRoot = (Transform)EditorGUILayout.ObjectField(new GUIContent("camera Root", "Reference to the camera root."), weaponPickup.cameraRoot, typeof(Transform), true);
+            weaponPickup.bulletText = (TextMeshProUGUI)EditorGUILayout.ObjectField(new GUIContent("Bullet Text", "Reference to the text that shows number of bullets on UI."), weaponPickup.bulletText, typeof(TextMeshProUGUI), true);
             EditorGUILayout.Space();
             #endregion
 

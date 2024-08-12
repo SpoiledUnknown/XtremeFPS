@@ -9,9 +9,9 @@ namespace XtremeFPS.Demo
     [RequireComponent(typeof(Rigidbody))]
     public class ShellEjection : MonoBehaviour
     {
-        public float minForce;
-        public float maxForce;
-        public float lifeTime;
+        [SerializeField] private float minForce;
+        [SerializeField] private float maxForce;
+        [SerializeField] private float lifeTime;
         private Rigidbody rb;
 
         private void OnEnable()
