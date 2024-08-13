@@ -4,6 +4,7 @@
 using System.Collections;
 using UnityEngine;
 using XtremeFPS.PoolingSystem;
+using XtremeFPS.Interfaces;
 
 namespace XtremeFPS.WeaponSystem
 {
@@ -11,6 +12,7 @@ namespace XtremeFPS.WeaponSystem
     {
         #region Variables
         private float speed;
+        private float damage;
         private float gravity;
         private Vector3 startPosition;
         private Vector3 startForward;
@@ -22,11 +24,12 @@ namespace XtremeFPS.WeaponSystem
         #endregion
 
         #region Initialization
-        public void Initialize(Transform startPoint, float speed, float gravity, float bulletLifetime, GameObject particlePrefab)
+        public void Initialize(Transform startPoint, float speed, float damage, float gravity, float bulletLifetime, GameObject particlePrefab)
         {
             this.startPosition = startPoint.position;
             this.startForward = startPoint.forward.normalized;
             this.speed = speed;
+            this.damage = damage;
             this.gravity = gravity;
             this.particlesPrefab = particlePrefab;
             this.bulletLiftime = bulletLifetime;
@@ -86,7 +89,7 @@ namespace XtremeFPS.WeaponSystem
 
         private void OnHit(RaycastHit hit)
         {
-            if (hit.transform.TryGetComponent<ShootableObject>(out ShootableObject shootableObject)) shootableObject.OnHit(hit);
+            if (hit.transform.TryGetComponent<IShootableObject>(out IShootableObject shootableObject)) shootableObject.OnHit(hit, damage);
 
             GameObject HitObject = PoolManager.Instance.SpawnObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
             HitObject.transform.parent = hit.transform;

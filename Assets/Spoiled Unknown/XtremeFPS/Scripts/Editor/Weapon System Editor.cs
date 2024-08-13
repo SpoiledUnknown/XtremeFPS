@@ -79,11 +79,12 @@ namespace XtremeFPS.Editor
 
             GUI.color = Color.black;
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-            GUILayout.Label("Bullet Physics", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+            GUILayout.Label("Bullet Stats", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
             EditorGUILayout.Space();
 
             GUI.color = Color.white;
             uni_WeaponSystem.bulletSpeed = EditorGUILayout.Slider(new GUIContent("Bullet Velocity", "The velocity at which the bullet will move."), uni_WeaponSystem.bulletSpeed, 50f, 1500f);
+            uni_WeaponSystem.bulletDamage = EditorGUILayout.Slider(new GUIContent("Bullet Damage", "The amount of damage the bullet should deal."), uni_WeaponSystem.bulletDamage, 5f, 150f);
             uni_WeaponSystem.bulletLifeTime = EditorGUILayout.Slider(new GUIContent("Bullet Life", "The time after which the bullet will despawn itself."), uni_WeaponSystem.bulletLifeTime, 1f, 100f);
             uni_WeaponSystem.bulletGravitationalForce = EditorGUILayout.Slider(new GUIContent("Bullet Gravity", "Defines the value of gravity that will act on the bullet."), uni_WeaponSystem.bulletGravitationalForce, 0f, 300f);
             EditorGUILayout.Space();

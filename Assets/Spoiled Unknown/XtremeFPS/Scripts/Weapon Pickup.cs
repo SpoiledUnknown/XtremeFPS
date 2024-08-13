@@ -3,6 +3,7 @@
 
 using TMPro;
 using UnityEngine;
+using XtremeFPS.InputHandler;
 using XtremeFPS.Interfaces;
 
 namespace XtremeFPS.WeaponSystem.Pickup
@@ -87,14 +88,16 @@ namespace XtremeFPS.WeaponSystem.Pickup
         public void Drop()
         {
             bulletText.SetText("00 / 00");
-            UnEquip();
             equipped = false;
             IsWeaponEquipped = false;
             transform.SetParent(null);
             float random = Random.Range(-1f, 1f);
+            weaponSystem.animator.gameObject.SetActive(true);
+            if (weaponSystem.aimUIImage != null) weaponSystem.aimUIImage.SetActive(false);
 
             currentVelocity = cameraRoot.forward * dropForwardForce + cameraRoot.up * dropUpwardForce;
             angularVelocity = new Vector3(random, random, random) * 100f;
+            UnEquip();
         }
 
         public bool IsEquiped()

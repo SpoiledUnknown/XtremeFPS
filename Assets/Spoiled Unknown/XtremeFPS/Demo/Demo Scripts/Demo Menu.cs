@@ -14,7 +14,6 @@ namespace XtremeFPS.Demo
         [SerializeField] private TextMeshProUGUI bulletText;
         [SerializeField] private FirstPersonController personController;
         [SerializeField] private UniversalWeaponSystem weaponSystem;
-        [SerializeField] private int shellCount;
 
         private void Update()
         {
@@ -27,7 +26,7 @@ namespace XtremeFPS.Demo
         private void CalculateBulletShellsAndSetTheText()
         {
             if (bulletText == null || weaponSystem == null || !weaponSystem.enabled) return;
-            bulletText.text = $"{weaponSystem.BulletsLeft / shellCount} / {weaponSystem.totalBullets / shellCount}";
+            bulletText.text = $"{weaponSystem.BulletsLeft / weaponSystem.bulletsPerTap} / {weaponSystem.totalBullets / weaponSystem.bulletsPerTap}";
         }
     }
 }

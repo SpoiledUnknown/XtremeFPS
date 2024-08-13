@@ -27,6 +27,7 @@ namespace XtremeFPS.WeaponSystem
 
         //Bullet Physics
         public float bulletSpeed;
+        public float bulletDamage;
         public float bulletLifeTime;
         public float bulletGravitationalForce;
 
@@ -199,7 +200,7 @@ namespace XtremeFPS.WeaponSystem
 
             GameObject bulletObject = PoolManager.Instance.SpawnObject(bulletPrefab, shootPoint.position, Quaternion.identity);
             ParabolicBullet parabolicBullet = bulletObject.GetComponent<ParabolicBullet>();
-            parabolicBullet.Initialize(shootPoint, bulletSpeed, bulletGravitationalForce, bulletLifeTime, particlesPrefab);
+            parabolicBullet.Initialize(shootPoint, bulletSpeed, bulletDamage, bulletGravitationalForce, bulletLifeTime, particlesPrefab);
 
             //Graphics
             muzzleFlash.Play();

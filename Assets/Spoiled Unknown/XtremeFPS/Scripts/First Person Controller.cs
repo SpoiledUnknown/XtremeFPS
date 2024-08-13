@@ -262,7 +262,7 @@ namespace XtremeFPS.FPSController
 
         private void AdjustFOVSettings(float targetFOV)
         {
-            if (enableZoom && isZoomed) return;
+            if (enableZoom || isZoomed) return;
             if (!isMoving) targetFOV = FOV;
 
             float currentFOV = playerVirtualCamera.m_Lens.FieldOfView;
@@ -368,8 +368,6 @@ namespace XtremeFPS.FPSController
             {
                 inputManager.isSprintingHold = false;
                 inputManager.isSprintingTapped = false;
-                audioSource.clip = null;
-                audioSource.loop = false;
                 MovementState = PlayerMovementState.Crouching;
             }
         }
@@ -429,11 +427,8 @@ namespace XtremeFPS.FPSController
                 case PlayerMovementState.Sliding:
                     targetSpeed = Mathf.Lerp(targetSpeed, slidingSpeed, transitionDelta);
                     AdjustCrouchHeight(crouchedHeight, false);
-                    audioSource.clip = slidingAudioClip;
-
-                    if (IsGrounded) audioSource.Play();
-                    else audioSource.Stop();
-
+                    if (!audioSource.isPlaying && IsGrounded) audioSource.PlayOneShot(slidingAudioClip);
+                    else if (!IsGrounded) audioSource.Stop();
                     canSlide = false;
                     break;
 
@@ -445,7 +440,6 @@ namespace XtremeFPS.FPSController
         private void GravityAndJump()
         {
             bool wasPreviouslyGrounded = IsGrounded;
-            bool hasPreviouslyJumped = !IsGrounded;
             IsGrounded = CharacterController.isGrounded;
 
             if (!IsGrounded)
@@ -462,10 +456,12 @@ namespace XtremeFPS.FPSController
                 return;
             }
 
-            if (inputManager.haveJumped && MovementState != PlayerMovementState.Crouching)
+            if (inputManager.haveJumped && 
+                MovementState != PlayerMovementState.Crouching &&
+                MovementState != PlayerMovementState.Sliding)
             {
                 jumpVelocity.y = Mathf.Sqrt(jumpHeight * 2f * gravitationalForce);
-                if (!hasPreviouslyJumped) audioSource.PlayOneShot(jumpingAudioClip);
+                if (wasPreviouslyGrounded) audioSource.PlayOneShot(jumpingAudioClip);
             }
             else if (!IsGrounded && jumpVelocity.y < 0f) jumpVelocity.y = -1f;
         }
@@ -489,7 +485,7 @@ namespace XtremeFPS.FPSController
         {
             while (true)
             {
-                if (!IsGrounded || !isMoving)
+                if (!IsGrounded || !isMoving || MovementState == PlayerMovementState.Sliding)
                 {
                     yield return null;
                     continue;

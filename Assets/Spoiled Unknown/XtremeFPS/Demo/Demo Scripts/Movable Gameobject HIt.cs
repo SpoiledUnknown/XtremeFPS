@@ -2,18 +2,15 @@
 /*2024*/
 
 using UnityEngine;
-using XtremeFPS.WeaponSystem;
+using XtremeFPS.Interfaces;
 
 namespace XtremeFPS.Demo
 {
-    public class MovableGameobjectHit : ShootableObject
+    public class MovableGameobjectHit : MonoBehaviour, IShootableObject
     {
-        [SerializeField] private GameObject particlesPrefab;
-        [SerializeField] private float impactForce;
-
-        public override void OnHit(RaycastHit hit)
+        public void OnHit(RaycastHit hit, float impactForce)
         {
-            GetComponent<Rigidbody>().AddForceAtPosition(-hit.normal * impactForce, hit.point);
+            this.GetComponent<Rigidbody>().AddForceAtPosition(-hit.normal * (impactForce * 10f), hit.point);
         }
     }
 }
