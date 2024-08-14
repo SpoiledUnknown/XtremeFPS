@@ -166,17 +166,17 @@ PrefabInstance:
     - target: {fileID: 3984521187494611133, guid: 2d60990fe6e1fb54d8681367adabe8fa,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.76
+      value: 9.78
       objectReference: {fileID: 0}
     - target: {fileID: 3984521187494611133, guid: 2d60990fe6e1fb54d8681367adabe8fa,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.2
+      value: 4.64
       objectReference: {fileID: 0}
     - target: {fileID: 3984521187494611133, guid: 2d60990fe6e1fb54d8681367adabe8fa,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.593
+      value: 9.423
       objectReference: {fileID: 0}
     - target: {fileID: 3984521187494611133, guid: 2d60990fe6e1fb54d8681367adabe8fa,
         type: 3}
@@ -233,6 +233,11 @@ PrefabInstance:
       propertyPath: playerArmature
       value: 
       objectReference: {fileID: 1094100484}
+    - target: {fileID: 5857796322038038237, guid: 2d60990fe6e1fb54d8681367adabe8fa,
+        type: 3}
+      propertyPath: dropTorqueMultiplier
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6170424704145857850, guid: 2d60990fe6e1fb54d8681367adabe8fa,
         type: 3}
       propertyPath: aimUIImage
@@ -243,11 +248,6 @@ PrefabInstance:
       propertyPath: bulletCount
       value: 
       objectReference: {fileID: 2124113490}
-    - target: {fileID: 6170424704145857850, guid: 2d60990fe6e1fb54d8681367adabe8fa,
-        type: 3}
-      propertyPath: bulletDamage
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 6170424704145857850, guid: 2d60990fe6e1fb54d8681367adabe8fa,
         type: 3}
       propertyPath: weaponHolder
@@ -9558,17 +9558,17 @@ PrefabInstance:
     - target: {fileID: 89194239659965237, guid: 3d486f468af0fa8429b3f1dc99574534,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.688
+      value: 6.7079997
       objectReference: {fileID: 0}
     - target: {fileID: 89194239659965237, guid: 3d486f468af0fa8429b3f1dc99574534,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.2
+      value: 4.64
       objectReference: {fileID: 0}
     - target: {fileID: 89194239659965237, guid: 3d486f468af0fa8429b3f1dc99574534,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.593
+      value: 9.423
       objectReference: {fileID: 0}
     - target: {fileID: 89194239659965237, guid: 3d486f468af0fa8429b3f1dc99574534,
         type: 3}
@@ -9635,11 +9635,6 @@ PrefabInstance:
       propertyPath: bulletCount
       value: 
       objectReference: {fileID: 2124113490}
-    - target: {fileID: 9102567424339424500, guid: 3d486f468af0fa8429b3f1dc99574534,
-        type: 3}
-      propertyPath: bulletDamage
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 9102567424339424500, guid: 3d486f468af0fa8429b3f1dc99574534,
         type: 3}
       propertyPath: weaponHolder
@@ -11715,7 +11710,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 191
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -12400,11 +12395,6 @@ PrefabInstance:
       objectReference: {fileID: 2124113490}
     - target: {fileID: 5941598614821741515, guid: 70acddad957ae5645abdecf3ec972d07,
         type: 3}
-      propertyPath: bulletDamage
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5941598614821741515, guid: 70acddad957ae5645abdecf3ec972d07,
-        type: 3}
       propertyPath: weaponHolder
       value: 
       objectReference: {fileID: 78600923}
@@ -12426,17 +12416,17 @@ PrefabInstance:
     - target: {fileID: 6112300006543672966, guid: 70acddad957ae5645abdecf3ec972d07,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.607
+      value: 6.6269994
       objectReference: {fileID: 0}
     - target: {fileID: 6112300006543672966, guid: 70acddad957ae5645abdecf3ec972d07,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.2
+      value: 4.64
       objectReference: {fileID: 0}
     - target: {fileID: 6112300006543672966, guid: 70acddad957ae5645abdecf3ec972d07,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.77
+      value: 13.6
       objectReference: {fileID: 0}
     - target: {fileID: 6112300006543672966, guid: 70acddad957ae5645abdecf3ec972d07,
         type: 3}
@@ -15151,7 +15141,7 @@ MonoBehaviour:
   minimumClamp: -90
   sprintFOV: 75
   FOV: 60
-  enableZoom: 0
+  enableZoom: 1
   isZoomingHold: 0
   zoomFOV: 30
   canHeadBob: 0
@@ -15199,12 +15189,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a0f7c9da8c6a58649a40f6fb7b4a56df, type: 3}
   - {fileID: 8300000, guid: 2d064d60ac258d848b3e2dee1a223058, type: 3}
   landingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
-  jumpingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
+  jumpingAudioClip: {fileID: 8300000, guid: 56d2ae87641afd04ab7327adc39cb823, type: 3}
   slidingAudioClip: {fileID: 8300000, guid: d261e6d42697b4b44b1e4f8bc462561a, type: 3}
   footstepSensitivity: 0.44
-  canPush: 0
-  pushLayersID: 0
+  canPush: 1
+  pushLayersID: 3
   pushStrength: 1.1
+  interactionLayersID: 7
   interactRange: 2
 --- !u!82 &1094100482
 AudioSource:
@@ -19305,11 +19296,6 @@ PrefabInstance:
       objectReference: {fileID: 2124113490}
     - target: {fileID: 1726971426450021211, guid: de42f5f27aa7609439dc50a90ea9d0a6,
         type: 3}
-      propertyPath: bulletDamage
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1726971426450021211, guid: de42f5f27aa7609439dc50a90ea9d0a6,
-        type: 3}
       propertyPath: weaponHolder
       value: 
       objectReference: {fileID: 78600923}
@@ -19336,17 +19322,17 @@ PrefabInstance:
     - target: {fileID: 7563791101487239656, guid: de42f5f27aa7609439dc50a90ea9d0a6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: 3.0199995
       objectReference: {fileID: 0}
     - target: {fileID: 7563791101487239656, guid: de42f5f27aa7609439dc50a90ea9d0a6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.21
+      value: 4.6499996
       objectReference: {fileID: 0}
     - target: {fileID: 7563791101487239656, guid: de42f5f27aa7609439dc50a90ea9d0a6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.510001
+      value: 9.340001
       objectReference: {fileID: 0}
     - target: {fileID: 7563791101487239656, guid: de42f5f27aa7609439dc50a90ea9d0a6,
         type: 3}
@@ -24129,11 +24115,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 270942843566577593, guid: 061c6cf7daadf244ea473dbb9b51bf13,
         type: 3}
-      propertyPath: bulletDamage
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 270942843566577593, guid: 061c6cf7daadf244ea473dbb9b51bf13,
-        type: 3}
       propertyPath: weaponHolder
       value: 
       objectReference: {fileID: 78600923}
@@ -24180,17 +24161,17 @@ PrefabInstance:
     - target: {fileID: 9123236870417984071, guid: 061c6cf7daadf244ea473dbb9b51bf13,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.81
+      value: 9.83
       objectReference: {fileID: 0}
     - target: {fileID: 9123236870417984071, guid: 061c6cf7daadf244ea473dbb9b51bf13,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.2
+      value: 4.64
       objectReference: {fileID: 0}
     - target: {fileID: 9123236870417984071, guid: 061c6cf7daadf244ea473dbb9b51bf13,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.53
+      value: 13.36
       objectReference: {fileID: 0}
     - target: {fileID: 9123236870417984071, guid: 061c6cf7daadf244ea473dbb9b51bf13,
         type: 3}

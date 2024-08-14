@@ -100,7 +100,7 @@ namespace XtremeFPS.FPSController
         public bool isZoomingHold;
         public float zoomFOV = 30f;
 
-        private bool isZoomed = false;
+        private bool isZoomed;
 
 
         //Head Bobbing effect
@@ -149,6 +149,7 @@ namespace XtremeFPS.FPSController
         private float vRecoil = 0f;
 
         //Interactions
+        public int interactionLayersID;
         public float interactRange;
 
         private IPickup closestPickup = null;
@@ -232,14 +233,14 @@ namespace XtremeFPS.FPSController
             mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime + hRecoil;
             mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime + vRecoil;
 
-            if (isSprintHold) isSprinting = inputManager.isSprintingHold;
-            else isSprinting = inputManager.isSprintingTapped;
+            if (isSprintHold) isSprinting = inputManager.isSprintingHold && !isZoomed;
+            else isSprinting = inputManager.isSprintingTapped && !isZoomed;
 
             if (isCrouchHold) isCrouching = inputManager.isCrouchingHold;
             else isCrouching = inputManager.isCrouchingTapped;
 
-            if (isZoomingHold) isZoomed = inputManager.isZoomingHold && !isSprinting;
-            else isZoomed = inputManager.isZoomingTapped && !isSprinting;
+            if (isZoomingHold) isZoomed = inputManager.isZoomingHold;
+            else isZoomed = inputManager.isZoomingTapped;
 
             canSlide = isCrouching && isSprinting && canPlayerCrouch;
         }
@@ -262,7 +263,7 @@ namespace XtremeFPS.FPSController
 
         private void AdjustFOVSettings(float targetFOV)
         {
-            if (enableZoom || isZoomed) return;
+            if (isZoomed) return;
             if (!isMoving) targetFOV = FOV;
 
             float currentFOV = playerVirtualCamera.m_Lens.FieldOfView;
@@ -529,16 +530,15 @@ namespace XtremeFPS.FPSController
         private void InteractionHandling()
         {
             if (!inputManager.isTryingToInteract) return;
-            Collider[] colliders = Physics.OverlapSphere(transform.position, interactRange);
+            Collider[] colliders = Physics.OverlapSphere(transform.position, interactRange, (1 << interactionLayersID));
 
             foreach (Collider collider in colliders)
             {
-                if (collider.TryGetComponent(out IPickup pickup))
+                if (collider.TryGetComponent(out IPickup pickup) && !isZoomed)
                 {
                     closestPickup ??= pickup;
                     if (Vector3.Distance(transform.position, collider.transform.position) <
                         Vector3.Distance(transform.position, closestPickup.GetTransform().position)) closestPickup = pickup;
-
                     if (!closestPickup.IsEquiped() && !WeaponPickup.IsWeaponEquipped) closestPickup.PickUp();
                     else closestPickup.Drop();
                     break;

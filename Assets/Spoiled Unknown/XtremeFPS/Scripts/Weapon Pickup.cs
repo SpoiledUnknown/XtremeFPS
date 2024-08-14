@@ -3,7 +3,6 @@
 
 using TMPro;
 using UnityEngine;
-using XtremeFPS.InputHandler;
 using XtremeFPS.Interfaces;
 
 namespace XtremeFPS.WeaponSystem.Pickup
@@ -24,11 +23,11 @@ namespace XtremeFPS.WeaponSystem.Pickup
         public int Priority;
         public float dropForwardForce;
         public float dropUpwardForce;
+        public float dropTorqueMultiplier;
 
         private UniversalWeaponSystem weaponSystem;
         private BoxCollider Collider;
-        private Vector3 currentVelocity;
-        private Vector3 angularVelocity;
+        private Rigidbody rb;
         #endregion
 
         #region Monobehaviour Callbacks
@@ -37,41 +36,30 @@ namespace XtremeFPS.WeaponSystem.Pickup
             Collider = GetComponent<BoxCollider>();
             weaponSystem = GetComponent<UniversalWeaponSystem>();
 
-            if (!equipped) UnEquip();
-            else Equip();
-        }
-
-        private void FixedUpdate()
-        {
-            if (equipped) return;
-            if (Physics.CheckBox(Collider.center, Collider.size * 0.5f, Quaternion.identity)) return;
-            if (Physics.Raycast(new Ray(transform.position, currentVelocity.normalized), out RaycastHit hit, Collider.size.magnitude * 0.45f))
-            {
-                float angle = Vector3.Angle(hit.normal, Vector3.up);
-                if (angle < 10f)
-                {
-                    currentVelocity = Vector3.zero;
-                    angularVelocity = Vector3.zero;
-                    return;
-                }
-                currentVelocity = Vector3.Reflect(currentVelocity, hit.normal);
-                angularVelocity = Vector3.Reflect(angularVelocity, hit.normal);
-            }
-            transform.position += currentVelocity * Time.deltaTime;
-            transform.Rotate(angularVelocity * Time.deltaTime);
-            currentVelocity += Physics.gravity * Time.deltaTime;
+            if (equipped) Equip();
+            else UnEquip();
         }
         #endregion
 
         #region Private methods
         private void UnEquip()
         {
+            if (!gameObject.TryGetComponent<Rigidbody>(out rb))
+            {
+                rb = gameObject.AddComponent<Rigidbody>();
+                rb.interpolation = RigidbodyInterpolation.Extrapolate;
+                rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            }
             weaponSystem.enabled = false;
             Collider.isTrigger = false;
+            equipped = false;
+            IsWeaponEquipped = false;
         }
 
         private void Equip()
         {
+            Destroy(rb);
+            equipped = true;
             weaponSystem.enabled = true;
             Collider.isTrigger = true;
             IsWeaponEquipped = true;
@@ -80,24 +68,22 @@ namespace XtremeFPS.WeaponSystem.Pickup
         public void PickUp()
         {
             Equip();
-            equipped = true;
             transform.SetParent(weaponHolder);
             transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
         }
 
         public void Drop()
         {
-            bulletText.SetText("00 / 00");
-            equipped = false;
-            IsWeaponEquipped = false;
-            transform.SetParent(null);
-            float random = Random.Range(-1f, 1f);
-            weaponSystem.animator.gameObject.SetActive(true);
-            if (weaponSystem.aimUIImage != null) weaponSystem.aimUIImage.SetActive(false);
-
-            currentVelocity = cameraRoot.forward * dropForwardForce + cameraRoot.up * dropUpwardForce;
-            angularVelocity = new Vector3(random, random, random) * 100f;
             UnEquip();
+            bulletText.SetText("00 / 00");
+            transform.SetParent(null);
+
+            rb.velocity = playerArmature.velocity;
+            rb.AddForce(cameraRoot.forward * dropForwardForce, ForceMode.Impulse);
+            rb.AddForce(cameraRoot.up * dropUpwardForce, ForceMode.Impulse);
+
+            float random = Random.Range(-1f, 1f);
+            rb.AddTorque(new Vector3(random, random, random) * 10f);
         }
 
         public bool IsEquiped()

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6561854614264178945}
   - component: {fileID: 9156973969725699003}
   - component: {fileID: 6943278112004662265}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6961032746404645797}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shoot Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 1726971426450021211}
   - component: {fileID: 4311011623630780122}
   - component: {fileID: 9112256565286822750}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -292,6 +292,7 @@ MonoBehaviour:
   animator: {fileID: 6943278112004662265}
   aimUIImage: {fileID: 0}
   bulletSpeed: 100
+  bulletDamage: 10
   bulletLifeTime: 2
   bulletGravitationalForce: 50
   ShellPosition: {fileID: 6546987108851769748}
@@ -399,7 +400,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6546987108851769748}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shell Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -432,6 +433,10 @@ PrefabInstance:
     - target: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
       propertyPath: m_Name
       value: MuzzleFlashEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4000011227296186, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
       propertyPath: m_LocalScale.x

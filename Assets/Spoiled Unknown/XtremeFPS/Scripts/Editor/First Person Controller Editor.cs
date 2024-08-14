@@ -186,6 +186,7 @@ namespace XtremeFPS.Editor
             EditorGUILayout.Space();
             GUI.color = Color.white;
             fpsController.interactRange = EditorGUILayout.Slider(new GUIContent("Interaction Range", "Determines the range in which the player can interact."), fpsController.interactRange, 0f, 5f);
+            fpsController.interactionLayersID = EditorGUILayout.LayerField(new GUIContent("What can be interacted?", "Determines what layers can the player interact with."), fpsController.interactionLayersID);
             fpsController.canPush = EditorGUILayout.ToggleLeft(new GUIContent("Can Push", "Defines whether player can push other objects or not."), fpsController.canPush);
             if (fpsController.canPush)
             {

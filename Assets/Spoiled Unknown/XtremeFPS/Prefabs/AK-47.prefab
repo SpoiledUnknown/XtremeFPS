@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5941598614821741515}
   - component: {fileID: 4573774880330676004}
   - component: {fileID: 6562090792210535183}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: AK-47
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,6 +155,7 @@ MonoBehaviour:
   animator: {fileID: 3043441741077489399}
   aimUIImage: {fileID: 0}
   bulletSpeed: 200
+  bulletDamage: 25
   bulletLifeTime: 3
   bulletGravitationalForce: 25
   ShellPosition: {fileID: 5186758061731743215}
@@ -262,7 +263,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5186758061731743215}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shell Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -293,7 +294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5054699442772944359}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shoot Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -328,7 +329,7 @@ GameObject:
   - component: {fileID: 7565065775163791314}
   - component: {fileID: 566488743618729011}
   - component: {fileID: 3043441741077489399}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -432,6 +433,10 @@ PrefabInstance:
     - target: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
       propertyPath: m_Name
       value: MuzzleFlashEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4000011227296186, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
       propertyPath: m_LocalScale.x

@@ -61,6 +61,7 @@ namespace XtremeFPS.Editor
             weaponPickup.equipped = EditorGUILayout.ToggleLeft(new GUIContent("Is Weapon Equiped", "Determines if the weapon is already equiped at the start of game  or not."), weaponPickup.equipped);
             weaponPickup.dropForwardForce = EditorGUILayout.Slider(new GUIContent("Forward Force", "Determines the force at which the weapon will be thrown forward."), weaponPickup.dropForwardForce, 0f, 50f);
             weaponPickup.dropUpwardForce = EditorGUILayout.Slider(new GUIContent("Upward Force", "Determines the force at which the weapon will be thrown upward."), weaponPickup.dropUpwardForce, 0f, 50f);
+            weaponPickup.dropTorqueMultiplier = EditorGUILayout.Slider(new GUIContent("Torque Multiplier", "Determines the value at which the torque will be multiplied."), weaponPickup.dropTorqueMultiplier, 0f, 50f);
             EditorGUILayout.Space();
             #endregion
             #region Update Changes

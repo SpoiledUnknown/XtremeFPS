@@ -17,6 +17,7 @@ namespace XtremeFPS.Editor
 {
     using XtremeFPS.FPSController;
     using XtremeFPS.WeaponSystem;
+    using XtremeFPS.WeaponSystem.Pickup;
 
     public class XtremeFPSEditor : EditorWindow
     {
@@ -61,6 +62,7 @@ namespace XtremeFPS.Editor
         }
 
         private const string physicsLayer = "Physics";
+        private const string interactionLayer = "Interactable";
 
         private const string concreteTag = "Concrete";
         private const string grassTag = "Grass";
@@ -194,6 +196,7 @@ namespace XtremeFPS.Editor
                     CreateTag(metalTag);
                     CreateTag(woodTag);
                     CreateLayer(physicsLayer);
+                    CreateLayer(interactionLayer);
 
                 }
                 EditorGUILayout.Space();
@@ -244,10 +247,7 @@ namespace XtremeFPS.Editor
                 shootPoint = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Shoot Point", "The referrence to the shoot point (Leave empty if none exists already)."), shootPoint, typeof(GameObject), true);
                 instantiatedEffect = (ParticleSystem)EditorGUILayout.ObjectField(new GUIContent("Muzzle Particle Effect", "The referrence to the muzzle particle effect, usually the child of 'Model' (Leave empty if none exists already)."), instantiatedEffect, typeof(ParticleSystem), true);
                 shellEjectionPoint = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Shell Ejection Point", "The referrence to the shell ejection point (Leave empty if none exists already)."), shellEjectionPoint, typeof(GameObject), true);
-                GUI.color = Color.black;
-                EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-                GUI.color = Color.white;
-                EditorGUILayout.Space(20f);
+                EditorGUILayout.Space(5f);
                 weaponTypes = (WeaponTypes)EditorGUILayout.EnumPopup(new GUIContent("Weapon Types", "Select an option from the weapon type for the default settings."), weaponTypes);
                 Rect createWeapon = GUILayoutUtility.GetRect(200, 50);
                 if (GUI.Button(createWeapon, "Set Weapon Values"))
@@ -288,9 +288,12 @@ namespace XtremeFPS.Editor
                             break;
                     }
                 }
-                GUI.color = Color.black;
-                EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-                GUI.color = Color.white;
+                EditorGUILayout.Space(5f);
+                Rect createWeaponPickBtn = GUILayoutUtility.GetRect(200, 50);
+                if (GUI.Button(createWeaponPickBtn, "Add Pick-Up System"))
+                {
+                    if (weaponObject != null) weaponObject.gameObject.AddComponent<WeaponPickup>();
+                }
                 #endregion
             }
             EditorGUILayout.EndVertical();
