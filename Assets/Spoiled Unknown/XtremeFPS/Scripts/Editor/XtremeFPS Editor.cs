@@ -548,24 +548,25 @@ namespace XtremeFPS.Editor
             }
             weaponObject.transform.parent = weaponRecoil.transform;
 
-            if (shootPoint == null) shootPoint = GameObject.Find("Shoot Point") ?? new GameObject("Shoot Point");
+            if (shootPoint == null) shootPoint = GameObject.Find($"{weaponModel.transform.name}'s Shoot Point") ?? new GameObject($"{weaponModel.transform.name}'s Shoot Point");
             shootPoint.transform.parent = weaponObject.transform;
 
-            if (shellEjectionPoint == null) shellEjectionPoint = GameObject.Find("Shell Ejection Point") ?? new GameObject("Shell Ejection Point");
+            if (shellEjectionPoint == null) shellEjectionPoint = GameObject.Find($"{weaponModel.transform.name}'s Shell Ejection Point") ?? new GameObject($"{weaponModel.transform.name}'s Shell Ejection Point");
             shellEjectionPoint.transform.parent = weaponObject.transform;
 
             if (instantiatedWeaponModel == null) 
             {
-                instantiatedWeaponModel = GameObject.Find("Model") ?? (GameObject)PrefabUtility.InstantiatePrefab(weaponModel);
+                instantiatedWeaponModel = GameObject.Find($"{weaponModel.transform.name}'s Model") ?? (GameObject)PrefabUtility.InstantiatePrefab(weaponModel);
                 if (IsPrefabInstance(instantiatedWeaponModel))PrefabUtility.UnpackPrefabInstance(instantiatedWeaponModel, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
             }
             instantiatedWeaponModel.transform.parent = weaponObject.transform;
-            instantiatedWeaponModel.transform.name = "Model";
+            instantiatedWeaponModel.transform.name = $"{weaponModel.transform.name}'s Model";
 
             if (instantiatedEffect == null) 
             {
-                GameObject tempInstantiatedEffect = GameObject.Find(particleEffect.transform.name) ?? (GameObject)PrefabUtility.InstantiatePrefab(particleEffect);
+                GameObject tempInstantiatedEffect = GameObject.Find($"{weaponModel.transform.name}'s {particleEffect.transform.name}") ?? (GameObject)PrefabUtility.InstantiatePrefab(particleEffect);
                 if (IsPrefabInstance(tempInstantiatedEffect)) PrefabUtility.UnpackPrefabInstance(tempInstantiatedEffect, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+                tempInstantiatedEffect.transform.name = $"{weaponModel.transform.name}'s {particleEffect.transform.name}";
                 instantiatedEffect = tempInstantiatedEffect.GetComponent<ParticleSystem>();
             }
             instantiatedEffect.transform.parent = shootPoint.transform;
