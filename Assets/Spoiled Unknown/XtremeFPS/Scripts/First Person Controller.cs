@@ -2,7 +2,7 @@
 /*2024*/
 using System.Collections;
 using UnityEngine;
-using XtremeFPS.InputHandler;
+using XtremeFPS.InputHandling;
 using Cinemachine;
 using UnityEngine.UI;
 using XtremeFPS.WeaponSystem.Pickup;

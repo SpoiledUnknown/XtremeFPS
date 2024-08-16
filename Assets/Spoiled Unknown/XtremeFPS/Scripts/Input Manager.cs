@@ -10,7 +10,7 @@ using System;
 using UnityEngine.EventSystems;
 using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
-namespace XtremeFPS.InputHandler
+namespace XtremeFPS.InputHandling
 {
     public class FPSInputManager : MonoBehaviour
     {

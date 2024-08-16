@@ -3,7 +3,7 @@
 /*Note: This is an important editor script*/
 
 using UnityEditor;
-using XtremeFPS.InputHandler;
+using XtremeFPS.InputHandling;
 using UnityEngine;
 
 namespace XtremeFPS.Editor

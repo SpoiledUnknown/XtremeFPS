@@ -83,7 +83,7 @@ namespace XtremeFPS.WeaponSystem.Pickup
             rb.AddForce(cameraRoot.up * dropUpwardForce, ForceMode.Impulse);
 
             float random = Random.Range(-1f, 1f);
-            rb.AddTorque(new Vector3(random, random, random) * 10f);
+            rb.AddTorque(new Vector3(random, random, random) * dropTorqueMultiplier);
         }
 
         public bool IsEquiped()

@@ -3,7 +3,7 @@
 
 using UnityEngine;
 using TMPro;
-using XtremeFPS.InputHandler;
+using XtremeFPS.InputHandling;
 using XtremeFPS.PoolingSystem;
 using XtremeFPS.FPSController;
 

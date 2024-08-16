@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace XtremeFPS.InputHandler
+namespace XtremeFPS.InputHandling
 {
     public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     {
