@@ -91,6 +91,7 @@ namespace XtremeFPS.InputHandling
             playerInputAction.Player.Jump.performed += JumpInput;
             playerInputAction.Player.ZoomHold.performed += ZoomHoldInput;
             playerInputAction.Player.ZoomTap.performed += ZoomTapInput;
+            playerInputAction.Player.Interaction.started += Interaction_performed;
 
             // Subscribe to input cancellation events 
             playerInputAction.Player.Movements.canceled += MovementInput;
@@ -111,7 +112,6 @@ namespace XtremeFPS.InputHandling
             playerInputAction.Shooting.FireHold.canceled += ShootInput;
             playerInputAction.Shooting.ADSHold.canceled += ADSHoldInput;
 
-            playerInputAction.Shooting.Interaction.started += Interaction_performed;
             #endregion
 
 #if UNITY_ANDROID || UNITY_IOS

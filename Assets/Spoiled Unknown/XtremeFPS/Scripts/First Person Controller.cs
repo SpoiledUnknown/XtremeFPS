@@ -150,7 +150,7 @@ namespace XtremeFPS.FPSController
 
         //Interactions
         public int interactionLayersID;
-        public float interactRange;
+        public float interactionRange;
 
         private IPickup closestPickup = null;
         #endregion
@@ -530,7 +530,7 @@ namespace XtremeFPS.FPSController
         private void InteractionHandling()
         {
             if (!inputManager.isTryingToInteract) return;
-            Collider[] colliders = Physics.OverlapSphere(transform.position, interactRange, (1 << interactionLayersID));
+            Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, (1 << interactionLayersID));
 
             foreach (Collider collider in colliders)
             {
