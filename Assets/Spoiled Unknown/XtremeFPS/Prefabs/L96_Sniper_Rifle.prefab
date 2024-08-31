@@ -198,7 +198,7 @@ Transform:
   m_GameObject: {fileID: 6783196281547354542}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.945811, y: 0.073271334, z: 17.054071}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -328,7 +328,7 @@ MonoBehaviour:
   bulletLifeTime: 5
   bulletGravitationalForce: 15
   ShellPosition: {fileID: 6277738445211276933}
-  Shell: {fileID: 2046857199201600465, guid: adb843424a0f88a4ea26c84473f521d2, type: 3}
+  Shell: {fileID: 5022607508920917637, guid: c4a92788f3aab074baf288aaed06ee96, type: 3}
   particlesPrefab: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d,
     type: 3}
   isGunAuto: 1
@@ -423,6 +423,7 @@ MonoBehaviour:
   Priority: 0
   dropForwardForce: 5
   dropUpwardForce: 1
+  dropTorqueMultiplier: 5
 --- !u!1001 &6506069538367957029
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -92,7 +92,7 @@ Transform:
   m_GameObject: {fileID: 8972059624727554837}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.2477455, y: 1.7773979, z: 14.616993}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -222,7 +222,7 @@ MonoBehaviour:
   bulletLifeTime: 3
   bulletGravitationalForce: 25
   ShellPosition: {fileID: 9051877298075917541}
-  Shell: {fileID: 2046857199201600465, guid: adb843424a0f88a4ea26c84473f521d2, type: 3}
+  Shell: {fileID: 5022607508920917637, guid: c4a92788f3aab074baf288aaed06ee96, type: 3}
   particlesPrefab: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d,
     type: 3}
   isGunAuto: 1
@@ -274,7 +274,7 @@ MonoBehaviour:
   walkSpeedMultiplier: 4
   walkSpeedMax: 6
   aimReduction: 4
-  bulletSoundClip: {fileID: 8300000, guid: c1bb13b21da12d44197f21b4ef4a1dd4, type: 3}
+  bulletSoundClip: {fileID: 8300000, guid: 85271efe3a4fd614f95d8653ced9927b, type: 3}
   bulletReloadClip: {fileID: 8300000, guid: c35f284e9475b5f45b9edab995d9824c, type: 3}
 --- !u!65 &4862417669674616978
 BoxCollider:
@@ -317,6 +317,7 @@ MonoBehaviour:
   Priority: 0
   dropForwardForce: 5
   dropUpwardForce: 1
+  dropTorqueMultiplier: 0
 --- !u!1 &9047966135287681340
 GameObject:
   m_ObjectHideFlags: 0

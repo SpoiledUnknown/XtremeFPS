@@ -183,7 +183,7 @@ namespace XtremeFPS.Editor
                 #endregion
                 #region Documentation
                 Rect documentationButton = GUILayoutUtility.GetRect(200, 60);
-                if (GUI.Button(documentationButton, "Open Documentation"))
+                if (GUI.Button(documentationButton, "Open New Documentation"))
                 {
                     enableDocumentationView = true;
                     enablePlayerSetupPanel = false;
@@ -546,7 +546,30 @@ namespace XtremeFPS.Editor
             EditorGUILayout.LabelField("Once again, thank you for your trust and support. We're excited to see the amazing games you create with XtremeFPS, and we look forward to working together to make it even better.", EditorStyles.wordWrappedLabel);
             EditorGUILayout.LabelField("Warm Regards,", EditorStyles.boldLabel);
             EditorGUILayout.LabelField("Spoiled Unknown", EditorStyles.boldLabel);
-            EditorGUILayout.Space(2f);
+            EditorGUILayout.Space();
+
+            GUI.color = Color.black;
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUI.color = Color.green;
+            GUILayout.Label("Credits", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
+            GUI.color = Color.black;
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            EditorGUILayout.Space();
+            GUI.color = Color.white;
+
+            Rect inputButtonDevAsset = GUILayoutUtility.GetRect(200, 60);
+            if (GUI.Button(inputButtonDevAsset, "Weapon Models"))
+            {
+                Application.OpenURL("https://devassets.com/assets/modern-weapons/");
+            }
+            EditorGUILayout.Space();
+
+            Rect inputButtonEditor = GUILayoutUtility.GetRect(200, 60);
+            if (GUI.Button(inputButtonEditor, "Video Editor"))
+            {
+                Application.OpenURL("https://www.youtube.com/@gyanology0/");
+            }
+            EditorGUILayout.Space();
 
             EditorGUILayout.EndScrollView();
             if (e.type == EventType.ScrollWheel)

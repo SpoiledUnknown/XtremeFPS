@@ -233,8 +233,8 @@ namespace XtremeFPS.FPSController
             mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime + hRecoil;
             mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime + vRecoil;
 
-            if (isSprintHold) isSprinting = inputManager.isSprintingHold && !isZoomed;
-            else isSprinting = inputManager.isSprintingTapped && !isZoomed;
+            if (isSprintHold) isSprinting = inputManager.isSprintingHold && !(isZoomed && enableZoom);
+            else isSprinting = inputManager.isSprintingTapped && !(isZoomed && enableZoom);
 
             if (isCrouchHold) isCrouching = inputManager.isCrouchingHold;
             else isCrouching = inputManager.isCrouchingTapped;
@@ -263,7 +263,7 @@ namespace XtremeFPS.FPSController
 
         private void AdjustFOVSettings(float targetFOV)
         {
-            if (isZoomed) return;
+            if (isZoomed && enableZoom) return;
             if (!isMoving) targetFOV = FOV;
 
             float currentFOV = playerVirtualCamera.m_Lens.FieldOfView;
