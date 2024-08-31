@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace XtremeFPS.InputHandler
+namespace XtremeFPS.InputHandling
 {
     public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     {
@@ -105,6 +105,15 @@ namespace XtremeFPS.InputHandler
                     ""name"": ""ZoomHold"",
                     ""type"": ""Button"",
                     ""id"": ""69606d3f-e6bd-4c58-a85c-8b048354334b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""87ef1cec-78a9-4f8d-8c2e-684642fe908a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -258,7 +267,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""1afb6ae5-c214-493a-ae77-691d3af34e9e"",
-                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -280,7 +289,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""6ff3397c-1376-4995-b59d-dc7a371b005b"",
-                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -302,7 +311,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""4f04d69c-9299-4efd-ba1c-de363c9204eb"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -324,7 +333,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""f1def02e-5f6d-48c4-9d39-911e112f9e1d"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -346,7 +355,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""019a6164-8d92-4bad-b67c-dd4910f563c2"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -379,7 +388,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""7c288ae1-5d13-4ae3-b512-c1aee498c12d"",
-                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -401,7 +410,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""47adce44-6055-4166-85dc-2f017415fcac"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -428,6 +437,28 @@ namespace XtremeFPS.InputHandler
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce32e172-84fd-4b0b-8bcb-80bf72f4f956"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard And Mouse"",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f3ca2c3e-96b9-44e8-9f03-5a1326a8e5d4"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interaction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -498,7 +529,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""c8da9dfb-fc45-4964-99ed-318b5d140766"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -520,7 +551,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""aaac2d1a-6ee2-4ca8-8680-4a864bb95bdf"",
-                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -542,7 +573,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""265e61ba-7f4f-4c6d-841f-34e631c10ff5"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -564,7 +595,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""d0aedd4d-9144-41b0-ac49-b44e445ef9c1"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -586,7 +617,7 @@ namespace XtremeFPS.InputHandler
                 {
                     ""name"": """",
                     ""id"": ""419a6ba8-b2c7-488c-9672-11e7bf3f94ab"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -1142,6 +1173,7 @@ namespace XtremeFPS.InputHandler
             m_Player_CrouchHold = m_Player.FindAction("CrouchHold", throwIfNotFound: true);
             m_Player_ZoomTap = m_Player.FindAction("ZoomTap", throwIfNotFound: true);
             m_Player_ZoomHold = m_Player.FindAction("ZoomHold", throwIfNotFound: true);
+            m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
             // Shooting
             m_Shooting = asset.FindActionMap("Shooting", throwIfNotFound: true);
             m_Shooting_FireHold = m_Shooting.FindAction("FireHold", throwIfNotFound: true);
@@ -1231,6 +1263,7 @@ namespace XtremeFPS.InputHandler
         private readonly InputAction m_Player_CrouchHold;
         private readonly InputAction m_Player_ZoomTap;
         private readonly InputAction m_Player_ZoomHold;
+        private readonly InputAction m_Player_Interaction;
         public struct PlayerActions
         {
             private @PlayerInputAction m_Wrapper;
@@ -1244,6 +1277,7 @@ namespace XtremeFPS.InputHandler
             public InputAction @CrouchHold => m_Wrapper.m_Player_CrouchHold;
             public InputAction @ZoomTap => m_Wrapper.m_Player_ZoomTap;
             public InputAction @ZoomHold => m_Wrapper.m_Player_ZoomHold;
+            public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1280,6 +1314,9 @@ namespace XtremeFPS.InputHandler
                 @ZoomHold.started += instance.OnZoomHold;
                 @ZoomHold.performed += instance.OnZoomHold;
                 @ZoomHold.canceled += instance.OnZoomHold;
+                @Interaction.started += instance.OnInteraction;
+                @Interaction.performed += instance.OnInteraction;
+                @Interaction.canceled += instance.OnInteraction;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1311,6 +1348,9 @@ namespace XtremeFPS.InputHandler
                 @ZoomHold.started -= instance.OnZoomHold;
                 @ZoomHold.performed -= instance.OnZoomHold;
                 @ZoomHold.canceled -= instance.OnZoomHold;
+                @Interaction.started -= instance.OnInteraction;
+                @Interaction.performed -= instance.OnInteraction;
+                @Interaction.canceled -= instance.OnInteraction;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1562,6 +1602,7 @@ namespace XtremeFPS.InputHandler
             void OnCrouchHold(InputAction.CallbackContext context);
             void OnZoomTap(InputAction.CallbackContext context);
             void OnZoomHold(InputAction.CallbackContext context);
+            void OnInteraction(InputAction.CallbackContext context);
         }
         public interface IShootingActions
         {

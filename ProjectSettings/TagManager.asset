@@ -10,6 +10,7 @@ TagManager:
   - Water
   - Metals
   - Wood
+  - Ledge
   layers:
   - Default
   - TransparentFX
@@ -17,9 +18,9 @@ TagManager:
   - Physics
   - Water
   - UI
-  - Ground
-  - Shell
-  - Player
+  - Eyes
+  - Interactable
+  - 
   - 
   - 
   - 
