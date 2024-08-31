@@ -183,7 +183,7 @@ namespace XtremeFPS.Editor
                 #endregion
                 #region Documentation
                 Rect documentationButton = GUILayoutUtility.GetRect(200, 60);
-                if (GUI.Button(documentationButton, "Open New Documentation"))
+                if (GUI.Button(documentationButton, "Open New Documentation (Beta)"))
                 {
                     enableDocumentationView = true;
                     enablePlayerSetupPanel = false;
