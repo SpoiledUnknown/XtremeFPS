@@ -2,7 +2,7 @@
 /*2024*/
 /*Note: This is an important editor script*/
 
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEditor;
 using UnityEngine;
 #if UNITY_PIPELINE_URP
@@ -53,7 +53,7 @@ namespace XtremeFPS.Editor
         private GameObject playerParent;
         private FirstPersonController playerArmature;
         private Camera playerCamera;
-        private CinemachineVirtualCamera virtualCamera;
+        private CinemachineCamera cinemachineCamera;
         private GameObject cameraHolder;
         private GameObject cameraFollow;
         private PoolManager objectPoolerManager;
@@ -221,7 +221,7 @@ namespace XtremeFPS.Editor
                 }
                 playerParent = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Player Parent", "The referrence to the player parent gameObject (Leave empty if none exists already)."), playerParent, typeof(GameObject), true);
                 playerCamera = (Camera)EditorGUILayout.ObjectField(new GUIContent("Player Camera", "The referrence to the player camera (Leave empty if none exists already)."), playerCamera, typeof(Camera), true);
-                virtualCamera = (CinemachineVirtualCamera)EditorGUILayout.ObjectField(new GUIContent("Virtual Camera", "The referrence to the virtual camera (Leave empty if none exists already)."), virtualCamera, typeof(CinemachineVirtualCamera), true);
+                cinemachineCamera = (CinemachineCamera)EditorGUILayout.ObjectField(new GUIContent("Cinemachine Camera", "The referrence to the cinemachine camera (Leave empty if none exists already)."), cinemachineCamera, typeof(CinemachineCamera), true);
                 objectPoolerManager = (PoolManager)EditorGUILayout.ObjectField(new GUIContent("Pool Manager", "The referrence to the object pool manager (Leave empty if none exists already)."), objectPoolerManager, typeof(PoolManager), true);
                 Rect buttonRect = GUILayoutUtility.GetRect(200, 50);
                 if (GUI.Button(buttonRect, "Create Player"))
@@ -587,7 +587,7 @@ namespace XtremeFPS.Editor
             playerParent = null;
             playerArmature = null;
             playerCamera = null;
-            virtualCamera = null;
+            cinemachineCamera = null;
             cameraHolder = null;
             cameraFollow = null;
             objectPoolerManager = null;
@@ -690,14 +690,14 @@ namespace XtremeFPS.Editor
             }
             playerCamera.transform.parent = playerParent.transform;
 
-            if (virtualCamera == null ||
-                !virtualCamera.TryGetComponent<CinemachineVirtualCamera>(out _))
+            if (cinemachineCamera == null ||
+                !cinemachineCamera.TryGetComponent<CinemachineCamera>(out _))
             {
-                GameObject playerVirtualCamera = GameObject.Find("Virtual Camera") ?? new GameObject("Virtual Camera");
-                if (!playerVirtualCamera.TryGetComponent<CinemachineVirtualCamera>(out _)) playerVirtualCamera.AddComponent<CinemachineVirtualCamera>();
-                virtualCamera = playerVirtualCamera.GetComponent<CinemachineVirtualCamera>();
+                GameObject playerVirtualCamera = GameObject.Find("Cinemachine Camera") ?? new GameObject("Cinemachine Camera");
+                if (!playerVirtualCamera.TryGetComponent<CinemachineCamera>(out _)) playerVirtualCamera.AddComponent<CinemachineCamera>();
+                cinemachineCamera = playerVirtualCamera.GetComponent<CinemachineCamera>();
             }
-            virtualCamera.transform.parent = playerParent.transform;
+            cinemachineCamera.transform.parent = playerParent.transform;
 
             if (objectPoolerManager == null ||
                 !objectPoolerManager.TryGetComponent<PoolManager>(out _))
@@ -710,9 +710,9 @@ namespace XtremeFPS.Editor
         }
         private void CreateThePlayer()
         {
-            if (playerParent == null || virtualCamera == null)
+            if (playerParent == null || cinemachineCamera == null)
             {
-                Debug.LogError($"Player Parent or Virtual Camera is null!");
+                Debug.LogError($"Player Parent or Cinemachine Camera is null!");
                 return;
             }
 
@@ -730,6 +730,16 @@ namespace XtremeFPS.Editor
 
             if (cameraFollow == null) cameraFollow = GameObject.Find("Camera Follow") ?? new GameObject("Camera Follow");
             cameraFollow.transform.parent = cameraHolder.transform;
+
+            if (!cinemachineCamera.TryGetComponent<CinemachineHardLockToTarget>(out _))
+            {
+                cinemachineCamera.gameObject.AddComponent<CinemachineHardLockToTarget>();
+            }
+
+            if (!cinemachineCamera.TryGetComponent<CinemachineRotateWithFollowTarget>(out _))
+            {
+                cinemachineCamera.gameObject.AddComponent<CinemachineRotateWithFollowTarget>();
+            }
         }
         private void SetDefaultValues()
         {
@@ -737,13 +747,13 @@ namespace XtremeFPS.Editor
         }
         private void DefaultPlayerValues()
         {
-            if (virtualCamera == null ||
+            if (cinemachineCamera == null ||
                 cameraFollow == null ||
                 playerArmature == null)
             {
-                Debug.LogError($"Virtual Camera or Camera Follow or Player Armature is null!");
+                Debug.LogError($"Cinemachine Camera or Camera Follow or Player Armature is null!");
             }
-            virtualCamera.Follow = cameraFollow.transform;
+            cinemachineCamera.Follow = cameraFollow.transform;
 
             playerArmature.transitionSpeed = 10f;
             playerArmature.walkSpeed = 2f;
@@ -771,7 +781,7 @@ namespace XtremeFPS.Editor
             playerArmature.enableZoom = false;
             playerArmature.canHeadBob = false;
 
-            playerArmature.playerVirtualCamera = virtualCamera;
+            playerArmature.cinemachineCamera = cinemachineCamera;
             playerArmature.cameraFollow = cameraFollow.transform;
 
             cameraHolder.transform.position = new Vector3(0f, 0.6150001f, 0.1719999f);
@@ -780,18 +790,6 @@ namespace XtremeFPS.Editor
                 playerParent.transform.position.y + 2f,
                 playerParent.transform.position.z
                 );
-
-            CinemachineComponentBase body = virtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Body);
-            if (body is not CinemachineHardLockToTarget)
-            {
-                virtualCamera.AddCinemachineComponent<CinemachineHardLockToTarget>();
-            }
-
-            CinemachineComponentBase aim = virtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Aim);
-            if (aim is not CinemachineSameAsFollowTarget)
-            {
-                virtualCamera.AddCinemachineComponent<CinemachineSameAsFollowTarget>();
-            }
             Debug.LogWarning($"Note: Although all values are automatically set to {defaultPlayerTypes},\n but you still have to set some values yourself (like sound files).");
             Debug.LogWarning("If you want to add the touch screen support then switch the player profile to Android/IOS and drag and drop the UI,\n and everything will be handled by the Input Manager script.");
         }

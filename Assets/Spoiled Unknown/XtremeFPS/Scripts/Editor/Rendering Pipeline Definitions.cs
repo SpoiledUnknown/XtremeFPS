@@ -1,9 +1,10 @@
-/*Copyright © Spoiled Unknown*/
+/*Copyright ï¿½ Spoiled Unknown*/
 /*2024*/
 
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -58,10 +59,10 @@ namespace XtremeFPS.Editor
         static PipelineType GetPipeline()
         {
 #if UNITY_2019_1_OR_NEWER
-            if (GraphicsSettings.renderPipelineAsset != null)
+            if (GraphicsSettings.defaultRenderPipeline != null)
             {
                 // SRP
-                var srpType = GraphicsSettings.renderPipelineAsset.GetType().ToString();
+                var srpType = GraphicsSettings.defaultRenderPipeline.GetType().ToString();
                 if (srpType.Contains("HDRenderPipelineAsset"))
                 {
                     return PipelineType.HDPipeline;
@@ -115,17 +116,17 @@ namespace XtremeFPS.Editor
         public static List<string> GetDefines()
         {
             var target = EditorUserBuildSettings.activeBuildTarget;
-            var buildTargetGroup = BuildPipeline.GetBuildTargetGroup(target);
-            var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
+            var namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(target));
+            var defines = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
             return defines.Split(';').ToList();
         }
 
         public static void SetDefines(List<string> definesList)
         {
             var target = EditorUserBuildSettings.activeBuildTarget;
-            var buildTargetGroup = BuildPipeline.GetBuildTargetGroup(target);
+            var namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(target));
             var defines = string.Join(";", definesList.ToArray());
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, defines);
+            PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, defines);
         }
     }
 }

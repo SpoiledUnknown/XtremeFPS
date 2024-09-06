@@ -1,4 +1,4 @@
-/*Copyright © Spoiled Unknown*/
+/*Copyright ï¿½ Spoiled Unknown*/
 /*2024*/
 
 using TMPro;
@@ -78,7 +78,7 @@ namespace XtremeFPS.WeaponSystem.Pickup
             bulletText.SetText("00 / 00");
             transform.SetParent(null);
 
-            rb.velocity = playerArmature.velocity;
+            rb.linearVelocity = playerArmature.velocity;
             rb.AddForce(cameraRoot.forward * dropForwardForce, ForceMode.Impulse);
             rb.AddForce(cameraRoot.up * dropUpwardForce, ForceMode.Impulse);
 
