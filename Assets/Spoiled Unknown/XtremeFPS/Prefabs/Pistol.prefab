@@ -59,6 +59,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -86,7 +89,7 @@ MeshRenderer:
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!95 &6943278112004662265
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -100,6 +103,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -137,6 +141,37 @@ Transform:
   - {fileID: 1094723299707052764}
   m_Father: {fileID: 7563791101487239656}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!1 &5488042930783445035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5301464828180297487}
+  m_Layer: 0
+  m_Name: Right Hand_target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5301464828180297487
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5488042930783445035}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.09479271, y: 0.078475945, z: 0.6328496, w: 0.7644327}
+  m_LocalPosition: {x: 0.1139, y: -0.034, z: 0.0149}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7563791101487239656}
+  m_LocalEulerAnglesHint: {x: 2.613, y: 13.899, z: 79.559}
 --- !u!1 &7215056896651268067
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,6 +206,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4279635824474390895}
+  - {fileID: 5301464828180297487}
   - {fileID: 6961032746404645797}
   - {fileID: 6546987108851769748}
   m_Father: {fileID: 0}
@@ -186,6 +222,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -291,7 +328,7 @@ MonoBehaviour:
   bulletCount: {fileID: 0}
   animator: {fileID: 6943278112004662265}
   aimUIImage: {fileID: 0}
-  bulletSpeed: 100
+  bulletSpeed: 300
   bulletDamage: 10
   bulletLifeTime: 2
   bulletGravitationalForce: 50
@@ -387,7 +424,7 @@ MonoBehaviour:
   weaponHolder: {fileID: 0}
   cameraRoot: {fileID: 0}
   bulletText: {fileID: 0}
-  equipped: 0
+  equipped: 1
   Priority: 0
   dropForwardForce: 5
   dropUpwardForce: 1
