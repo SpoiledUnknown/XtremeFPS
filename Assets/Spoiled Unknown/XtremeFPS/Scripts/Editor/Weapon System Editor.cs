@@ -71,7 +71,22 @@ namespace XtremeFPS.Editor
             uni_WeaponSystem.magazineSize = EditorGUILayout.IntSlider(new GUIContent("Magazine Size", "Determines the number of bullet the weapon will hold."), uni_WeaponSystem.magazineSize, 0, 200);
             uni_WeaponSystem.totalBullets = EditorGUILayout.IntSlider(new GUIContent("Total Bullets", "Determines the number of bullet the player have."), uni_WeaponSystem.totalBullets, 0, 999);
             uni_WeaponSystem.bulletsPerTap = EditorGUILayout.IntSlider(new GUIContent("Bullet Per Shoot", "Determines the number of bullet the player will shoot in single tap/shoot cycle."), uni_WeaponSystem.bulletsPerTap, 0, 30);
-            uni_WeaponSystem.reloadTime = EditorGUILayout.Slider(new GUIContent("Reloading Time", "Determines the time weapon takes to reload."), uni_WeaponSystem.reloadTime, 0f, 10f);
+
+            if (uni_WeaponSystem.animator != null)
+            {
+                RuntimeAnimatorController ac = uni_WeaponSystem.animator.runtimeAnimatorController;
+                foreach (AnimationClip clip in ac.animationClips)
+                {
+                    if (clip.name.ToLower() == "reload" ||
+                        clip.name.ToLower() == "reloading")
+                    {
+                        uni_WeaponSystem.reloadTime = clip.length;
+                        break;
+                    }
+                    else Debug.LogWarning("The animator provided does not inlcudes a animation");
+                }
+            }
+
             uni_WeaponSystem.hardMode = EditorGUILayout.ToggleLeft(new GUIContent("Hard Mode", "If enabled ammo management and reloading will ac realistically."), uni_WeaponSystem.hardMode);
             EditorGUILayout.Space();
             #endregion
