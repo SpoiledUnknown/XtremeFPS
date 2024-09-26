@@ -186,11 +186,12 @@ namespace XtremeFPS.Editor
             EditorGUILayout.Space();
             GUI.color = Color.white;
             fpsController.interactionRange = EditorGUILayout.Slider(new GUIContent("Interaction Range", "Determines the range in which the player can interact."), fpsController.interactionRange, 0f, 5f);
-            fpsController.interactionLayersID = EditorGUILayout.LayerField(new GUIContent("What can be interacted?", "Determines what layers can the player interact with."), fpsController.interactionLayersID);
+            fpsController.interactionLayerId = EditorGUILayout.LayerField(new GUIContent("What can be interacted?", "Determines what layers can the player interact with."), fpsController.interactionLayerId);
+
             fpsController.canPush = EditorGUILayout.ToggleLeft(new GUIContent("Can Push", "Defines whether player can push other objects or not."), fpsController.canPush);
             if (fpsController.canPush)
             {
-                fpsController.pushLayersID = EditorGUILayout.LayerField(new GUIContent("What can be pushed?", "Determines what layers can the player push."), fpsController.pushLayersID);
+                fpsController.pushLayerId = EditorGUILayout.LayerField(new GUIContent("What can be pushed?", "Determines what layers can the player push."), fpsController.pushLayerId);
                 fpsController.pushStrength = EditorGUILayout.Slider(new GUIContent("Push Strength", "Determines the strength at which the player should push."), fpsController.pushStrength, 0f, 10f);
             }
             GUI.color = Color.black;
@@ -207,7 +208,6 @@ namespace XtremeFPS.Editor
             }
             #endregion
         }
-
     }
 }
 

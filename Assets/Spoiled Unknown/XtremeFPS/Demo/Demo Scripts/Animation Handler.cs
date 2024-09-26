@@ -15,7 +15,7 @@ namespace XtremeFPS.Demo
         public Animator animator;
         public FirstPersonController personController;
 
-        private void Update()
+        /*private void Update()
         {
             if (WeaponPickup.IsWeaponEquipped)
             {
@@ -42,6 +42,6 @@ namespace XtremeFPS.Demo
                 animator.SetBool("IsNotHolding", true);
                 animator.speed = 0.5f;
             }
-        }
+        }*/
     }
 }

@@ -13,7 +13,6 @@ namespace XtremeFPS.WeaponSystem.Pickup
     public class WeaponPickup : MonoBehaviour, IPickup
     {
         #region Variables
-        public static bool IsWeaponEquipped { get; private set; }
         public CharacterController playerArmature;
         public Transform weaponHolder;
         public Transform cameraRoot;
@@ -53,7 +52,6 @@ namespace XtremeFPS.WeaponSystem.Pickup
             weaponSystem.enabled = false;
             Collider.isTrigger = false;
             equipped = false;
-            IsWeaponEquipped = false;
         }
 
         private void Equip()
@@ -62,7 +60,6 @@ namespace XtremeFPS.WeaponSystem.Pickup
             equipped = true;
             weaponSystem.enabled = true;
             Collider.isTrigger = true;
-            IsWeaponEquipped = true;
         }
 
         public void PickUp()

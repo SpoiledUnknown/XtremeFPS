@@ -55,8 +55,10 @@ namespace XtremeFPS.FPSController
         public bool canJump;
         public float jumpHeight = 2f;
         public float gravitationalForce = 10f;
+
         public bool IsGrounded { get; private set; }
-        public Vector3 jumpVelocity;
+        public Vector3 JumpVelocity { get; private set; }
+
 
         // Crouching
         public bool canPlayerCrouch;
@@ -69,6 +71,7 @@ namespace XtremeFPS.FPSController
         private float newHeight;
         private float initialHeight;
         private Vector3 initialCameraPosition;
+        private Vector3 initialGroundCheckPosition;
 
         //Sliding
         public float slidingSpeed;
@@ -92,8 +95,10 @@ namespace XtremeFPS.FPSController
         public float FOV;
 
         private float rotationY;
-        float mouseDirectionX;
-        float mouseDirectionY;
+        private float mouseDirectionX;
+        private float mouseDirectionY;
+        private float vRecoil = 0f;
+        private float hRecoil = 0f;
 
         //Zooming
         public bool enableZoom;
@@ -101,7 +106,6 @@ namespace XtremeFPS.FPSController
         public float zoomFOV = 30f;
 
         private bool isZoomed;
-
 
         //Head Bobbing effect
         public bool canHeadBob;
@@ -142,16 +146,16 @@ namespace XtremeFPS.FPSController
 
         // Handling Physics
         public bool canPush;
-        public int pushLayersID;
         public float pushStrength = 1.1f;
+        public int pushLayerId;
 
-        private float hRecoil = 0f;
-        private float vRecoil = 0f;
+        private LayerMask pushLayerMask;
 
         //Interactions
-        public int interactionLayersID;
         public float interactionRange;
+        public int interactionLayerId;
 
+        private LayerMask interactionLayerMask;
         private IPickup closestPickup = null;
         #endregion
 
@@ -170,6 +174,9 @@ namespace XtremeFPS.FPSController
 
             StartCoroutine(PlayFootstepSounds());
 
+            pushLayerMask = 1 << pushLayerId;
+            interactionLayerMask = 1 << interactionLayerId;
+
             if (!canPlayerCrouch) return;
             initialHeight = CharacterController.height;
             initialCameraPosition = cameraFollow.transform.localPosition;
@@ -178,11 +185,15 @@ namespace XtremeFPS.FPSController
         private void Update()
         {
             transitionDelta = Time.deltaTime * transitionSpeed;
+
+            //character Controller movement
             Vector3 horizontalMovement = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right +
                   inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
-            Vector3 verticalMovement = jumpVelocity.y * Time.deltaTime * transform.up;
+            Vector3 verticalMovement = JumpVelocity.y * Time.deltaTime * transform.up;
             CharacterController.Move(horizontalMovement + verticalMovement);
 
+            //checking if player is moving or not by using Inverse of transform direction for god knows what reason\
+            //but yeah this looks cool
             Vector3 localVelocity = transform.InverseTransformDirection(CharacterController.velocity);
             isMoving = Mathf.Abs(localVelocity.z) > footstepSensitivity || Mathf.Abs(localVelocity.x) > footstepSensitivity;
 
@@ -219,7 +230,7 @@ namespace XtremeFPS.FPSController
             if (body == null || body.isKinematic) return;
 
             LayerMask bodyLayerMask = 1 << body.gameObject.layer;
-            if ((bodyLayerMask & (1 << pushLayersID)) == 0) return;
+            if ((bodyLayerMask & pushLayerMask) == 0) return;
             if (hit.moveDirection.y < -0.3f) return;
 
             Vector3 pushDirection = new Vector3(hit.moveDirection.x, 0.0f, hit.moveDirection.z);
@@ -351,7 +362,8 @@ namespace XtremeFPS.FPSController
             CharacterController.height = newHeight;
 
             // Adjust the camera position based on the new height
-            Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) / 2, 0);
+            Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) * 0.5f, 0);
+
             Vector3 newCameraHeight = initialCameraPosition - halfHeightDifference;
             cameraFollow.localPosition = newCameraHeight;
         }
@@ -445,26 +457,26 @@ namespace XtremeFPS.FPSController
 
             if (!IsGrounded)
             {
-                jumpVelocity.y -= gravitationalForce * Time.deltaTime;
+                JumpVelocity = new Vector3(JumpVelocity.x, JumpVelocity.y - gravitationalForce * Time.deltaTime, JumpVelocity.z);
                 return; 
             }
 
-            if (!wasPreviouslyGrounded) audioSource.PlayOneShot(landingAudioClip);
-
             if (!canJump)
             {
-                jumpVelocity.y = -1f;
+                JumpVelocity = new Vector3(JumpVelocity.x, -0.5f, JumpVelocity.z);
                 return;
             }
+
+            if (!wasPreviouslyGrounded) audioSource.PlayOneShot(landingAudioClip);
 
             if (inputManager.haveJumped && 
                 MovementState != PlayerMovementState.Crouching &&
                 MovementState != PlayerMovementState.Sliding)
             {
-                jumpVelocity.y = Mathf.Sqrt(jumpHeight * 2f * gravitationalForce);
+                JumpVelocity =  new Vector3(JumpVelocity.x, Mathf.Sqrt(jumpHeight * 2f * gravitationalForce), JumpVelocity.z); ;
                 if (wasPreviouslyGrounded) audioSource.PlayOneShot(jumpingAudioClip);
             }
-            else if (!IsGrounded && jumpVelocity.y < 0f) jumpVelocity.y = -1f;
+            else if (!IsGrounded && JumpVelocity.y < 0f) JumpVelocity = new Vector3(JumpVelocity.x, -0.5f, JumpVelocity.z);
         }
         #region Sound Management
         private void DetectSurfaceAndMovement()
@@ -530,7 +542,7 @@ namespace XtremeFPS.FPSController
         private void InteractionHandling()
         {
             if (!inputManager.isTryingToInteract) return;
-            Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, (1 << interactionLayersID));
+            Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
 
             foreach (Collider collider in colliders)
             {
@@ -539,13 +551,20 @@ namespace XtremeFPS.FPSController
                     closestPickup ??= pickup;
                     if (Vector3.Distance(transform.position, collider.transform.position) <
                         Vector3.Distance(transform.position, closestPickup.GetTransform().position)) closestPickup = pickup;
-                    if (!closestPickup.IsEquiped() && !WeaponPickup.IsWeaponEquipped) closestPickup.PickUp();
+                    if (!closestPickup.IsEquiped()) closestPickup.PickUp();
                     else closestPickup.Drop();
                     break;
                 }
             }
         }
-
         #endregion
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, interactionRange);
+        }
+#endif
     }
 }

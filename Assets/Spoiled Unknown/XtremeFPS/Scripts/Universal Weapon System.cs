@@ -380,7 +380,7 @@ namespace XtremeFPS.WeaponSystem
             {
                 case false:
                     // Adjust the weapon's rotation based on the player's jump velocity.
-                    float yVelocity = fpsController.jumpVelocity.y;
+                    float yVelocity = fpsController.JumpVelocity.y;
                     yVelocity = Mathf.Clamp(yVelocity, -weaponMinClamp, weaponMaxClamp);
                     impactForce = -yVelocity * landingIntensity;
 
