@@ -6,13 +6,12 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 
-namespace XtremeFPS.Editor
+namespace XtremeFPS.CustomEditors
 {
     using XtremeFPS.WeaponSystem.Pickup;
-    using XtremeFPS.WeaponSystem;
 
     [CustomEditor(typeof(WeaponPickup)), CanEditMultipleObjects]
-    public class WeaponPickupEditor : UnityEditor.Editor
+    public class WeaponPickupEditor : Editor
     {
         WeaponPickup weaponPickup;
         SerializedObject serWeaponPickup;
@@ -30,7 +29,7 @@ namespace XtremeFPS.Editor
             #region Intro
             EditorGUILayout.Space();
             GUI.color = Color.black;
-            GUILayout.Label("Xtreme FPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
+            GUILayout.Label("XtremeFPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUI.color = Color.green;
             GUILayout.Label("Weapon Pickup Script", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });

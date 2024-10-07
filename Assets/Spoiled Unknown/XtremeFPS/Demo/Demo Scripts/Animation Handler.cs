@@ -4,6 +4,7 @@
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using XtremeFPS.FPSController;
+using XtremeFPS.WeaponSystem.Holder;
 using XtremeFPS.WeaponSystem.Pickup;
 
 namespace XtremeFPS.Demo
@@ -15,9 +16,9 @@ namespace XtremeFPS.Demo
         public Animator animator;
         public FirstPersonController personController;
 
-        /*private void Update()
+        private void Update()
         {
-            if (WeaponPickup.IsWeaponEquipped)
+            if (WeaponHolder.Instance.GetWeaponCount() > 0)
             {
                 RightRigLayer.rig.weight = 1f;
                 LeftRigLayer.rig.weight = 1f;
@@ -28,7 +29,7 @@ namespace XtremeFPS.Demo
                 LeftRigLayer.rig.weight = 0f;
             }
 
-            if (WeaponPickup.IsWeaponEquipped || personController.CharacterController.velocity.magnitude <= 0)
+            if (WeaponHolder.Instance.GetWeaponCount() > 0 || personController.CharacterController.velocity.magnitude <= 0)
             {
                 animator.SetBool("IsNotHolding", false);
             }
@@ -42,6 +43,6 @@ namespace XtremeFPS.Demo
                 animator.SetBool("IsNotHolding", true);
                 animator.speed = 0.5f;
             }
-        }*/
+        }
     }
 }

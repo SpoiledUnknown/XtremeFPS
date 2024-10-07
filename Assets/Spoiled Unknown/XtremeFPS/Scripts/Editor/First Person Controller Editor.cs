@@ -8,10 +8,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using XtremeFPS.FPSController;
 
-namespace XtremeFPS.Editor
+namespace XtremeFPS.CustomEditors
 {
     [CustomEditor(typeof(FirstPersonController)), CanEditMultipleObjects]
-    public class FirstPersonControllerEditor : UnityEditor.Editor
+    public class FirstPersonControllerEditor : Editor
     {
         FirstPersonController fpsController;
         SerializedObject serFPS;
@@ -28,7 +28,7 @@ namespace XtremeFPS.Editor
             #region Intro
             EditorGUILayout.Space();
             GUI.color = Color.black;
-            GUILayout.Label("Xtreme FPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
+            GUILayout.Label("XtremeFPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUI.color = Color.green;
             GUILayout.Label("First Person Controller Script", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });

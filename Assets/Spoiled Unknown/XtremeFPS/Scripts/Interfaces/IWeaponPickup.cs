@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace XtremeFPS.Interfaces
 {
-    public interface IPickup
+    public interface IWeaponPickup
     {
         void PickUp();
         void Drop();
         bool IsEquiped();
-        Transform GetTransform();
+        bool IsActive();
     }
 }

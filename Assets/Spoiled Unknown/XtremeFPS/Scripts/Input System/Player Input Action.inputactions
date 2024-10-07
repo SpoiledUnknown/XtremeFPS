@@ -27,7 +27,7 @@
                     "name": "SprintTap",
                     "type": "Button",
                     "id": "9354afc8-3ad0-4df9-b3a7-36b1274135ea",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -45,9 +45,9 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "909612d3-80c6-4431-a75e-a3ab713cc29c",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Tap",
                     "initialStateCheck": false
                 },
                 {
@@ -72,7 +72,7 @@
                     "name": "ZoomTap",
                     "type": "Button",
                     "id": "801c11e0-658d-45c9-a165-ad7317f43d3c",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -81,7 +81,7 @@
                     "name": "ZoomHold",
                     "type": "Button",
                     "id": "69606d3f-e6bd-4c58-a85c-8b048354334b",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -90,9 +90,18 @@
                     "name": "Interaction",
                     "type": "Button",
                     "id": "87ef1cec-78a9-4f8d-8c2e-684642fe908a",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Tap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Interaction Alt",
+                    "type": "Button",
+                    "id": "10d559b8-5fe4-486a-8a2e-7e71e585eea1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Tap(duration=0.01)",
                     "initialStateCheck": false
                 }
             ],
@@ -437,18 +446,40 @@
                     "action": "Interaction",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "825f1e59-601c-4c34-90f9-b6208916416e",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interaction Alt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "71e96e3c-c265-409d-8c9d-232c7f8221c5",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interaction Alt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "Shooting",
+            "name": "Weapon",
             "id": "022e0b28-fcdf-4b2c-96bd-8fff149a4131",
             "actions": [
                 {
                     "name": "FireHold",
                     "type": "Button",
                     "id": "be6a9684-d3f0-428c-997a-c6ee7f7b7122",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -457,16 +488,16 @@
                     "name": "FireTap",
                     "type": "Button",
                     "id": "fb562101-0adb-46d1-b29d-33cad700d74a",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Tap(duration=0.01)",
                     "initialStateCheck": false
                 },
                 {
                     "name": "Reload",
                     "type": "Button",
                     "id": "61cb2efb-9850-43ba-b057-46b7a4592aed",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -475,7 +506,7 @@
                     "name": "ADSHold",
                     "type": "Button",
                     "id": "af83cab6-c6ba-40d1-8938-d7e9ed178e7d",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -484,10 +515,19 @@
                     "name": "ADSTap",
                     "type": "Button",
                     "id": "39a835ea-30f2-4046-9532-60f44c77919e",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Weapon Scroll",
+                    "type": "Value",
+                    "id": "00f6bbb6-7825-4545-a0e1-22920fef0ad7",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -600,6 +640,72 @@
                     "action": "ADSTap",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Number Keys",
+                    "id": "90169a49-acf9-489b-9990-4e11454d0ebc",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon Scroll",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "106e83e4-f8af-479c-89f6-32c00280447e",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "39e2eea5-4aaa-4758-bdad-ab750a715c0a",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Mouse Control",
+                    "id": "69fa9797-897f-4d4b-9f89-c5b54213b7bb",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon Scroll",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "d218eb6f-05f2-4d6b-b541-a183e6d174fc",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "51105163-c0bb-4306-9d56-0a023e460e8c",
+                    "path": "<Mouse>/scroll/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

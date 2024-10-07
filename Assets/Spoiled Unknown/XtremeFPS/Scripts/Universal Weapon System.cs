@@ -6,6 +6,7 @@ using TMPro;
 using XtremeFPS.InputHandling;
 using XtremeFPS.PoolingSystem;
 using XtremeFPS.FPSController;
+using XtremeFPS.WeaponSystem.Bullet;
 
 namespace XtremeFPS.WeaponSystem
 {
@@ -23,7 +24,7 @@ namespace XtremeFPS.WeaponSystem
         public Animator animator;
         public GameObject aimUIImage;
 
-        private FPSInputManager inputManager;
+        private XtremeFPSInputHandler inputManager;
 
         //Bullet Physics
         public float bulletSpeed;
@@ -134,7 +135,7 @@ namespace XtremeFPS.WeaponSystem
         #region MonoBehaviour Callbacks
         private void Start()
         {
-            inputManager = FPSInputManager.Instance;
+            inputManager = XtremeFPSInputHandler.Instance;
             bulletSoundSource = GetComponent<AudioSource>();
 
             BulletsLeft = magazineSize;
@@ -145,6 +146,11 @@ namespace XtremeFPS.WeaponSystem
 
             SetBulletCountUI();
             readyToShoot = true;
+        }
+
+        private void OnEnable()
+        {
+            SetBulletCountUI();
         }
 
         private void Update()
@@ -295,7 +301,7 @@ namespace XtremeFPS.WeaponSystem
         private void SetBulletCountUI()
         {
             if (bulletCount == null) return;
-            bulletCount.SetText(BulletsLeft + " / " + totalBullets);
+            bulletCount.text = $"{BulletsLeft / bulletsPerTap} / {totalBullets / bulletsPerTap}";
         }
         #endregion
         #region Recoil
@@ -327,13 +333,13 @@ namespace XtremeFPS.WeaponSystem
 
             Vector3 desiredPosition = Vector3.Lerp(weaponHolder.transform.localPosition, target, Time.deltaTime * aimSmoothing);
             weaponHolder.transform.localPosition = desiredPosition;
+
             if (aimUIImage != null)
             {
                 aimUIImage.SetActive(aiming);
                 animator.gameObject.SetActive(!aiming);
                 fpsController.enableZoom = aiming;
             }
-
         }
         #region Effects
             private void WeaponRotationSway()

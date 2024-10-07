@@ -12,42 +12,42 @@ using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 namespace XtremeFPS.InputHandling
 {
-    public class FPSInputManager : MonoBehaviour
+    public class XtremeFPSInputHandler : MonoBehaviour
     {
-        public static FPSInputManager Instance {  get; private set; }
+        public static XtremeFPSInputHandler Instance {  get; private set; }
 
         #region Variables
+        private PlayerInputAction playerInputAction;
+
         public int maxTouchLimit = 10;
         public TouchDetectMode touchDetectionMode;
 
-        [HideInInspector] private PlayerInputAction playerInputAction;
+        [HideInInspector] public Vector2 moveDirection;
+        [HideInInspector] public Vector2 mouseDirection;
 
-        //sprinting
         [HideInInspector] public bool isSprintingHold;
         [HideInInspector] public bool isSprintingTapped;
 
-        //crouching
         [HideInInspector] public bool isCrouchingHold;
         [HideInInspector] public bool isCrouchingTapped;
 
-        //Vectors
-        [HideInInspector] public Vector2 moveDirection;
-         public Vector2 mouseDirection;
+        [HideInInspector] public bool isJumping;
 
-        //Jump
-        [HideInInspector] public bool haveJumped;
-
-        //Zooming
         [HideInInspector] public bool isZoomingHold;
         [HideInInspector] public bool isZoomingTapped;
 
-        //Weapon
         [HideInInspector] public bool isFiringHold;
         [HideInInspector] public bool isFiringTapped;
+
         [HideInInspector] public bool isReloading;
+
         [HideInInspector] public bool isAimingHold;
         [HideInInspector] public bool isAimingTapped;
+
         [HideInInspector] public bool isTryingToInteract;
+        [HideInInspector] public bool isTryingToInteractAlternate;
+
+        [HideInInspector] public float MouseScroll;
 
         #region Touch Controls
         public enum TouchDetectMode
@@ -70,53 +70,75 @@ namespace XtremeFPS.InputHandling
             if (Instance != null) Destroy(Instance);
             else Instance = this;
         }
+
         private void OnEnable()
         {
             playerInputAction.Enable();
         }
+
         private void OnDisable()
         {
             playerInputAction.Disable();
         }
+
         private void Start()
         {
             #region Player Movement
-            // Subscribe to input performing events
-            playerInputAction.Player.Movements.performed += MovementInput;
-            playerInputAction.Player.Look.performed += MouseInput;
-            playerInputAction.Player.CrouchHold.performed += CrouchHoldInput;
-            playerInputAction.Player.CrouchTap.performed += CrouchTapInput;
-            playerInputAction.Player.SprintHold.performed += SprintHoldInput;
-            playerInputAction.Player.SprintTap.performed += SprintTapInput;
+            playerInputAction.Player.Jump.started += JumpInput;
             playerInputAction.Player.Jump.performed += JumpInput;
-            playerInputAction.Player.ZoomHold.performed += ZoomHoldInput;
-            playerInputAction.Player.ZoomTap.performed += ZoomTapInput;
-            playerInputAction.Player.Interaction.started += Interaction_performed;
+            playerInputAction.Player.Jump.canceled += JumpInput;
 
-            // Subscribe to input cancellation events 
-            playerInputAction.Player.Movements.canceled += MovementInput;
+            playerInputAction.Player.Movements.performed += MoveInput;
+            playerInputAction.Player.Movements.canceled += MoveInput;
+
+            playerInputAction.Player.Look.performed += MouseInput;
             playerInputAction.Player.Look.canceled += MouseInput;
+
+            playerInputAction.Player.CrouchHold.performed += CrouchHoldInput;
             playerInputAction.Player.CrouchHold.canceled += CrouchHoldInput;
+
+            playerInputAction.Player.SprintHold.performed += SprintHoldInput;
             playerInputAction.Player.SprintHold.canceled += SprintHoldInput;
+
+            playerInputAction.Player.ZoomHold.performed += ZoomHoldInput;
             playerInputAction.Player.ZoomHold.canceled += ZoomHoldInput;
+
+            playerInputAction.Player.CrouchTap.performed += CrouchTapInput;
+            playerInputAction.Player.SprintTap.performed += SprintTapInput;
+            playerInputAction.Player.ZoomTap.performed += ZoomTapInput;
+
+            playerInputAction.Player.Interaction.started += InteractionInput;
+            playerInputAction.Player.Interaction.performed += InteractionInput;
+            playerInputAction.Player.Interaction.canceled += InteractionInput;
+
+            playerInputAction.Player.InteractionAlt.started += InteractionAltInput;
+            playerInputAction.Player.InteractionAlt.performed += InteractionAltInput;
+            playerInputAction.Player.InteractionAlt.canceled += InteractionAltInput;
             #endregion
 
             #region Weapon System
-            playerInputAction.Shooting.FireHold.performed += ShootInput;
-            playerInputAction.Shooting.FireTap.performed += ShootTapInput;
-            playerInputAction.Shooting.Reload.performed += ReloadingInput;
-            playerInputAction.Shooting.ADSTap.performed += ADSTapInput;
-            playerInputAction.Shooting.ADSHold.performed += ADSHoldInput;
-
-            playerInputAction.Shooting.Reload.canceled += ReloadingInput;
-            playerInputAction.Shooting.FireHold.canceled += ShootInput;
-            playerInputAction.Shooting.ADSHold.canceled += ADSHoldInput;
-
+            playerInputAction.Weapon.FireHold.performed += ShootHoldInput;
+            playerInputAction.Weapon.FireHold.canceled += ShootHoldInput;
+                              
+            playerInputAction.Weapon.FireTap.started += ShootTapInput;
+            playerInputAction.Weapon.FireTap.performed += ShootTapInput;
+            playerInputAction.Weapon.FireTap.canceled += ShootTapInput;
+                              
+            playerInputAction.Weapon.Reload.performed += ReloadingInput;
+            playerInputAction.Weapon.Reload.canceled += ReloadingInput;
+                              
+            playerInputAction.Weapon.ADSHold.canceled += ADSHoldInput;
+            playerInputAction.Weapon.ADSHold.performed += ADSHoldInput;
+                              
+            playerInputAction.Weapon.ADSTap.performed += ADSTapInput;
+                              
+            playerInputAction.Weapon.WeaponScroll.performed += ScrollInput;
+            playerInputAction.Weapon.WeaponScroll.canceled += ScrollInput;
             #endregion
 
 #if UNITY_ANDROID || UNITY_IOS
             if (EventSystem.current != null) eventStytem = EventSystem.current;
-            else Debug.LogError($"Scene has no Event System!");
+            else Debug.LogError("Scene has no Event System!");
             SetIsTouchDelegate();
 #endif
         }
@@ -167,7 +189,6 @@ namespace XtremeFPS.InputHandling
             }
         }
 #endif
-
         #endregion
 
         #region Player Inputs
@@ -175,10 +196,12 @@ namespace XtremeFPS.InputHandling
         {
             mouseDirection = context.ReadValue<Vector2>();
         }
-        private void MovementInput(InputAction.CallbackContext context)
+
+        private void MoveInput(InputAction.CallbackContext context)
         {
             moveDirection = context.ReadValue<Vector2>();
         }
+
         private void CrouchHoldInput(InputAction.CallbackContext context)
         {
             isCrouchingHold = context.ReadValueAsButton();
@@ -187,6 +210,7 @@ namespace XtremeFPS.InputHandling
         {
             isCrouchingTapped = !isCrouchingTapped;
         }
+
         private void SprintHoldInput(InputAction.CallbackContext context)
         {
             isSprintingHold = context.ReadValueAsButton();
@@ -195,6 +219,7 @@ namespace XtremeFPS.InputHandling
         {
             isSprintingTapped = !isSprintingTapped;
         }
+
         private void ZoomHoldInput(InputAction.CallbackContext context)
         {
             isZoomingHold = context.ReadValueAsButton();
@@ -203,36 +228,30 @@ namespace XtremeFPS.InputHandling
         {
             isZoomingTapped = !isZoomingTapped;
         }
+
         private void JumpInput(InputAction.CallbackContext context)
         {
-            if (haveJumped) return;
-            haveJumped = true;
-            StartCoroutine(CancelJump());
-
+            isJumping = context.ReadValueAsButton();
         }
-        IEnumerator CancelJump()
+
+        private void InteractionInput(InputAction.CallbackContext context)
         {
-            yield return new WaitForSeconds(0.05f);
-            haveJumped = false;
+            isTryingToInteract = context.ReadValueAsButton();
+        }
+        private void InteractionAltInput(InputAction.CallbackContext context)
+        {
+            isTryingToInteractAlternate = context.ReadValueAsButton();
         }
         #endregion
 
         #region Weapon Inputs
-        private void ShootInput(InputAction.CallbackContext context)
+        private void ShootHoldInput(InputAction.CallbackContext context)
         {
             isFiringHold = context.ReadValueAsButton();
         }
-
         private void ShootTapInput(InputAction.CallbackContext context)
         {
-            if (isFiringTapped) return;
-            isFiringTapped = true;
-            StartCoroutine(CancelFire());
-        }
-        IEnumerator CancelFire()
-        {
-            yield return new WaitForSeconds(0.05f);
-            isFiringTapped = false;
+            isFiringTapped = context.ReadValueAsButton();
         }
 
         private void ReloadingInput(InputAction.CallbackContext context)
@@ -244,21 +263,14 @@ namespace XtremeFPS.InputHandling
         {
             isAimingHold = context.ReadValueAsButton();
         }
-
         private void ADSTapInput(InputAction.CallbackContext context)
         {
             isAimingTapped = !isAimingTapped;
         }
 
-        private void Interaction_performed(InputAction.CallbackContext obj)
+        private void ScrollInput(InputAction.CallbackContext context)
         {
-            isTryingToInteract = true;
-            Invoke(nameof(SetIsTryingToInteractToFalse), 0.001f);
-        }
-
-        private void SetIsTryingToInteractToFalse()
-        {
-            isTryingToInteract = false;
+            MouseScroll = context.ReadValue<float>();
         }
         #endregion
     }

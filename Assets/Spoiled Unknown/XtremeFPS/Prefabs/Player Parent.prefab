@@ -555,8 +555,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9019187294976503955}
+  - component: {fileID: 2918690091397347923}
   m_Layer: 0
-  m_Name: Weapon Recoils
+  m_Name: Weapon Holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -577,6 +578,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1341044986045850307}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2918690091397347923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203261777128514000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6ed27d77ecdcdd42b877ff119a26a12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1249078990123539652
 GameObject:
   m_ObjectHideFlags: 0
@@ -1324,7 +1337,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1341044986045850307}
   m_Layer: 0
-  m_Name: Weapon Holder
+  m_Name: Weapon Holder Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1835,13 +1848,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTouchLimit: 10
   touchDetectionMode: 0
+  moveDirection: {x: 0, y: 0}
+  mouseDirection: {x: 0, y: 0}
   isSprintingHold: 0
   isSprintingTapped: 0
   isCrouchingHold: 0
   isCrouchingTapped: 0
-  moveDirection: {x: 0, y: 0}
-  mouseDirection: {x: 0, y: 0}
-  haveJumped: 0
+  isJumping: 0
   isZoomingHold: 0
   isZoomingTapped: 0
   isFiringHold: 0
@@ -1850,6 +1863,8 @@ MonoBehaviour:
   isAimingHold: 0
   isAimingTapped: 0
   isTryingToInteract: 0
+  isTryingToInteractAlternate: 0
+  MouseScroll: 0
 --- !u!82 &8643482363577178035
 AudioSource:
   m_ObjectHideFlags: 0

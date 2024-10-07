@@ -5,13 +5,13 @@ using UnityEngine;
 using XtremeFPS.InputHandling;
 using Unity.Cinemachine;
 using UnityEngine.UI;
-using XtremeFPS.WeaponSystem.Pickup;
 using XtremeFPS.Interfaces;
+using XtremeFPS.WeaponSystem.Holder;
 
 namespace XtremeFPS.FPSController
 {
     [RequireComponent(typeof(CharacterController))]
-    [RequireComponent(typeof(FPSInputManager))]
+    [RequireComponent(typeof(XtremeFPSInputHandler))]
     [RequireComponent(typeof(AudioSource))]
     [AddComponentMenu("Spoiled Unknown/XtremeFPS/First Person Controller")]
     public class FirstPersonController : MonoBehaviour
@@ -23,7 +23,7 @@ namespace XtremeFPS.FPSController
         public float walkSoundSpeed;
 
         public CharacterController CharacterController {  get; private set; }
-        private FPSInputManager inputManager;
+        private XtremeFPSInputHandler inputManager;
         public PlayerMovementState MovementState {  get; private set; }
         public enum PlayerMovementState
         {
@@ -156,13 +156,12 @@ namespace XtremeFPS.FPSController
         public int interactionLayerId;
 
         private LayerMask interactionLayerMask;
-        private IPickup closestPickup = null;
         #endregion
 
         #region MonoBehaviour Callbacks
         private void Start()
         {
-            inputManager = FPSInputManager.Instance;
+            inputManager = XtremeFPSInputHandler.Instance;
             audioSource = GetComponent<AudioSource>();
             CharacterController = GetComponent<CharacterController>();
 
@@ -469,7 +468,7 @@ namespace XtremeFPS.FPSController
 
             if (!wasPreviouslyGrounded) audioSource.PlayOneShot(landingAudioClip);
 
-            if (inputManager.haveJumped && 
+            if (inputManager.isJumping && 
                 MovementState != PlayerMovementState.Crouching &&
                 MovementState != PlayerMovementState.Sliding)
             {
@@ -541,19 +540,31 @@ namespace XtremeFPS.FPSController
 
         private void InteractionHandling()
         {
-            if (!inputManager.isTryingToInteract) return;
-            Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
-
-            foreach (Collider collider in colliders)
+            if (inputManager.isTryingToInteract)
             {
-                if (collider.TryGetComponent(out IPickup pickup) && !isZoomed)
+                Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
+
+                foreach (Collider collider in colliders)
                 {
-                    closestPickup ??= pickup;
-                    if (Vector3.Distance(transform.position, collider.transform.position) <
-                        Vector3.Distance(transform.position, closestPickup.GetTransform().position)) closestPickup = pickup;
-                    if (!closestPickup.IsEquiped()) closestPickup.PickUp();
-                    else closestPickup.Drop();
-                    break;
+                    if (collider.TryGetComponent(out IWeaponPickup pickup) && !isZoomed)
+                    {
+                        if (pickup.IsEquiped()) continue;
+                        if (WeaponHolder.Instance.GetWeaponCount() < 3) pickup.PickUp();
+                        break;
+                    }
+                }
+            }
+            else if (inputManager.isTryingToInteractAlternate)
+            {
+                Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
+
+                foreach (Collider collider in colliders)
+                {
+                    if (collider.TryGetComponent(out IWeaponPickup pickup) && !isZoomed)
+                    {
+                        if (pickup.IsEquiped() && pickup.IsActive()) pickup.Drop();
+                        break;
+                    }
                 }
             }
         }

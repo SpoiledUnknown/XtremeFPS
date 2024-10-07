@@ -4,13 +4,14 @@
 using TMPro;
 using UnityEngine;
 using XtremeFPS.Interfaces;
+using XtremeFPS.WeaponSystem.Holder;
 
 namespace XtremeFPS.WeaponSystem.Pickup
 {
     [RequireComponent(typeof(UniversalWeaponSystem))]
     [RequireComponent(typeof(BoxCollider))]
     [AddComponentMenu("Spoiled Unknown/XtremeFPS/Weapon Pickup")]
-    public class WeaponPickup : MonoBehaviour, IPickup
+    public class WeaponPickup : MonoBehaviour, IWeaponPickup
     {
         #region Variables
         public CharacterController playerArmature;
@@ -88,9 +89,9 @@ namespace XtremeFPS.WeaponSystem.Pickup
             return equipped;
         }
 
-        public Transform GetTransform()
+        public bool IsActive()
         {
-            return transform;
+            return gameObject.activeSelf;
         }
         #endregion
     }

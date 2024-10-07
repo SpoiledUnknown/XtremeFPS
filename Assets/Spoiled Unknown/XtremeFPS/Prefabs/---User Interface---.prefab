@@ -2987,7 +2987,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 7
+  m_AdditionalShaderChannelsFlag: 31
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -3091,9 +3091,7 @@ MonoBehaviour:
   stateText: {fileID: 309267136728855562}
   surfaceText: {fileID: 2045962316463140346}
   speedText: {fileID: 3803732811335044806}
-  bulletText: {fileID: 7334886873981788341}
   personController: {fileID: 0}
-  weaponSystem: {fileID: 0}
 --- !u!114 &5226219788713997327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3101,7 +3099,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9106025449823218236}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe4b4d9ef20dd81429bac6200a5e5e85, type: 3}
   m_Name: 

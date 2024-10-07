@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEditor;
 using XtremeFPS.PoolingSystem;
 
-namespace XtremeFPS.Editor
+namespace XtremeFPS.CustomEditors
 {
     [CustomEditor(typeof(PoolManager)), CanEditMultipleObjects]
-    public class PoolManagerEditor : UnityEditor.Editor
+    public class PoolManagerEditor : Editor
     {
         private PoolManager poolManager;
         private SerializedObject serializedPoolManager;
@@ -35,7 +35,7 @@ namespace XtremeFPS.Editor
             #region Intro
             EditorGUILayout.Space();
             GUI.color = Color.black;
-            GUILayout.Label("Xtreme FPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
+            GUILayout.Label("XtremeFPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUI.color = Color.green;
             GUILayout.Label("Pool Manager", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });

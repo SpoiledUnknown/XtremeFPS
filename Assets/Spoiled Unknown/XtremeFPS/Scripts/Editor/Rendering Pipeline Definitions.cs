@@ -8,7 +8,7 @@ using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace XtremeFPS.Editor
+namespace XtremeFPS.CustomEditors
 {
     [InitializeOnLoad]
     public class RenderingPipelineDefines

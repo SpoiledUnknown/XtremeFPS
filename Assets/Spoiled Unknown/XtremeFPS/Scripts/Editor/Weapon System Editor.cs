@@ -6,17 +6,16 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 
-namespace XtremeFPS.Editor
+namespace XtremeFPS.CustomEditors
 {
     using XtremeFPS.WeaponSystem;
     using XtremeFPS.FPSController;
 
     [CustomEditor(typeof(UniversalWeaponSystem)), CanEditMultipleObjects]
-    public class WeaponSystemEditor : UnityEditor.Editor
+    public class WeaponSystemEditor : Editor
     {
         UniversalWeaponSystem uni_WeaponSystem;
         SerializedObject serWeaponSystem;
-
 
         private void OnEnable()
         {
@@ -30,7 +29,7 @@ namespace XtremeFPS.Editor
             #region Intro
             EditorGUILayout.Space();
             GUI.color = Color.black;
-            GUILayout.Label("Xtreme FPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
+            GUILayout.Label("XtremeFPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUI.color = Color.green;
             GUILayout.Label("Universal Weapon Script", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });

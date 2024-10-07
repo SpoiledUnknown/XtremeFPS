@@ -6,7 +6,7 @@ using UnityEngine;
 using XtremeFPS.PoolingSystem;
 using XtremeFPS.Interfaces;
 
-namespace XtremeFPS.WeaponSystem
+namespace XtremeFPS.WeaponSystem.Bullet
 {
     public class ParabolicBullet : MonoBehaviour
     {
@@ -37,7 +37,7 @@ namespace XtremeFPS.WeaponSystem
         #endregion
 
         #region MonoBehaviour Callbacks
-        void OnEnable()
+        private void OnEnable()
         {
             StartCoroutine(DestroyBullets());
             startTime = -1f;

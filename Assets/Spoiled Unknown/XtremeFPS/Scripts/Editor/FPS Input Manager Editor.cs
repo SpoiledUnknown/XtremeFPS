@@ -6,17 +6,17 @@ using UnityEditor;
 using XtremeFPS.InputHandling;
 using UnityEngine;
 
-namespace XtremeFPS.Editor
+namespace XtremeFPS.CustomEditors
 {
-    [CustomEditor(typeof(FPSInputManager)), CanEditMultipleObjects]
-    public class FPSInputManagerEditor : UnityEditor.Editor
+    [CustomEditor(typeof(XtremeFPSInputHandler)), CanEditMultipleObjects]
+    public class FPSInputManagerEditor : Editor
     {
-        FPSInputManager inputM_UI;
+        XtremeFPSInputHandler inputM_UI;
         SerializedObject serInputM_UI;
 
         private void OnEnable()
         {
-            inputM_UI = (FPSInputManager)target;
+            inputM_UI = (XtremeFPSInputHandler)target;
             serInputM_UI = new SerializedObject(inputM_UI);
         }
 
@@ -26,7 +26,7 @@ namespace XtremeFPS.Editor
             #region Intro
             EditorGUILayout.Space();
             GUI.color = Color.black;
-            GUILayout.Label("Xtreme FPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
+            GUILayout.Label("XtremeFPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUI.color = Color.green;
             GUILayout.Label("Input Manager Script", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
