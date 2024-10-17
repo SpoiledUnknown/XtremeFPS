@@ -65,10 +65,10 @@ namespace XtremeFPS.InputHandling
         #region Initialization
         private void Awake()
         {
-            playerInputAction = new PlayerInputAction();
-
             if (Instance != null) Destroy(Instance);
             else Instance = this;
+
+            playerInputAction = new PlayerInputAction();
         }
 
         private void OnEnable()

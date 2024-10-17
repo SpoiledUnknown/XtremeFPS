@@ -32097,16 +32097,6 @@ PrefabInstance:
       propertyPath: RightRigLayer.m_Rig
       value: 
       objectReference: {fileID: 6263278290098993807}
-    - target: {fileID: 5226219788713997327, guid: ce7602eaee915294c84db6dd743f8301,
-        type: 3}
-      propertyPath: LeftRigLayer.m_Active
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5226219788713997327, guid: ce7602eaee915294c84db6dd743f8301,
-        type: 3}
-      propertyPath: RightRigLayer.m_Active
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8098977304064367707, guid: ce7602eaee915294c84db6dd743f8301,
         type: 3}
       propertyPath: m_Pivot.x

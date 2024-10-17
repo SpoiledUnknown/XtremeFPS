@@ -71,7 +71,6 @@ namespace XtremeFPS.FPSController
         private float newHeight;
         private float initialHeight;
         private Vector3 initialCameraPosition;
-        private Vector3 initialGroundCheckPosition;
 
         //Sliding
         public float slidingSpeed;
