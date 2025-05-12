@@ -86,7 +86,9 @@ namespace XtremeFPS.FPSController
         // Camera
         public bool isCursorLocked;
         public Transform cameraFollow;
-        public CinemachineCamera cinemachineCamera;
+        public Transform cameraFollowTPS;
+        public CinemachineCamera FirstPersonCamera;
+        public CinemachineCamera ThirdPersonCamera;
         public float mouseSensitivity;
         public float maximumClamp;
         public float minimumClamp;
@@ -155,6 +157,8 @@ namespace XtremeFPS.FPSController
         public int interactionLayerId;
 
         private LayerMask interactionLayerMask;
+        private float turnSmoothVelocity;
+        private float rotationX;
         #endregion
 
         #region MonoBehaviour Callbacks
@@ -164,7 +168,8 @@ namespace XtremeFPS.FPSController
             audioSource = GetComponent<AudioSource>();
             CharacterController = GetComponent<CharacterController>();
 
-            cinemachineCamera.Lens.FieldOfView = FOV;
+            FirstPersonCamera.Lens.FieldOfView = FOV;
+            ThirdPersonCamera.Lens.FieldOfView = FOV;
             AudioEffectSpeed = walkSoundSpeed;
             headBobStartPosition = cameraFollow.localPosition;
 
@@ -180,15 +185,34 @@ namespace XtremeFPS.FPSController
             initialCameraPosition = cameraFollow.transform.localPosition;
         }
 
+        Vector3 horizontalMovement;
+
         private void Update()
         {
             transitionDelta = Time.deltaTime * transitionSpeed;
 
             //character Controller movement
-            Vector3 horizontalMovement = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right +
-                  inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
+            if (!inputManager.IsSwitchingCamera)
+            {
+                horizontalMovement = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right +
+                      inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
+            }
+            else
+            {
+                Vector3 direction = new Vector3(inputManager.moveDirection.x, 0f, inputManager.moveDirection.y).normalized;
+                if (direction.magnitude >= 0.1f)
+                {
+                    float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cameraFollowTPS.eulerAngles.y;
+                    float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, transitionDelta);
+                    transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+                    horizontalMovement = Quaternion.Euler(0.0f, targetAngle, 0.0f) * Vector3.forward * Time.deltaTime * targetSpeed;
+                }
+            }
+
             Vector3 verticalMovement = JumpVelocity.y * Time.deltaTime * transform.up;
             CharacterController.Move(horizontalMovement + verticalMovement);
+            horizontalMovement = Vector3.zero;
 
             //checking if player is moving or not by using Inverse of transform direction for god knows what reason\
             //but yeah this looks cool
@@ -212,11 +236,22 @@ namespace XtremeFPS.FPSController
 
         private void LateUpdate()
         {
+            cameraFollowTPS.localPosition = transform.localPosition;
+
             rotationY -= mouseDirectionY;
             rotationY = Mathf.Clamp(rotationY, minimumClamp, maximumClamp);
 
-            transform.Rotate(mouseDirectionX * transform.up);
-            cameraFollow.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
+            if (!inputManager.IsSwitchingCamera)
+            {
+                transform.Rotate(mouseDirectionX * transform.up);
+                cameraFollow.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
+            }
+            else
+            {
+                rotationX += mouseDirectionX;
+                cameraFollowTPS.localRotation = Quaternion.Euler(rotationY, rotationX, 0f);
+            }
+
             inputManager.mouseDirection = Vector2.zero;
         }
 
@@ -252,6 +287,17 @@ namespace XtremeFPS.FPSController
             else isZoomed = inputManager.isZoomingTapped;
 
             canSlide = isCrouching && isSprinting && canPlayerCrouch;
+
+            if (XtremeFPSInputHandler.Instance.IsSwitchingCamera)
+            {
+                FirstPersonCamera.Priority = 0;
+                ThirdPersonCamera.Priority = 1;
+            }
+            else
+            {
+                FirstPersonCamera.Priority = 1;
+                ThirdPersonCamera.Priority = 0;
+            }
         }
         #region Camera
         public void AddRecoil(float hRecoil, float vRecoil)
@@ -265,9 +311,9 @@ namespace XtremeFPS.FPSController
             if (!enableZoom) return;
 
             if (isZoomed) 
-                cinemachineCamera.Lens.FieldOfView = Mathf.Lerp(cinemachineCamera.Lens.FieldOfView, zoomFOV, transitionDelta);
+                FirstPersonCamera.Lens.FieldOfView = Mathf.Lerp(FirstPersonCamera.Lens.FieldOfView, zoomFOV, transitionDelta);
             else if (!isZoomed && !isSprinting) 
-                cinemachineCamera.Lens.FieldOfView = Mathf.Lerp(cinemachineCamera.Lens.FieldOfView, FOV, transitionDelta);
+                FirstPersonCamera.Lens.FieldOfView = Mathf.Lerp(FirstPersonCamera.Lens.FieldOfView, FOV, transitionDelta);
         }
 
         private void AdjustFOVSettings(float targetFOV)
@@ -275,9 +321,10 @@ namespace XtremeFPS.FPSController
             if (isZoomed && enableZoom) return;
             if (!isMoving) targetFOV = FOV;
 
-            float currentFOV = cinemachineCamera.Lens.FieldOfView;
+            float currentFOV = FirstPersonCamera.Lens.FieldOfView;
             float newFOV = Mathf.Lerp(currentFOV, targetFOV, transitionDelta);
-            cinemachineCamera.Lens.FieldOfView = newFOV;
+            FirstPersonCamera.Lens.FieldOfView = newFOV;
+            ThirdPersonCamera.Lens.FieldOfView = newFOV;
         }
         #region Head Bobbing
         private Vector3 FootStepMotion()
@@ -364,6 +411,7 @@ namespace XtremeFPS.FPSController
 
             Vector3 newCameraHeight = initialCameraPosition - halfHeightDifference;
             cameraFollow.localPosition = newCameraHeight;
+            cameraFollowTPS.localPosition = new Vector3(transform.localPosition.x, newCameraHeight.y, transform.localPosition.z);
         }
 
         #region Sliding

@@ -502,7 +502,7 @@ namespace XtremeFPS.CustomEditors
             playerArmature.enableZoom = false;
             playerArmature.canHeadBob = false;
 
-            playerArmature.cinemachineCamera = cinemachineCamera;
+            playerArmature.FirstPersonCamera = cinemachineCamera;
             playerArmature.cameraFollow = cameraFollow.transform;
 
             cameraHolder.transform.position = new Vector3(0f, 0.6150001f, 0.1719999f);

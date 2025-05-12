@@ -191,6 +191,15 @@ namespace XtremeFPS.InputHandling
                     ""processors"": """",
                     ""interactions"": ""Tap(duration=0.01)"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Camera Switch"",
+                    ""type"": ""Button"",
+                    ""id"": ""2651982d-f9ff-46b5-a478-c635a0b15995"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -554,6 +563,17 @@ namespace XtremeFPS.InputHandling
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interaction Alt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8be523fd-8068-4aee-91dd-7a050309ab90"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard And Mouse"",
+                    ""action"": ""Camera Switch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1345,6 +1365,7 @@ namespace XtremeFPS.InputHandling
             m_Player_ZoomHold = m_Player.FindAction("ZoomHold", throwIfNotFound: true);
             m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
             m_Player_InteractionAlt = m_Player.FindAction("Interaction Alt", throwIfNotFound: true);
+            m_Player_CameraSwitch = m_Player.FindAction("Camera Switch", throwIfNotFound: true);
             // Weapon
             m_Weapon = asset.FindActionMap("Weapon", throwIfNotFound: true);
             m_Weapon_FireHold = m_Weapon.FindAction("FireHold", throwIfNotFound: true);
@@ -1458,6 +1479,7 @@ namespace XtremeFPS.InputHandling
         private readonly InputAction m_Player_ZoomHold;
         private readonly InputAction m_Player_Interaction;
         private readonly InputAction m_Player_InteractionAlt;
+        private readonly InputAction m_Player_CameraSwitch;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -1513,6 +1535,10 @@ namespace XtremeFPS.InputHandling
             /// Provides access to the underlying input action "Player/InteractionAlt".
             /// </summary>
             public InputAction @InteractionAlt => m_Wrapper.m_Player_InteractionAlt;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/CameraSwitch".
+            /// </summary>
+            public InputAction @CameraSwitch => m_Wrapper.m_Player_CameraSwitch;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1572,6 +1598,9 @@ namespace XtremeFPS.InputHandling
                 @InteractionAlt.started += instance.OnInteractionAlt;
                 @InteractionAlt.performed += instance.OnInteractionAlt;
                 @InteractionAlt.canceled += instance.OnInteractionAlt;
+                @CameraSwitch.started += instance.OnCameraSwitch;
+                @CameraSwitch.performed += instance.OnCameraSwitch;
+                @CameraSwitch.canceled += instance.OnCameraSwitch;
             }
 
             /// <summary>
@@ -1616,6 +1645,9 @@ namespace XtremeFPS.InputHandling
                 @InteractionAlt.started -= instance.OnInteractionAlt;
                 @InteractionAlt.performed -= instance.OnInteractionAlt;
                 @InteractionAlt.canceled -= instance.OnInteractionAlt;
+                @CameraSwitch.started -= instance.OnCameraSwitch;
+                @CameraSwitch.performed -= instance.OnCameraSwitch;
+                @CameraSwitch.canceled -= instance.OnCameraSwitch;
             }
 
             /// <summary>
@@ -2118,6 +2150,13 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnInteractionAlt(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Camera Switch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnCameraSwitch(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Weapon" which allows adding and removing callbacks.

@@ -112,7 +112,9 @@ namespace XtremeFPS.CustomEditors
             GUI.color = Color.white;
             fpsController.isCursorLocked = EditorGUILayout.ToggleLeft(new GUIContent("Is Cursor Locked", "Defines whether Cursor is locked."), fpsController.isCursorLocked);
             fpsController.cameraFollow = (Transform)EditorGUILayout.ObjectField(new GUIContent("Camera Root", "Camera root object which acts as look at point for cinemachine."), fpsController.cameraFollow, typeof(Transform), true);
-            fpsController.cinemachineCamera = (CinemachineCamera)EditorGUILayout.ObjectField(new GUIContent("Cinemachine Camera", "cinemachine Camera which player uses."), fpsController.cinemachineCamera, typeof(CinemachineCamera), true);
+            fpsController.cameraFollowTPS = (Transform)EditorGUILayout.ObjectField(new GUIContent("Camera Root TPS", "Camera root object which acts as look at point for cinemachine."), fpsController.cameraFollowTPS, typeof(Transform), true);
+            fpsController.FirstPersonCamera = (CinemachineCamera)EditorGUILayout.ObjectField(new GUIContent("First Person Camera", "cinemachine Camera which player uses."), fpsController.FirstPersonCamera, typeof(CinemachineCamera), true);
+            fpsController.ThirdPersonCamera = (CinemachineCamera)EditorGUILayout.ObjectField(new GUIContent("Third Person Camera", "cinemachine Camera which player uses."), fpsController.ThirdPersonCamera, typeof(CinemachineCamera), true);
             fpsController.FOV = EditorGUILayout.Slider(new GUIContent("Field Of View", "Determines the default Field Of View for the camera."), fpsController.FOV, 60f, 110f);
             fpsController.mouseSensitivity = EditorGUILayout.Slider(new GUIContent("Sensitivity", "Determines the senstivity at which camera will rotate."), fpsController.mouseSensitivity, 0f, 200f);
             fpsController.maximumClamp = EditorGUILayout.Slider(new GUIContent("Maximum Clamp Angle", "Determines the maximum angle at which the camera can reach while being rotated."), fpsController.maximumClamp, 0f, 90f);

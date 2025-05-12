@@ -103,6 +103,15 @@
                     "processors": "",
                     "interactions": "Tap(duration=0.01)",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Camera Switch",
+                    "type": "Button",
+                    "id": "2651982d-f9ff-46b5-a478-c635a0b15995",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -466,6 +475,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interaction Alt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8be523fd-8068-4aee-91dd-7a050309ab90",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard And Mouse",
+                    "action": "Camera Switch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

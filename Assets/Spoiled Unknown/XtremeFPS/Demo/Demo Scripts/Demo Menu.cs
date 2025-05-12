@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using XtremeFPS.FPSController;
+using XtremeFPS.InputHandling;
 using XtremeFPS.WeaponSystem;
 
 namespace XtremeFPS.Demo
@@ -15,9 +16,9 @@ namespace XtremeFPS.Demo
 
         private void Update()
         {
-            stateText.text = $"State: {personController.MovementState}";
-            surfaceText.text = $"Surface: {personController.SurfaceType}";
-            speedText.text = $"Speed: {personController.targetSpeed}";
+                stateText.text = $"State: {personController.MovementState}";
+                surfaceText.text = $"Surface: {personController.SurfaceType}";
+                speedText.text = $"Speed: {personController.targetSpeed}";
         }
     }
 }

@@ -47,6 +47,8 @@ namespace XtremeFPS.InputHandling
         [HideInInspector] public bool isTryingToInteract;
         [HideInInspector] public bool isTryingToInteractAlternate;
 
+        [HideInInspector] public bool IsSwitchingCamera;
+
         [HideInInspector] public float MouseScroll;
 
         #region Touch Controls
@@ -106,6 +108,7 @@ namespace XtremeFPS.InputHandling
             playerInputAction.Player.CrouchTap.performed += CrouchTapInput;
             playerInputAction.Player.SprintTap.performed += SprintTapInput;
             playerInputAction.Player.ZoomTap.performed += ZoomTapInput;
+            playerInputAction.Player.CameraSwitch.performed += CameraSwitchInput;
 
             playerInputAction.Player.Interaction.started += InteractionInput;
             playerInputAction.Player.Interaction.performed += InteractionInput;
@@ -142,6 +145,8 @@ namespace XtremeFPS.InputHandling
             SetIsTouchDelegate();
 #endif
         }
+
+
 
 #if UNITY_ANDROID || UNITY_IOS
         private void Update()
@@ -241,6 +246,11 @@ namespace XtremeFPS.InputHandling
         private void InteractionAltInput(InputAction.CallbackContext context)
         {
             isTryingToInteractAlternate = context.ReadValueAsButton();
+        }
+
+        private void CameraSwitchInput(InputAction.CallbackContext obj)
+        {
+            IsSwitchingCamera = !IsSwitchingCamera;
         }
         #endregion
 
