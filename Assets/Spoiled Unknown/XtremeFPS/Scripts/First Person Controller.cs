@@ -34,7 +34,9 @@ namespace XtremeFPS.FPSController
             Default
         }
         public float targetSpeed;
+
         private float transitionDelta;
+        private Vector3 horizontalMovement;
 
         //sprinting
         public bool canPlayerSprint;
@@ -55,6 +57,12 @@ namespace XtremeFPS.FPSController
         public bool canJump;
         public float jumpHeight = 2f;
         public float gravitationalForce = 10f;
+        public Transform groundSphere;
+        public float groundRadius;
+        public int groundLayerID;
+
+        private Vector3 groundSpherePosition;
+        private LayerMask groundLayerMask;
 
         public bool IsGrounded { get; private set; }
         public Vector3 JumpVelocity { get; private set; }
@@ -179,13 +187,13 @@ namespace XtremeFPS.FPSController
 
             pushLayerMask = 1 << pushLayerId;
             interactionLayerMask = 1 << interactionLayerId;
+            groundLayerMask = 1 << groundLayerID;
+            groundSpherePosition = groundSphere.localPosition;
 
             if (!canPlayerCrouch) return;
             initialHeight = CharacterController.height;
             initialCameraPosition = cameraFollow.transform.localPosition;
         }
-
-        Vector3 horizontalMovement;
 
         private void Update()
         {
@@ -288,7 +296,7 @@ namespace XtremeFPS.FPSController
 
             canSlide = isCrouching && isSprinting && canPlayerCrouch;
 
-            if (XtremeFPSInputHandler.Instance.IsSwitchingCamera)
+            if (inputManager.IsSwitchingCamera)
             {
                 FirstPersonCamera.Priority = 0;
                 ThirdPersonCamera.Priority = 1;
@@ -410,6 +418,7 @@ namespace XtremeFPS.FPSController
             Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) * 0.5f, 0);
 
             Vector3 newCameraHeight = initialCameraPosition - halfHeightDifference;
+            groundSphere.localPosition = groundSpherePosition + halfHeightDifference;
             cameraFollow.localPosition = newCameraHeight;
             cameraFollowTPS.localPosition = new Vector3(transform.localPosition.x, newCameraHeight.y, transform.localPosition.z);
         }
@@ -499,7 +508,7 @@ namespace XtremeFPS.FPSController
         private void GravityAndJump()
         {
             bool wasPreviouslyGrounded = IsGrounded;
-            IsGrounded = CharacterController.isGrounded;
+            IsGrounded = Physics.CheckSphere(groundSphere.position, groundRadius, groundLayerMask, QueryTriggerInteraction.Ignore);
 
             if (!IsGrounded)
             {
@@ -622,6 +631,15 @@ namespace XtremeFPS.FPSController
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position, interactionRange);
+
+            Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
+            Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
+
+            if (IsGrounded) Gizmos.color = transparentGreen;
+            else Gizmos.color = transparentRed;
+
+            // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
+            Gizmos.DrawSphere(groundSphere.position, groundRadius);
         }
 #endif
     }

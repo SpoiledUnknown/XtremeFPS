@@ -63,7 +63,7 @@ namespace XtremeFPS.CustomEditors
                 fpsController.unlimitedSprinting = EditorGUILayout.ToggleLeft(new GUIContent("Unlimited Sprint", "Determines if 'Sprint Duration' is enabled. Turning this on will allow for unlimited sprint."), fpsController.unlimitedSprinting);
                 GUI.enabled = !fpsController.unlimitedSprinting;
                 fpsController.sprintDuration = EditorGUILayout.Slider(new GUIContent("Sprint Duration", "Determines how long the player can sprint while unlimited sprint is disabled."), fpsController.sprintDuration, 1f, 20f);
-                fpsController.sprintCooldown = EditorGUILayout.Slider(new GUIContent("Sprint Cooldown", "Determines how long the recovery time is when the player runs out of sprint."), fpsController.sprintCooldown, .1f, fpsController.sprintDuration);
+                fpsController.sprintCooldown = EditorGUILayout.Slider(new GUIContent("Sprint Cooldown", "Determines how long the recovery time is when the player runs out of sprint."), fpsController.sprintCooldown, 0.1f, fpsController.sprintDuration);
                 fpsController.staminaBar = (Slider)EditorGUILayout.ObjectField(new GUIContent("Stamina Bar (Optional)", "Reference to the stamina bar itself."), fpsController.staminaBar, typeof(Slider), true);
                 EditorGUI.indentLevel--;
             }
@@ -81,6 +81,9 @@ namespace XtremeFPS.CustomEditors
                 fpsController.jumpHeight = EditorGUILayout.Slider(new GUIContent("Jump Height", "Determines how high can the player jump."), fpsController.jumpHeight, 0.1f, 10f);
             }
             fpsController.gravitationalForce = EditorGUILayout.Slider(new GUIContent("Gravitational Force", "Sets the the gravitation force which will act on the player."), fpsController.gravitationalForce, 5f, 40f);
+            fpsController.groundSphere = (Transform)EditorGUILayout.ObjectField(new GUIContent("Ground Sphere", "Reference to the transform of an empty object that will work as ground checker."), fpsController.groundSphere, typeof(Transform), true);
+            fpsController.groundLayerID = EditorGUILayout.LayerField(new GUIContent("What is Ground?", "Determines what ground is."), fpsController.groundLayerID);
+            fpsController.groundRadius = EditorGUILayout.Slider(new GUIContent("Ground Sphere Radius", "Radius of the sphere that will check whether player is grounded or not."), fpsController.groundRadius, 0.1f, 1f);
             EditorGUILayout.Space();
 
             //Crouching settings

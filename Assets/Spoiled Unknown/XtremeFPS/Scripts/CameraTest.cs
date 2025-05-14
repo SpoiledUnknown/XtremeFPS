@@ -1,16 +1,14 @@
-using Unity.Cinemachine;
 using UnityEngine;
-using XtremeFPS.FPSController;
 using XtremeFPS.InputHandling;
 
 public class CameraTest : MonoBehaviour
 {
-    public CinemachineCamera fpsCam;
-    public CinemachineCamera tpsCam;
+    public GameObject Eye;
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (!XtremeFPSInputHandler.Instance.IsSwitchingCamera) Eye.SetActive(false);
+        else Eye.SetActive(true);
     }
 }
