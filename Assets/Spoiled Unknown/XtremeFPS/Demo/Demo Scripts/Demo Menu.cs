@@ -1,7 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
-using XtremeFPS.FPSController;
+using XtremeFPS.Controller;
 using XtremeFPS.InputHandling;
 using XtremeFPS.WeaponSystem;
 
@@ -12,7 +12,7 @@ namespace XtremeFPS.Demo
         [SerializeField] private TextMeshProUGUI stateText;
         [SerializeField] private TextMeshProUGUI surfaceText;
         [SerializeField] private TextMeshProUGUI speedText;
-        [SerializeField] private FirstPersonController personController;
+        [SerializeField] private MovementController personController;
 
         private void Update()
         {

@@ -9,7 +9,7 @@ using UnityEngine;
 namespace XtremeFPS.CustomEditors
 {
     using XtremeFPS.WeaponSystem;
-    using XtremeFPS.FPSController;
+    using XtremeFPS.Controller;
 
     [CustomEditor(typeof(UniversalWeaponSystem)), CanEditMultipleObjects]
     public class WeaponSystemEditor : Editor
@@ -43,7 +43,7 @@ namespace XtremeFPS.CustomEditors
 
             //Main Movement Settings
             GUI.color = Color.white;
-            uni_WeaponSystem.fpsController = (FirstPersonController)EditorGUILayout.ObjectField(new GUIContent("Player Controller", "Reference to player controller script."), uni_WeaponSystem.fpsController, typeof(FirstPersonController), true);
+            uni_WeaponSystem.fpsController = (MovementController)EditorGUILayout.ObjectField(new GUIContent("Player Controller", "Reference to player controller script."), uni_WeaponSystem.fpsController, typeof(MovementController), true);
             uni_WeaponSystem.shootPoint = (Transform)EditorGUILayout.ObjectField(new GUIContent("Shoot Point", "Reference to the transform of the point from where bullets will spawn (Ideally it should be a child of gun model itself)."), uni_WeaponSystem.shootPoint, typeof(Transform), true);
             uni_WeaponSystem.muzzleFlash = (ParticleSystem)EditorGUILayout.ObjectField(new GUIContent("Muzzle Flash", "Reference to the particle system that will be played (the game object should be a child of shootPoint)."), uni_WeaponSystem.muzzleFlash, typeof(ParticleSystem), true);
             uni_WeaponSystem.particlesPrefab = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Hit Effect", "Reference to the GameObject that will be spawned at the point where bullet hits."), uni_WeaponSystem.particlesPrefab, typeof(GameObject), true);

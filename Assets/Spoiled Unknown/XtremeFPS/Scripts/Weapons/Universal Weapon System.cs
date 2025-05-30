@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using XtremeFPS.InputHandling;
 using XtremeFPS.PoolingSystem;
-using XtremeFPS.FPSController;
+using XtremeFPS.Controller;
 using XtremeFPS.WeaponSystem.Bullet;
 
 namespace XtremeFPS.WeaponSystem
@@ -16,7 +16,7 @@ namespace XtremeFPS.WeaponSystem
     {
         #region Variables
         //Reference
-        public FirstPersonController fpsController;
+        public MovementController fpsController;
         public Transform shootPoint;
         public ParticleSystem muzzleFlash;
         public GameObject bulletPrefab;
@@ -196,7 +196,7 @@ namespace XtremeFPS.WeaponSystem
                 Shoot();
                 bulletSoundSource.PlayOneShot(bulletSoundClip);
             }
-            else fpsController.AddRecoil(0f, 0f);
+            //else fpsController.AddRecoil(0f, 0f);
         }
 
         #region Shooting && Reloading
@@ -220,7 +220,7 @@ namespace XtremeFPS.WeaponSystem
                 rotationRecoil += new Vector3(-recoilRotationAds.x, Random.Range(-recoilRotationAds.y, recoilRotationAds.y), Random.Range(-recoilRotationAds.z, recoilRotationAds.z));
                 positionRecoil += new Vector3(Random.Range(-recoilKickBackAds.x, recoilKickBackAds.y), Random.Range(-recoilKickBackAds.y, recoilKickBackAds.y), recoilKickBackAds.z);
 
-                fpsController.AddRecoil(hRecoil * 0.5f, vRecoil * 0.5f);
+               // fpsController.AddRecoil(hRecoil * 0.5f, vRecoil * 0.5f);
             }
             else
             {
@@ -228,7 +228,7 @@ namespace XtremeFPS.WeaponSystem
                 rotationRecoil += new Vector3(-recoilRotationHip.x, Random.Range(-recoilRotationHip.y, recoilRotationHip.y), Random.Range(-recoilRotationHip.z, recoilRotationHip.z));
                 positionRecoil += new Vector3(Random.Range(-recoilKickBackHip.x, recoilKickBackHip.y), Random.Range(-recoilKickBackHip.y, recoilKickBackHip.y), recoilKickBackHip.z);
 
-                fpsController.AddRecoil(hRecoil, vRecoil);
+                //fpsController.AddRecoil(hRecoil, vRecoil);
             }
 
             BulletsLeft--;
@@ -338,7 +338,7 @@ namespace XtremeFPS.WeaponSystem
             {
                 aimUIImage.SetActive(aiming);
                 animator.gameObject.SetActive(!aiming);
-                fpsController.enableZoom = aiming;
+                //fpsController.enableZoom = aiming;
             }
         }
         #region Effects
@@ -352,7 +352,7 @@ namespace XtremeFPS.WeaponSystem
         }
         private void WeaponBobbing()
         {
-            if(!haveBobbing || fpsController.MovementState == FirstPersonController.PlayerMovementState.Sliding) return;
+            if(!haveBobbing || fpsController.MovementState == MovementController.PlayerMovementState.Sliding) return;
 
             if (!fpsController.IsGrounded)
             {

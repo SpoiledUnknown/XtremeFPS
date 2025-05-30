@@ -16,7 +16,7 @@ using XtremeFPS.PoolingSystem;
 namespace XtremeFPS.CustomEditors
 {
     using System;
-    using XtremeFPS.FPSController;
+    using XtremeFPS.Controller;
     using XtremeFPS.WeaponSystem;
     using XtremeFPS.WeaponSystem.Pickup;
 
@@ -50,7 +50,7 @@ namespace XtremeFPS.CustomEditors
 
         #region Player Setup
         private GameObject playerParent;
-        private FirstPersonController playerArmature;
+        private MovementController playerArmature;
         private Camera playerCamera;
         private CinemachineCamera cinemachineCamera;
         private GameObject cameraHolder;
@@ -213,7 +213,7 @@ namespace XtremeFPS.CustomEditors
                 {
                     CreateThePlayer();
                 }
-                playerArmature = (FirstPersonController)EditorGUILayout.ObjectField(new GUIContent("Player Armature", "The referrence to the player armature gameObject (Leave empty if none exists already)."), playerArmature, typeof(FirstPersonController), true);
+                playerArmature = (MovementController)EditorGUILayout.ObjectField(new GUIContent("Player Armature", "The referrence to the player armature gameObject (Leave empty if none exists already)."), playerArmature, typeof(MovementController), true);
                 cameraHolder = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Camera Holder", "The referrence to the player camera holder object (Leave empty if none exists already)."), cameraHolder, typeof(GameObject), true);
                 cameraFollow = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Camera Follow", "The referrence to the player camera follow (Leave empty if none exists already)."), cameraFollow, typeof(GameObject), true);
                 defaultPlayerTypes = (DefaultPlayerTypes)EditorGUILayout.EnumPopup(new GUIContent("Default Values", "Select an option from the player type for the default settings."), defaultPlayerTypes);
@@ -438,11 +438,11 @@ namespace XtremeFPS.CustomEditors
             }
 
             if (playerArmature == null ||
-                !playerArmature.TryGetComponent<FirstPersonController>(out _))
+                !playerArmature.TryGetComponent<MovementController>(out _))
             {
                 GameObject player = GameObject.Find("Player Armature") ?? new GameObject("Player Armature");
-                if (!player.TryGetComponent<FirstPersonController>(out _)) player.AddComponent<FirstPersonController>();
-                playerArmature = player.GetComponent<FirstPersonController>();
+                if (!player.TryGetComponent<MovementController>(out _)) player.AddComponent<MovementController>();
+                playerArmature = player.GetComponent<MovementController>();
             }
             playerArmature.transform.parent = playerParent.transform;
 
@@ -493,17 +493,17 @@ namespace XtremeFPS.CustomEditors
             playerArmature.crouchSoundPlayTime = 0.3f;
             playerArmature.slidingSpeed = 10f;
             playerArmature.slidingDuration = 0.75f;
-            playerArmature.isCursorLocked = true;
-            playerArmature.mouseSensitivity = 50f;
-            playerArmature.maximumClamp = 90f;
-            playerArmature.minimumClamp = -90f;
-            playerArmature.sprintFOV = 75f;
-            playerArmature.FOV = 50f;
-            playerArmature.enableZoom = false;
-            playerArmature.canHeadBob = false;
+            //playerArmature.isCursorLocked = true;
+            //playerArmature.mouseSensitivity = 50f;
+            //playerArmature.maximumClamp = 90f;
+            //playerArmature.minimumClamp = -90f;
+            //playerArmature.sprintFOV = 75f;
+            //playerArmature.FOV = 50f;
+            //playerArmature.enableZoom = false;
+            //playerArmature.canHeadBob = false;
 
-            playerArmature.FirstPersonCamera = cinemachineCamera;
-            playerArmature.cameraFollow = cameraFollow.transform;
+            //playerArmature.FirstPersonCamera = cinemachineCamera;
+            //playerArmature.cameraFollow = cameraFollow.transform;
 
             cameraHolder.transform.position = new Vector3(0f, 0.6150001f, 0.1719999f);
             playerParent.transform.position = new Vector3(

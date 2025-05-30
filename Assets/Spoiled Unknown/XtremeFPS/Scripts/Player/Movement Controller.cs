@@ -7,14 +7,15 @@ using Unity.Cinemachine;
 using UnityEngine.UI;
 using XtremeFPS.Interfaces;
 using XtremeFPS.WeaponSystem.Holder;
+using XtremeFPS.CameraSystem;
 
-namespace XtremeFPS.FPSController
+namespace XtremeFPS.Controller
 {
+    [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(XtremeFPSInputHandler))]
-    [RequireComponent(typeof(AudioSource))]
-    [AddComponentMenu("Spoiled Unknown/XtremeFPS/First Person Controller")]
-    public class FirstPersonController : MonoBehaviour
+    [AddComponentMenu("Spoiled Unknown/XtremeFPS/Movement Controller")]
+    public class MovementController : MonoBehaviour
     {
         #region Variables
         // Player
@@ -27,16 +28,17 @@ namespace XtremeFPS.FPSController
         public PlayerMovementState MovementState {  get; private set; }
         public enum PlayerMovementState
         {
+            Walking,
             Sprinting,
             Crouching,
-            Walking,
             Sliding,
             Default
         }
         public float targetSpeed;
 
-        private float transitionDelta;
+          float transitionDelta;
         private Vector3 horizontalMovement;
+        private float turnSmoothVelocity;
 
         //sprinting
         public bool canPlayerSprint;
@@ -48,7 +50,7 @@ namespace XtremeFPS.FPSController
         public Slider staminaBar;
         public float sprintSoundSpeed;
 
-        private bool isSprinting;
+        public bool isSprinting;
         private readonly float sprintCooldownReset;
         private float sprintRemaining;
 
@@ -75,7 +77,7 @@ namespace XtremeFPS.FPSController
         public float crouchedSpeed = 1f;
         public float crouchSoundPlayTime;
 
-        private bool isCrouching;
+        public bool isCrouching;
         private float newHeight;
         private float initialHeight;
         private Vector3 initialCameraPosition;
@@ -91,37 +93,7 @@ namespace XtremeFPS.FPSController
         private float nextSlopeCheckTime;
         private RaycastHit slopeHit;
 
-        // Camera
-        public bool isCursorLocked;
-        public Transform cameraFollow;
-        public Transform cameraFollowTPS;
-        public CinemachineCamera FirstPersonCamera;
-        public CinemachineCamera ThirdPersonCamera;
-        public float mouseSensitivity;
-        public float maximumClamp;
-        public float minimumClamp;
-        public float sprintFOV;
-        public float FOV;
-
-        private float rotationY;
-        private float mouseDirectionX;
-        private float mouseDirectionY;
-        private float vRecoil = 0f;
-        private float hRecoil = 0f;
-
-        //Zooming
-        public bool enableZoom;
-        public bool isZoomingHold;
-        public float zoomFOV = 30f;
-
-        private bool isZoomed;
-
-        //Head Bobbing effect
-        public bool canHeadBob;
-        public float headBobAmplitude = 0.01f;
-        public float headBobFrequency = 18.5f;
-
-        private Vector3 headBobStartPosition;
+        
 
         //Sound System
         public string SurfaceType { get; private set; }
@@ -150,7 +122,7 @@ namespace XtremeFPS.FPSController
 
         private AudioSource audioSource;
         private float AudioEffectSpeed;
-        private bool isMoving = false;
+        public bool isMoving = false;
 
 
         // Handling Physics
@@ -164,9 +136,9 @@ namespace XtremeFPS.FPSController
         public float interactionRange;
         public int interactionLayerId;
 
-        private LayerMask interactionLayerMask;
-        private float turnSmoothVelocity;
-        private float rotationX;
+        //private LayerMask interactionLayerMask;
+        public Transform cameraFollowTPS;
+        public Transform cameraFollow;
         #endregion
 
         #region MonoBehaviour Callbacks
@@ -175,18 +147,13 @@ namespace XtremeFPS.FPSController
             inputManager = XtremeFPSInputHandler.Instance;
             audioSource = GetComponent<AudioSource>();
             CharacterController = GetComponent<CharacterController>();
+            //cameraController = GetComponent<PlayerCameraManager>();
 
-            FirstPersonCamera.Lens.FieldOfView = FOV;
-            ThirdPersonCamera.Lens.FieldOfView = FOV;
             AudioEffectSpeed = walkSoundSpeed;
-            headBobStartPosition = cameraFollow.localPosition;
-
-            Cursor.lockState = isCursorLocked ? CursorLockMode.Locked : CursorLockMode.None;
-
             StartCoroutine(PlayFootstepSounds());
 
             pushLayerMask = 1 << pushLayerId;
-            interactionLayerMask = 1 << interactionLayerId;
+            //interactionLayerMask = 1 << interactionLayerId;
             groundLayerMask = 1 << groundLayerID;
             groundSpherePosition = groundSphere.localPosition;
 
@@ -228,39 +195,12 @@ namespace XtremeFPS.FPSController
             isMoving = Mathf.Abs(localVelocity.z) > footstepSensitivity || Mathf.Abs(localVelocity.x) > footstepSensitivity;
 
             PlayerInputs();
-            HandleZoom();
             HandleSprintCooldown();
             GravityAndJump();
             HandleStateMachine();
             DetectSurfaceAndMovement();
-            InteractionHandling();
+            //InteractionHandling();
             if (MovementState == PlayerMovementState.Sliding) HanldeSliding();
-
-            if (!canHeadBob || MovementState == PlayerMovementState.Sliding) return;
-            CheckMotion();
-            ResetPosition();
-            cameraFollow.LookAt(FocusTarget());
-        }
-
-        private void LateUpdate()
-        {
-            cameraFollowTPS.localPosition = transform.localPosition;
-
-            rotationY -= mouseDirectionY;
-            rotationY = Mathf.Clamp(rotationY, minimumClamp, maximumClamp);
-
-            if (!inputManager.IsSwitchingCamera)
-            {
-                transform.Rotate(mouseDirectionX * transform.up);
-                cameraFollow.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
-            }
-            else
-            {
-                rotationX += mouseDirectionX;
-                cameraFollowTPS.localRotation = Quaternion.Euler(rotationY, rotationX, 0f);
-            }
-
-            inputManager.mouseDirection = Vector2.zero;
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -282,97 +222,15 @@ namespace XtremeFPS.FPSController
         #region Private Methods
         private void PlayerInputs()
         {
-            mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime + hRecoil;
-            mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime + vRecoil;
-
-            if (isSprintHold) isSprinting = inputManager.isSprintingHold && !(isZoomed && enableZoom);
-            else isSprinting = inputManager.isSprintingTapped && !(isZoomed && enableZoom);
+            if (isSprintHold) isSprinting = inputManager.isSprintingHold;
+            else isSprinting = inputManager.isSprintingTapped;
 
             if (isCrouchHold) isCrouching = inputManager.isCrouchingHold;
             else isCrouching = inputManager.isCrouchingTapped;
 
-            if (isZoomingHold) isZoomed = inputManager.isZoomingHold;
-            else isZoomed = inputManager.isZoomingTapped;
-
             canSlide = isCrouching && isSprinting && canPlayerCrouch;
-
-            if (inputManager.IsSwitchingCamera)
-            {
-                FirstPersonCamera.Priority = 0;
-                ThirdPersonCamera.Priority = 1;
-            }
-            else
-            {
-                FirstPersonCamera.Priority = 1;
-                ThirdPersonCamera.Priority = 0;
-            }
         }
-        #region Camera
-        public void AddRecoil(float hRecoil, float vRecoil)
-        {
-            this.hRecoil = hRecoil;
-            this.vRecoil = vRecoil;
-        }
-
-        private void HandleZoom()
-        {
-            if (!enableZoom) return;
-
-            if (isZoomed) 
-                FirstPersonCamera.Lens.FieldOfView = Mathf.Lerp(FirstPersonCamera.Lens.FieldOfView, zoomFOV, transitionDelta);
-            else if (!isZoomed && !isSprinting) 
-                FirstPersonCamera.Lens.FieldOfView = Mathf.Lerp(FirstPersonCamera.Lens.FieldOfView, FOV, transitionDelta);
-        }
-
-        private void AdjustFOVSettings(float targetFOV)
-        {
-            if (isZoomed && enableZoom) return;
-            if (!isMoving) targetFOV = FOV;
-
-            float currentFOV = FirstPersonCamera.Lens.FieldOfView;
-            float newFOV = Mathf.Lerp(currentFOV, targetFOV, transitionDelta);
-            FirstPersonCamera.Lens.FieldOfView = newFOV;
-            ThirdPersonCamera.Lens.FieldOfView = newFOV;
-        }
-        #region Head Bobbing
-        private Vector3 FootStepMotion()
-        {
-            Vector3 pos = Vector3.zero;
-            pos.y += Mathf.Sin(Time.time * headBobFrequency) * headBobAmplitude;
-            pos.x += Mathf.Cos(Time.time * headBobFrequency / 2) * headBobAmplitude * 2;
-            return pos;
-        }
-
-        private void CheckMotion()
-        {
-            if (!isMoving || !IsGrounded)
-            {
-                return;
-            }
-            PlayMotion(FootStepMotion());
-        }
-
-        private void PlayMotion(Vector3 motion)
-        {
-            cameraFollow.localPosition += motion;
-        }
-
-        private Vector3 FocusTarget()
-        {
-            Vector3 pos = new Vector3(transform.position.x, transform.position.y + cameraFollow.localPosition.y, transform.position.z);
-            pos += cameraFollow.forward * 15.0f;
-            return pos;
-        }
-
-        private void ResetPosition()
-        {
-            if (cameraFollow.localPosition != headBobStartPosition)
-            {
-                cameraFollow.localPosition = Vector3.Lerp(cameraFollow.localPosition, headBobStartPosition, 1f * Time.deltaTime);
-            }
-        }
-        #endregion
-        #endregion
+        
 
         private void HandleSprintCooldown()
         {
@@ -476,7 +334,6 @@ namespace XtremeFPS.FPSController
                     targetSpeed = Mathf.Lerp(targetSpeed, sprintSpeed, transitionDelta);
                     AudioEffectSpeed = sprintSoundSpeed;
                     AdjustCrouchHeight(initialHeight, true);
-                    AdjustFOVSettings(sprintFOV);
                     break;
 
                 case PlayerMovementState.Crouching:
@@ -488,7 +345,6 @@ namespace XtremeFPS.FPSController
                 case PlayerMovementState.Walking:
                     targetSpeed = Mathf.Lerp(targetSpeed, walkSpeed, transitionDelta);
                     AudioEffectSpeed = walkSoundSpeed;
-                    AdjustFOVSettings(FOV);
                     AdjustCrouchHeight(initialHeight, true);
                     break;
 
@@ -594,36 +450,36 @@ namespace XtremeFPS.FPSController
         }
         #endregion
 
-        private void InteractionHandling()
-        {
-            if (inputManager.isTryingToInteract)
-            {
-                Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
+        //private void InteractionHandling()
+        //{
+        //    if (inputManager.isTryingToInteract)
+        //    {
+        //        Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
 
-                foreach (Collider collider in colliders)
-                {
-                    if (collider.TryGetComponent(out IWeaponPickup pickup) && !isZoomed)
-                    {
-                        if (pickup.IsEquiped()) continue;
-                        if (WeaponHolder.Instance.GetWeaponCount() < 3) pickup.PickUp();
-                        break;
-                    }
-                }
-            }
-            else if (inputManager.isTryingToInteractAlternate)
-            {
-                Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
+        //        foreach (Collider collider in colliders)
+        //        {
+        //            if (collider.TryGetComponent(out IWeaponPickup pickup) && !isZoomed)
+        //            {
+        //                if (pickup.IsEquiped()) continue;
+        //                if (WeaponHolder.Instance.GetWeaponCount() < 3) pickup.PickUp();
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    else if (inputManager.isTryingToInteractAlternate)
+        //    {
+        //        Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
 
-                foreach (Collider collider in colliders)
-                {
-                    if (collider.TryGetComponent(out IWeaponPickup pickup) && !isZoomed)
-                    {
-                        if (pickup.IsEquiped() && pickup.IsActive()) pickup.Drop();
-                        break;
-                    }
-                }
-            }
-        }
+        //        foreach (Collider collider in colliders)
+        //        {
+        //            if (collider.TryGetComponent(out IWeaponPickup pickup) && !isZoomed)
+        //            {
+        //                if (pickup.IsEquiped() && pickup.IsActive()) pickup.Drop();
+        //                break;
+        //            }
+        //        }
+        //    }
+        //}
         #endregion
 
 #if UNITY_EDITOR

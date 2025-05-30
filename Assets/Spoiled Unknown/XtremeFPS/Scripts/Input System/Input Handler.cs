@@ -1,13 +1,13 @@
 /*Copyright © Spoiled Unknown*/
 /*2024*/
 
-using UnityEngine;
-using UnityEngine.InputSystem;
-using System.Collections;
-using UnityEngine.InputSystem.Controls;
-using System.Collections.Generic;
 using System;
+using UnityEngine;
+using System.Collections;
+using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using UnityEngine.InputSystem.Controls;
 using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 namespace XtremeFPS.InputHandling
