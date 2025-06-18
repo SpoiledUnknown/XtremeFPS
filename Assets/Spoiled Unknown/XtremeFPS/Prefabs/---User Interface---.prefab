@@ -1247,7 +1247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3106203681783252461
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2168,6 +2168,7 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 2
   m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
 --- !u!1 &7117366963291608867
 GameObject:
   m_ObjectHideFlags: 0
@@ -3055,7 +3056,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8767016201762224850}
   - component: {fileID: 3431876539211041036}
-  - component: {fileID: 5226219788713997327}
   m_Layer: 5
   m_Name: Static UI
   m_TagString: Untagged
@@ -3104,26 +3104,6 @@ MonoBehaviour:
   stateText: {fileID: 309267136728855562}
   surfaceText: {fileID: 2045962316463140346}
   speedText: {fileID: 3803732811335044806}
-  personController: {fileID: 0}
---- !u!114 &5226219788713997327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9106025449823218236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe4b4d9ef20dd81429bac6200a5e5e85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RightRigLayer:
-    m_Rig: {fileID: 0}
-    m_Active: 0
-  LeftRigLayer:
-    m_Rig: {fileID: 0}
-    m_Active: 0
-  animator: {fileID: 0}
   personController: {fileID: 0}
 --- !u!1 &9129013351020337896
 GameObject:

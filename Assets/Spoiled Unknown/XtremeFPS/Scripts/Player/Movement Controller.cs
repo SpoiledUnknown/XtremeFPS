@@ -25,6 +25,8 @@ namespace XtremeFPS.Controller
 
         public CharacterController CharacterController {  get; private set; }
         private XtremeFPSInputHandler inputManager;
+        public Transform cameraFollowTPS;
+        public Transform cameraFollow;
         public PlayerMovementState MovementState {  get; private set; }
         public enum PlayerMovementState
         {
@@ -36,7 +38,7 @@ namespace XtremeFPS.Controller
         }
         public float targetSpeed;
 
-          float transitionDelta;
+        private float transitionDelta;
         private Vector3 horizontalMovement;
         private float turnSmoothVelocity;
 
@@ -131,14 +133,6 @@ namespace XtremeFPS.Controller
         public int pushLayerId;
 
         private LayerMask pushLayerMask;
-
-        //Interactions
-        public float interactionRange;
-        public int interactionLayerId;
-
-        //private LayerMask interactionLayerMask;
-        public Transform cameraFollowTPS;
-        public Transform cameraFollow;
         #endregion
 
         #region MonoBehaviour Callbacks
@@ -147,13 +141,11 @@ namespace XtremeFPS.Controller
             inputManager = XtremeFPSInputHandler.Instance;
             audioSource = GetComponent<AudioSource>();
             CharacterController = GetComponent<CharacterController>();
-            //cameraController = GetComponent<PlayerCameraManager>();
 
             AudioEffectSpeed = walkSoundSpeed;
             StartCoroutine(PlayFootstepSounds());
 
             pushLayerMask = 1 << pushLayerId;
-            //interactionLayerMask = 1 << interactionLayerId;
             groundLayerMask = 1 << groundLayerID;
             groundSpherePosition = groundSphere.localPosition;
 
@@ -199,7 +191,6 @@ namespace XtremeFPS.Controller
             GravityAndJump();
             HandleStateMachine();
             DetectSurfaceAndMovement();
-            //InteractionHandling();
             if (MovementState == PlayerMovementState.Sliding) HanldeSliding();
         }
 
@@ -450,44 +441,12 @@ namespace XtremeFPS.Controller
         }
         #endregion
 
-        //private void InteractionHandling()
-        //{
-        //    if (inputManager.isTryingToInteract)
-        //    {
-        //        Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
-
-        //        foreach (Collider collider in colliders)
-        //        {
-        //            if (collider.TryGetComponent(out IWeaponPickup pickup) && !isZoomed)
-        //            {
-        //                if (pickup.IsEquiped()) continue;
-        //                if (WeaponHolder.Instance.GetWeaponCount() < 3) pickup.PickUp();
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    else if (inputManager.isTryingToInteractAlternate)
-        //    {
-        //        Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
-
-        //        foreach (Collider collider in colliders)
-        //        {
-        //            if (collider.TryGetComponent(out IWeaponPickup pickup) && !isZoomed)
-        //            {
-        //                if (pickup.IsEquiped() && pickup.IsActive()) pickup.Drop();
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
+        
         #endregion
 
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, interactionRange);
-
             Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
             Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
