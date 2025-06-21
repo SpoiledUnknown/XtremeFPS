@@ -3,7 +3,7 @@
 /*Note: This is an important editor script*/
 
 using UnityEditor;
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 using XtremeFPS.FPSController;
@@ -112,7 +112,7 @@ namespace XtremeFPS.Editor
             GUI.color = Color.white;
             fpsController.isCursorLocked = EditorGUILayout.ToggleLeft(new GUIContent("Is Cursor Locked", "Defines whether Cursor is locked."), fpsController.isCursorLocked);
             fpsController.cameraFollow = (Transform)EditorGUILayout.ObjectField(new GUIContent("Camera Root", "Camera root object which acts as look at point for cinemachine."), fpsController.cameraFollow, typeof(Transform), true);
-            fpsController.playerVirtualCamera = (CinemachineVirtualCamera)EditorGUILayout.ObjectField(new GUIContent("Player Virtual Camera", "virtual Camera which player uses."), fpsController.playerVirtualCamera, typeof(CinemachineVirtualCamera), true);
+            fpsController.playerVirtualCamera = (CinemachineCamera)EditorGUILayout.ObjectField(new GUIContent("Player Virtual Camera", "virtual Camera which player uses."), fpsController.playerVirtualCamera, typeof(CinemachineCamera), true);
             fpsController.FOV = EditorGUILayout.Slider(new GUIContent("Field Of View", "Determines the default Field Of View for the camera."), fpsController.FOV, 60f, 110f);
             fpsController.mouseSensitivity = EditorGUILayout.Slider(new GUIContent("Sensitivity", "Determines the senstivity at which camera will rotate."), fpsController.mouseSensitivity, 0f, 200f);
             fpsController.maximumClamp = EditorGUILayout.Slider(new GUIContent("Maximum Clamp Angle", "Determines the maximum angle at which the camera can reach while being rotated."), fpsController.maximumClamp, 0f, 90f);

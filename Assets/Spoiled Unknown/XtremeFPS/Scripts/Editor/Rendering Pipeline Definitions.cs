@@ -1,4 +1,4 @@
-/*Copyright © Spoiled Unknown*/
+/*Copyright ï¿½ Spoiled Unknown*/
 /*2024*/
 
 using System.Collections.Generic;
@@ -58,10 +58,10 @@ namespace XtremeFPS.Editor
         static PipelineType GetPipeline()
         {
 #if UNITY_2019_1_OR_NEWER
-            if (GraphicsSettings.renderPipelineAsset != null)
+            if (GraphicsSettings.defaultRenderPipeline != null)
             {
                 // SRP
-                var srpType = GraphicsSettings.renderPipelineAsset.GetType().ToString();
+                var srpType = GraphicsSettings.defaultRenderPipeline.GetType().ToString();
                 if (srpType.Contains("HDRenderPipelineAsset"))
                 {
                     return PipelineType.HDPipeline;

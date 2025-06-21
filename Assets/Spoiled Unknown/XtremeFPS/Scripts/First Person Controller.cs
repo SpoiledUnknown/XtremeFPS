@@ -3,7 +3,7 @@
 using System.Collections;
 using UnityEngine;
 using XtremeFPS.InputHandling;
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine.UI;
 using XtremeFPS.WeaponSystem.Pickup;
 using XtremeFPS.Interfaces;
@@ -84,7 +84,7 @@ namespace XtremeFPS.FPSController
         // Camera
         public bool isCursorLocked;
         public Transform cameraFollow;
-        public CinemachineVirtualCamera playerVirtualCamera;
+        public CinemachineCamera playerVirtualCamera;
         public float mouseSensitivity;
         public float maximumClamp;
         public float minimumClamp;
@@ -162,7 +162,7 @@ namespace XtremeFPS.FPSController
             audioSource = GetComponent<AudioSource>();
             CharacterController = GetComponent<CharacterController>();
 
-            playerVirtualCamera.m_Lens.FieldOfView = FOV;
+            playerVirtualCamera.Lens.FieldOfView = FOV;
             AudioEffectSpeed = walkSoundSpeed;
             headBobStartPosition = cameraFollow.localPosition;
 
@@ -256,9 +256,9 @@ namespace XtremeFPS.FPSController
             if (!enableZoom) return;
 
             if (isZoomed) 
-                playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, zoomFOV, transitionDelta);
+                playerVirtualCamera.Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.Lens.FieldOfView, zoomFOV, transitionDelta);
             else if (!isZoomed && !isSprinting) 
-                playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, FOV, transitionDelta);
+                playerVirtualCamera.Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.Lens.FieldOfView, FOV, transitionDelta);
         }
 
         private void AdjustFOVSettings(float targetFOV)
@@ -266,9 +266,9 @@ namespace XtremeFPS.FPSController
             if (isZoomed && enableZoom) return;
             if (!isMoving) targetFOV = FOV;
 
-            float currentFOV = playerVirtualCamera.m_Lens.FieldOfView;
+            float currentFOV = playerVirtualCamera.Lens.FieldOfView;
             float newFOV = Mathf.Lerp(currentFOV, targetFOV, transitionDelta);
-            playerVirtualCamera.m_Lens.FieldOfView = newFOV;
+            playerVirtualCamera.Lens.FieldOfView = newFOV;
         }
         #region Head Bobbing
         private Vector3 FootStepMotion()
