@@ -1,8 +1,9 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using XtremeFPS.InputHandling;
+using XtremeFPS.Player.Controller;
 
-namespace XtremeFPS.CameraSystem
+namespace XtremeFPS.Player.CameraSystem
 {
     [AddComponentMenu("Spoiled Unknown/XtremeFPS/TPP Camera Manager")]
     public class TPPCameraManager : MonoBehaviour
@@ -10,12 +11,11 @@ namespace XtremeFPS.CameraSystem
         private XtremeFPSInputHandler inputManager;
 
         // References
-        public CharacterController characterController;
+        public MovementController movementController;
         public Transform ThirdPersonCameraRoot;
         public CinemachineCamera ThirdPersonCamera;
 
         //general
-        public bool isCursorLocked;
         public float transitionSpeed;
         public float mouseSensitivity;
         public float clampAngle;
@@ -26,33 +26,24 @@ namespace XtremeFPS.CameraSystem
         private float rotationX;
         private float mouseDirectionX;
         private float mouseDirectionY;
-        private float vRecoil = 0f;
-        private float hRecoil = 0f;
-        private Vector3 horizontalVelocity;
 
         private void Start()
         {
             inputManager = XtremeFPSInputHandler.Instance;
-
-            Cursor.lockState = isCursorLocked ? CursorLockMode.Locked : CursorLockMode.None;
-
             ThirdPersonCamera.Lens.FieldOfView = walkFOV;
         }
 
         private void Update()
         {
-            horizontalVelocity = characterController.velocity;
-            horizontalVelocity.y = 0f;
-
-            mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime + hRecoil;
-            mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime + vRecoil;
+            mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime;
+            mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime;
 
             HandleFOVChange();
         }
 
         private void LateUpdate()
         {
-            ThirdPersonCameraRoot.localPosition = characterController.transform.localPosition;
+            ThirdPersonCameraRoot.localPosition = movementController.transform.localPosition;
 
             rotationY -= mouseDirectionY;
             rotationY = Mathf.Clamp(rotationY, clampAngle * -1f, clampAngle);
@@ -60,12 +51,6 @@ namespace XtremeFPS.CameraSystem
             ThirdPersonCameraRoot.localRotation = Quaternion.Euler(rotationY, (rotationX += mouseDirectionX), 0f);
 
             inputManager.mouseDirection = Vector2.zero;
-        }
-
-        public void AddRecoil(float hRecoil, float vRecoil)
-        {
-            this.hRecoil = hRecoil;
-            this.vRecoil = vRecoil;
         }
 
         private void AdjustFOVSettings(float targetFOV)
@@ -77,12 +62,12 @@ namespace XtremeFPS.CameraSystem
 
         private void HandleFOVChange()
         {
-            if (Mathf.RoundToInt(horizontalVelocity.magnitude) >= 4)
+            if (movementController.MovementState == MovementController.PlayerMovementState.Sprinting)
             {
                 AdjustFOVSettings(sprintFOV);
                 return;
             }
-            if (Mathf.RoundToInt(horizontalVelocity.magnitude) >= 2)
+            if (movementController.MovementState == MovementController.PlayerMovementState.Walking)
             {
                 AdjustFOVSettings(walkFOV);
             }

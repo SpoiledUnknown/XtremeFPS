@@ -1,8 +1,9 @@
-using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine;
 using XtremeFPS.InputHandling;
+using XtremeFPS.Player.Controller;
 
-namespace XtremeFPS.CameraSystem
+namespace XtremeFPS.Player.CameraSystem
 {
     [AddComponentMenu("Spoiled Unknown/XtremeFPS/FPP Camera Manager")]
     public class FPPCameraManager : MonoBehaviour
@@ -10,12 +11,11 @@ namespace XtremeFPS.CameraSystem
         private XtremeFPSInputHandler inputManager;
 
         // References
-        public CharacterController characterController;
+        public MovementController movementController;
         public Transform FirstPersonCameraRoot;
         public CinemachineCamera FirstPersonCamera;
 
         //general
-        public bool isCursorLocked;
         public float mouseSensitivity;
         public float clampAngle;
         public float sprintFOV;
@@ -24,9 +24,6 @@ namespace XtremeFPS.CameraSystem
         private float rotationY;
         private float mouseDirectionX;
         private float mouseDirectionY;
-        private float vRecoil = 0f;
-        private float hRecoil = 0f;
-        private Vector3 horizontalVelocity;
 
         //Zooming
         public float transitionSpeed;
@@ -47,17 +44,11 @@ namespace XtremeFPS.CameraSystem
         {
             inputManager = XtremeFPSInputHandler.Instance;
             headBobStartPosition = FirstPersonCameraRoot.localPosition;
-
-            Cursor.lockState = isCursorLocked ? CursorLockMode.Locked : CursorLockMode.None;
-
             FirstPersonCamera.Lens.FieldOfView = walkFOV;
         }
 
         private void Update()
         {
-            horizontalVelocity = characterController.velocity;
-            horizontalVelocity.y = 0f;
-
             HandleInputs();
             HandleFOVChange();
 
@@ -71,7 +62,7 @@ namespace XtremeFPS.CameraSystem
             rotationY -= mouseDirectionY;
             rotationY = Mathf.Clamp(rotationY, clampAngle * -1f, clampAngle);
 
-            characterController.transform.Rotate(mouseDirectionX * characterController.transform.up);
+            movementController.CharacterController.transform.Rotate(mouseDirectionX * movementController.CharacterController.transform.up);
             FirstPersonCameraRoot.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
 
             inputManager.mouseDirection = Vector2.zero;
@@ -79,17 +70,11 @@ namespace XtremeFPS.CameraSystem
 
         private void HandleInputs()
         {
-            mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime + hRecoil;
-            mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime + vRecoil;
+            mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime;
+            mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime;
 
             if (isZoomHold) isZooming = inputManager.isZoomingHold;
             else isZooming = inputManager.isZoomingTapped;
-        }
-
-        public void AddRecoil(float hRecoil, float vRecoil)
-        {
-            this.hRecoil = hRecoil;
-            this.vRecoil = vRecoil;
         }
 
         private void AdjustFOVSettings(float targetFOV)
@@ -101,15 +86,16 @@ namespace XtremeFPS.CameraSystem
 
         private void HandleFOVChange()
         {
-            if (Mathf.RoundToInt(horizontalVelocity.magnitude) >= 4)
+            if (movementController.MovementState == MovementController.PlayerMovementState.Sprinting)
             {
                 AdjustFOVSettings(sprintFOV);
                 return;
             }
-            if (Mathf.RoundToInt(horizontalVelocity.magnitude) >= 2)
+            if (movementController.MovementState == MovementController.PlayerMovementState.Walking)
             {
                 AdjustFOVSettings(walkFOV);
             }
+
             if (canZoom)
             {
                 if (isZooming) AdjustFOVSettings(zoomFOV);
@@ -119,7 +105,7 @@ namespace XtremeFPS.CameraSystem
 
         private void HandleHeadBob()
         {
-            if (Mathf.RoundToInt(horizontalVelocity.magnitude) >= 1)
+            if (movementController.isMoving)
             {
                 Vector3 headBobMotion = Vector3.zero;
                 headBobMotion.y += Mathf.Sin(Time.time * headBobFrequency) * headBobAmplitude;

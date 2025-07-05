@@ -478,19 +478,19 @@ namespace XtremeFPS.CustomEditors
 
             playerArmature.transitionSpeed = 10f;
             playerArmature.walkSpeed = 2f;
-            playerArmature.walkSoundSpeed = 0.3f;
+            //playerArmature.walkSoundSpeed = 0.3f;
             playerArmature.canPlayerSprint = true;
             playerArmature.sprintSpeed = 4f;
             playerArmature.sprintDuration = 8f;
             playerArmature.sprintCooldown = 8f;
-            playerArmature.sprintSoundSpeed = 0.25f;
+            //playerArmature.sprintSoundSpeed = 0.25f;
             playerArmature.canJump = true;
             playerArmature.jumpHeight = 1.89f;
             playerArmature.gravitationalForce = 10f;
             playerArmature.canPlayerCrouch = true;
             playerArmature.crouchedHeight = 1f;
             playerArmature.crouchedSpeed = 1f;
-            playerArmature.crouchSoundPlayTime = 0.3f;
+            //playerArmature.crouchSoundPlayTime = 0.3f;
             playerArmature.slidingSpeed = 10f;
             playerArmature.slidingDuration = 0.75f;
             //playerArmature.isCursorLocked = true;
