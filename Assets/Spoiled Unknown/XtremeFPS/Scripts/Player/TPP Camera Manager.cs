@@ -12,7 +12,7 @@ namespace XtremeFPS.Player.CameraSystem
 
         // References
         [Header("References")]
-        [SerializeField] private PlayerMovementController movementController;
+        [SerializeField] private PlayerMovementController playerMovementController;
         [SerializeField] private Transform cameraRoot;
         [SerializeField] private CinemachineCamera cinemachineCamera;
 
@@ -45,7 +45,7 @@ namespace XtremeFPS.Player.CameraSystem
 
         private void LateUpdate()
         {
-            cameraRoot.localPosition = movementController.transform.localPosition;
+            cameraRoot.localPosition = playerMovementController.transform.localPosition;
 
             rotationY -= mouseDirectionY;
             rotationY = Mathf.Clamp(rotationY, clampAngle * -1f, clampAngle);
@@ -64,12 +64,12 @@ namespace XtremeFPS.Player.CameraSystem
 
         private void HandleFOVChange()
         {
-            if (movementController.MovementState == PlayerMovementController.PlayerMovementState.Sprinting)
+            if (playerMovementController.MovementState == PlayerMovementController.PlayerMovementState.Sprinting)
             {
                 AdjustFOVSettings(sprintFOV);
                 return;
             }
-            if (movementController.MovementState == PlayerMovementController.PlayerMovementState.Walking)
+            if (playerMovementController.MovementState == PlayerMovementController.PlayerMovementState.Walking)
             {
                 AdjustFOVSettings(walkFOV);
             }

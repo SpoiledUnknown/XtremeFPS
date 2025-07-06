@@ -16,6 +16,7 @@ namespace XtremeFPS.Player.Controller
         [SerializeField] private float transitionSpeed;
         [SerializeField] private float walkSpeed = 5f;
         [SerializeField] private Transform cameraRoot;
+        [SerializeField] private bool canSwitchCamera;
 
         public CharacterController CharacterController { private set; get; }
         public PlayerMovementState MovementState {  get; private set; }
@@ -70,7 +71,6 @@ namespace XtremeFPS.Player.Controller
         private bool isCrouching;
         private float newHeight;
         private float initialHeight;
-        private Vector3 initialCameraPosition;
         [Space(10)]
         //Sliding
         [SerializeField] private float slidingSpeed;
@@ -128,7 +128,6 @@ namespace XtremeFPS.Player.Controller
 
             if (!canPlayerCrouch) return;
             initialHeight = CharacterController.height;
-            initialCameraPosition = cameraRoot.transform.localPosition;
         }
 
         private void Update()
@@ -137,7 +136,7 @@ namespace XtremeFPS.Player.Controller
             AudioEffectSpeed = Mathf.Clamp(1f / targetSpeed, 0.3f, 1f);
 
             //character Controller movement
-            if (inputManager.IsTryingToSwitchCamera) //TPP Mode
+            if (canSwitchCamera && inputManager.IsTryingToSwitchCamera) //TPP Mode
             {
                 cameraRoot.parent = transform.parent;
                 Vector3 direction = new Vector3(inputManager.moveDirection.x, 0f, inputManager.moveDirection.y).normalized;
@@ -236,10 +235,7 @@ namespace XtremeFPS.Player.Controller
 
             // Adjust the camera position based on the new height
             Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) * 0.5f, 0);
-
-            Vector3 newCameraHeight = initialCameraPosition - halfHeightDifference;
             groundSphere.localPosition = groundSpherePosition + halfHeightDifference;
-            cameraRoot.localPosition = newCameraHeight;
         }
 
         #region Sliding
@@ -404,7 +400,7 @@ namespace XtremeFPS.Player.Controller
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
-            Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
+            Color transparentGreen = new Color(1.0f, 0.0f, 0.0f, 0.35f);
             Gizmos.color = transparentGreen;
             Gizmos.DrawSphere(groundSphere.position, groundRadius);
         }

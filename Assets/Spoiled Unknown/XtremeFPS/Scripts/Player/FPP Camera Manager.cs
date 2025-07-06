@@ -13,8 +13,8 @@ namespace XtremeFPS.Player.CameraSystem
         // References
         [Header("References")]
         [SerializeField] private PlayerMovementController movementController;
-        [SerializeField] private Transform cameraRoot;
-        [SerializeField] private CinemachineCamera cinemachineCamera;
+        [SerializeField] private Transform firstPersonCameraRoot;
+        [SerializeField] private CinemachineCamera firstPersonCamera;
 
         //general
         [Header("General Settings")]
@@ -47,8 +47,8 @@ namespace XtremeFPS.Player.CameraSystem
         private void Start()
         {
             inputManager = XtremeFPSInputHandler.Instance;
-            headBobStartPosition = cameraRoot.localPosition;
-            cinemachineCamera.Lens.FieldOfView = walkFOV;
+            headBobStartPosition = firstPersonCameraRoot.localPosition;
+            firstPersonCamera.Lens.FieldOfView = walkFOV;
         }
 
         private void Update()
@@ -58,7 +58,7 @@ namespace XtremeFPS.Player.CameraSystem
 
             if (!canHeadBob || inputManager.IsTryingToSwitchCamera) return;
             HandleHeadBob();
-            cameraRoot.LookAt(FocusTarget());
+            firstPersonCameraRoot.LookAt(FocusTarget());
         }
 
         private void LateUpdate()
@@ -67,7 +67,7 @@ namespace XtremeFPS.Player.CameraSystem
             rotationY = Mathf.Clamp(rotationY, clampAngle * -1f, clampAngle);
 
             movementController.CharacterController.transform.Rotate(mouseDirectionX * movementController.CharacterController.transform.up);
-            cameraRoot.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
+            firstPersonCameraRoot.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
 
             inputManager.mouseDirection = Vector2.zero;
         }
@@ -83,9 +83,9 @@ namespace XtremeFPS.Player.CameraSystem
 
         private void AdjustFOVSettings(float targetFOV)
         {
-            float currentFOV = cinemachineCamera.Lens.FieldOfView;
+            float currentFOV = firstPersonCamera.Lens.FieldOfView;
             float newFOV = Mathf.Lerp(currentFOV, targetFOV, (transitionSpeed * Time.deltaTime));
-            cinemachineCamera.Lens.FieldOfView = newFOV;
+            firstPersonCamera.Lens.FieldOfView = newFOV;
         }
 
         private void HandleFOVChange()
@@ -112,21 +112,21 @@ namespace XtremeFPS.Player.CameraSystem
             if (movementController.IsMoving)
             {
                 Vector3 headBobMotion = Vector3.zero;
-                headBobMotion.y += Mathf.Sin(Time.time * headBobFrequency) * headBobAmplitude;
-                headBobMotion.x += Mathf.Cos(Time.time * headBobFrequency / 2) * headBobAmplitude * 2;
+                headBobMotion.y += Mathf.Sin(Time.time * headBobFrequency) * (headBobAmplitude * 0.001f);
+                headBobMotion.x += Mathf.Cos(Time.time * headBobFrequency / 2) * (headBobAmplitude * 0.001f) * 2;
 
-                cameraRoot.localPosition += headBobMotion;
+                firstPersonCameraRoot.localPosition += headBobMotion;
             }
-            else if (cameraRoot.localPosition != headBobStartPosition)
+            else if (firstPersonCameraRoot.localPosition != headBobStartPosition)
             {
-                cameraRoot.localPosition = Vector3.Lerp(cameraRoot.localPosition, headBobStartPosition, 1f * Time.deltaTime);
+                firstPersonCameraRoot.localPosition = Vector3.Lerp(firstPersonCameraRoot.localPosition, headBobStartPosition, 1f * Time.deltaTime);
             }
         }
 
         private Vector3 FocusTarget()
         {
-            Vector3 pos = new Vector3(transform.position.x, transform.position.y + cameraRoot.localPosition.y, transform.position.z);
-            pos += cameraRoot.forward * 15.0f;
+            Vector3 pos = new Vector3(transform.position.x, transform.position.y + firstPersonCameraRoot.localPosition.y, transform.position.z);
+            pos += firstPersonCameraRoot.forward * 15.0f;
             return pos;
         }
     }
