@@ -16,7 +16,7 @@ using XtremeFPS.PoolingSystem;
 namespace XtremeFPS.CustomEditors
 {
     using System;
-    using XtremeFPS.Controller;
+    using XtremeFPS.Player.Controller;
     using XtremeFPS.WeaponSystem;
     using XtremeFPS.WeaponSystem.Pickup;
 
@@ -50,7 +50,7 @@ namespace XtremeFPS.CustomEditors
 
         #region Player Setup
         private GameObject playerParent;
-        private MovementController playerArmature;
+        private PlayerMovementController playerArmature;
         private Camera playerCamera;
         private CinemachineCamera cinemachineCamera;
         private GameObject cameraHolder;
@@ -213,7 +213,7 @@ namespace XtremeFPS.CustomEditors
                 {
                     CreateThePlayer();
                 }
-                playerArmature = (MovementController)EditorGUILayout.ObjectField(new GUIContent("Player Armature", "The referrence to the player armature gameObject (Leave empty if none exists already)."), playerArmature, typeof(MovementController), true);
+                playerArmature = (PlayerMovementController)EditorGUILayout.ObjectField(new GUIContent("Player Armature", "The referrence to the player armature gameObject (Leave empty if none exists already)."), playerArmature, typeof(PlayerMovementController), true);
                 cameraHolder = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Camera Holder", "The referrence to the player camera holder object (Leave empty if none exists already)."), cameraHolder, typeof(GameObject), true);
                 cameraFollow = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Camera Follow", "The referrence to the player camera follow (Leave empty if none exists already)."), cameraFollow, typeof(GameObject), true);
                 defaultPlayerTypes = (DefaultPlayerTypes)EditorGUILayout.EnumPopup(new GUIContent("Default Values", "Select an option from the player type for the default settings."), defaultPlayerTypes);
@@ -438,11 +438,11 @@ namespace XtremeFPS.CustomEditors
             }
 
             if (playerArmature == null ||
-                !playerArmature.TryGetComponent<MovementController>(out _))
+                !playerArmature.TryGetComponent<PlayerMovementController>(out _))
             {
                 GameObject player = GameObject.Find("Player Armature") ?? new GameObject("Player Armature");
-                if (!player.TryGetComponent<MovementController>(out _)) player.AddComponent<MovementController>();
-                playerArmature = player.GetComponent<MovementController>();
+                if (!player.TryGetComponent<PlayerMovementController>(out _)) player.AddComponent<PlayerMovementController>();
+                playerArmature = player.GetComponent<PlayerMovementController>();
             }
             playerArmature.transform.parent = playerParent.transform;
 
@@ -476,23 +476,23 @@ namespace XtremeFPS.CustomEditors
             }
             cinemachineCamera.Follow = cameraFollow.transform;
 
-            playerArmature.transitionSpeed = 10f;
-            playerArmature.walkSpeed = 2f;
+            //playerArmature.transitionSpeed = 10f;
+            //playerArmature.walkSpeed = 2f;
             //playerArmature.walkSoundSpeed = 0.3f;
-            playerArmature.canPlayerSprint = true;
-            playerArmature.sprintSpeed = 4f;
-            playerArmature.sprintDuration = 8f;
-            playerArmature.sprintCooldown = 8f;
+            //playerArmature.canPlayerSprint = true;
+            //playerArmature.sprintSpeed = 4f;
+            //playerArmature.sprintDuration = 8f;
+            //playerArmature.sprintCooldown = 8f;
             //playerArmature.sprintSoundSpeed = 0.25f;
-            playerArmature.canJump = true;
-            playerArmature.jumpHeight = 1.89f;
-            playerArmature.gravitationalForce = 10f;
-            playerArmature.canPlayerCrouch = true;
-            playerArmature.crouchedHeight = 1f;
-            playerArmature.crouchedSpeed = 1f;
+            //playerArmature.canJump = true;
+            //playerArmature.jumpHeight = 1.89f;
+            //playerArmature.gravitationalForce = 10f;
+            //playerArmature.canPlayerCrouch = true;
+            //playerArmature.crouchedHeight = 1f;
+            //playerArmature.crouchedSpeed = 1f;
             //playerArmature.crouchSoundPlayTime = 0.3f;
-            playerArmature.slidingSpeed = 10f;
-            playerArmature.slidingDuration = 0.75f;
+            //playerArmature.slidingSpeed = 10f;
+            //playerArmature.slidingDuration = 0.75f;
             //playerArmature.isCursorLocked = true;
             //playerArmature.mouseSensitivity = 50f;
             //playerArmature.maximumClamp = 90f;

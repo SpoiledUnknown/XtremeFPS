@@ -2768,7 +2768,7 @@ GameObject:
   - component: {fileID: 323263523}
   m_Layer: 8
   m_Name: Metal
-  m_TagString: Metals
+  m_TagString: Metal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -17186,8 +17186,8 @@ GameObject:
   - component: {fileID: 5345331570768938701}
   - component: {fileID: 7748514539527609930}
   - component: {fileID: 7748514539527609933}
-  - component: {fileID: 8873623447422935977}
   - component: {fileID: 8873623447422935978}
+  - component: {fileID: 8873623447422935977}
   m_Layer: 0
   m_Name: Player Armature
   m_TagString: Player
@@ -17880,8 +17880,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateText: {fileID: 814174370818679521}
-  surfaceText: {fileID: 1396833278311136017}
-  speedText: {fileID: 4309849471709911085}
   personController: {fileID: 8873623447422935977}
 --- !u!1 &2359574691503711138
 GameObject:
@@ -24721,26 +24719,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd9027d004d8ef42a87424e7f401565, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxTouchLimit: 10
-  touchDetectionMode: 0
   moveDirection: {x: 0, y: 0}
   mouseDirection: {x: 0, y: 0}
-  isSprintingHold: 0
-  isSprintingTapped: 0
-  isCrouchingHold: 0
-  isCrouchingTapped: 0
-  isJumping: 0
-  isZoomingHold: 0
-  isZoomingTapped: 0
-  isFiringHold: 0
-  isFiringTapped: 0
-  isReloading: 0
-  isAimingHold: 0
-  isAimingTapped: 0
+  mouseScrollDirection: 0
+  isSprintHold: 0
+  isSprintTap: 0
+  isCrouchHold: 0
+  isCrouchTap: 0
+  isTryingToJump: 0
+  isZoomHold: 0
+  isZoomTap: 0
+  isShootHold: 0
+  isShootTap: 0
+  isTryingToReload: 0
+  isAimHold: 0
+  isAimTap: 0
   isTryingToInteract: 0
   isTryingToInteractAlternate: 0
-  IsSwitchingCamera: 0
-  MouseScroll: 0
+  IsTryingToSwitchCamera: 0
 --- !u!1 &5363970039570495880
 GameObject:
   m_ObjectHideFlags: 0
@@ -27406,16 +27402,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c75ba64d40ecff4b9e615470825e80b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 8714608985491471927}
-  FirstPersonCameraRoot: {fileID: 2000383339}
-  FirstPersonCamera: {fileID: 4983420077096768158}
+  movementController: {fileID: 8873623447422935977}
+  cameraRoot: {fileID: 0}
+  cinemachineCamera: {fileID: 0}
   mouseSensitivity: 50
   clampAngle: 85
   sprintFOV: 75
   walkFOV: 60
-  transitionSpeed: 10
   canZoom: 0
   isZoomHold: 0
+  transitionSpeed: 10
   zoomFOV: 30
   canHeadBob: 1
   headBobAmplitude: 0.01
@@ -27432,14 +27428,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c171a44c98dec4890ec373860f02f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 8714608985491471927}
-  ThirdPersonCameraRoot: {fileID: 2000383339}
-  ThirdPersonCamera: {fileID: 1183359091}
+  movementController: {fileID: 0}
+  cameraRoot: {fileID: 0}
+  cinemachineCamera: {fileID: 0}
   transitionSpeed: 10
   mouseSensitivity: 50
   clampAngle: 85
   sprintFOV: 75
-  walkFOV: 60
+  walkFOV: 56.7
 --- !u!114 &7760253960476750116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28479,60 +28475,30 @@ MonoBehaviour:
   gravitationalForce: 10
   groundSphere: {fileID: 3096919878596046021}
   groundRadius: 0.25
-  groundLayerID: 8
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
   canPlayerCrouch: 1
   isCrouchHold: 0
   crouchedHeight: 1
-  crouchedSpeed: 1
+  crouchedSpeed: 2.25
   slidingSpeed: 10
   slidingDuration: 0.75
-  grassTag: Grass
-  soundGrass:
-  - {fileID: 8300000, guid: 23f537bc838b6224a8b22680c3ec0477, type: 3}
-  - {fileID: 8300000, guid: 77313b3ac9c75f545a7cce94bdc8c1a3, type: 3}
-  - {fileID: 8300000, guid: fe99b708869596346a35738043ba969f, type: 3}
-  - {fileID: 8300000, guid: 1642d501db459a2408f8b9b45ea7e09f, type: 3}
-  waterTag: Water
-  soundWater:
-  - {fileID: 8300000, guid: e0fe87410d2160d46906e152b4bd6f21, type: 3}
-  - {fileID: 8300000, guid: b87dc1a8465327349b2bd94b58666b60, type: 3}
-  - {fileID: 8300000, guid: ce73e51f44d67f3448b78085d8e3a22e, type: 3}
-  metalTag: Metals
-  soundMetal:
-  - {fileID: 8300000, guid: b39d500728efec2468983e463e16d719, type: 3}
-  - {fileID: 8300000, guid: 819a181928a16d64993eeba8d3b8c651, type: 3}
-  - {fileID: 8300000, guid: b0b8cdcf5e784624990a0d61b230fd3e, type: 3}
-  - {fileID: 8300000, guid: aa4a5fc2bf0743348943776816aa5a68, type: 3}
-  concreteTag: Concrete
-  soundConcrete:
-  - {fileID: 8300000, guid: 229c64ed39310624c9aada3d771c7b06, type: 3}
-  - {fileID: 8300000, guid: 1f866668884214b4db7140d25b0def17, type: 3}
-  - {fileID: 8300000, guid: e5ae416f49602c1409e7c0d85ae0215c, type: 3}
-  - {fileID: 8300000, guid: 169f75c2c9f5fae4c9147639256eb0c8, type: 3}
-  - {fileID: 8300000, guid: 375af61fe5c06774084832c408e31683, type: 3}
-  gravelTag: Gravel
-  soundGravel:
-  - {fileID: 8300000, guid: 5cbf4dba6e3b40040938560663d850cc, type: 3}
-  - {fileID: 8300000, guid: 36b2a5a7f988c3a49a8dcb97c82f3055, type: 3}
-  - {fileID: 8300000, guid: 061f92917f3344e46a181210cd2be5f8, type: 3}
-  - {fileID: 8300000, guid: e6b69fa3aa7d71543b631e73a8d4edaa, type: 3}
-  - {fileID: 8300000, guid: 325a507d48fda384fa119f766f5c51a7, type: 3}
-  - {fileID: 8300000, guid: 763ef6481f64ff044b076930e3e76ba2, type: 3}
-  woodTag: Wood
-  soundWood:
-  - {fileID: 8300000, guid: 7cfe8fa2d154f5b48b968c6c2873f0c5, type: 3}
-  - {fileID: 8300000, guid: ae55f2c92e3202b4aaef430dfe971fce, type: 3}
-  - {fileID: 8300000, guid: 04999e5a75ae5eb4d86f476107b81a6d, type: 3}
-  - {fileID: 8300000, guid: a0f7c9da8c6a58649a40f6fb7b4a56df, type: 3}
-  - {fileID: 8300000, guid: 2d064d60ac258d848b3e2dee1a223058, type: 3}
-  landingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
-  jumpingAudioClip: {fileID: 8300000, guid: 56d2ae87641afd04ab7327adc39cb823, type: 3}
-  slidingAudioClip: {fileID: 8300000, guid: d261e6d42697b4b44b1e4f8bc462561a, type: 3}
   footstepSensitivity: 0.44
-  isMoving: 0
+  grassAudioClip: []
+  waterAudioClip: []
+  metalAudioClip: []
+  concreteAudioClip: []
+  gravelAudioClip: []
+  woodAudioClip: []
+  landAudioClip: {fileID: 0}
+  jumpAudioClip: {fileID: 0}
+  slideAudioClip: {fileID: 0}
   canPush: 1
   pushStrength: 1.1
-  pushLayerId: 3
+  pushLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &8873623447422935978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28545,11 +28511,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed09b1325ad015b42b0a37fc9965ae7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FirstPersonCamera: {fileID: 4983420077096768158}
-  ThirdPersonCamera: {fileID: 1183359091}
+  isCursorLocked: 1
+  firstPersonCamera: {fileID: 4983420077096768158}
+  thirdPersonCamera: {fileID: 1183359091}
   tppCameraManager: {fileID: 7748514539527609933}
   fppCameraManager: {fileID: 7748514539527609930}
-  isCursorLocked: 0
+  interactionRange: 1.06
+  interactionLayerId: 0
 --- !u!1 &8912003009432351831
 GameObject:
   m_ObjectHideFlags: 0

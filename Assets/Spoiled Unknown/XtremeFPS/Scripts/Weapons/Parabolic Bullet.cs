@@ -1,7 +1,4 @@
-﻿/*Copyright © Spoiled Unknown*/
-/*2024*/
-
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using XtremeFPS.PoolingSystem;
 using XtremeFPS.Interfaces;

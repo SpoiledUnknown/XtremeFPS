@@ -2,33 +2,45 @@ using Unity.Cinemachine;
 using UnityEngine;
 using XtremeFPS.Player.CameraSystem;
 using XtremeFPS.InputHandling;
+using XtremeFPS.Interfaces;
+using XtremeFPS.WeaponSystem.Holder;
 
 namespace XtremeFPS.Player
 {
-    [AddComponentMenu("Spoiled Unknown/XtremeFPS/Player")]
-    public class Player : MonoBehaviour
+    [AddComponentMenu("Spoiled Unknown/XtremeFPS/Player Manager")]
+    public class PlayerManager : MonoBehaviour
     {
-        public CinemachineCamera firstPersonCamera;
-        public CinemachineCamera thirdPersonCamera;
+        private XtremeFPSInputHandler inputManager;
 
-        public TPPCameraManager tppCameraManager;
-        public FPPCameraManager fppCameraManager;
+        //Cameras
+        [Header("Camera Settings")]
+        [SerializeField] private bool isCursorLocked;
+        [Space(10)]
+        [SerializeField] private CinemachineCamera firstPersonCamera;
+        [SerializeField] private CinemachineCamera thirdPersonCamera;
+        [Space(10)]
+        [SerializeField] private TPPCameraManager tppCameraManager;
+        [SerializeField] private FPPCameraManager fppCameraManager;
 
         //Interactions
-        public float interactionRange;
-        public int interactionLayerId;
+        [Header("Interaction Settings")]
+        [SerializeField] private float interactionRange;
+        [SerializeField] private int interactionLayerId;
 
-        public bool isCursorLocked;
+
+        private LayerMask interactionLayerMask;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
+            inputManager = XtremeFPSInputHandler.Instance;
+
             Cursor.lockState = isCursorLocked ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (XtremeFPSInputHandler.Instance.IsSwitchingCamera)
+            if (XtremeFPSInputHandler.Instance.IsTryingToSwitchCamera)
             {
                 tppCameraManager.enabled = true;
                 fppCameraManager.enabled = false;
@@ -44,17 +56,20 @@ namespace XtremeFPS.Player
                 thirdPersonCamera.Priority = 0;
                 firstPersonCamera.Priority = 1;
             }
+
+            InteractionHandling();
         }
 
         private void InteractionHandling()
         {
+            bool Aiming = inputManager.isAimHold || inputManager.isAimTap;
             if (inputManager.isTryingToInteract)
             {
                 Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
 
                 foreach (Collider collider in colliders)
                 {
-                    if (collider.TryGetComponent(out IWeaponPickup pickup) && !isZoomed)
+                    if (collider.TryGetComponent(out IWeaponPickup pickup) && !Aiming)
                     {
                         if (pickup.IsEquiped()) continue;
                         if (WeaponHolder.Instance.GetWeaponCount() < 3) pickup.PickUp();
@@ -68,7 +83,7 @@ namespace XtremeFPS.Player
 
                 foreach (Collider collider in colliders)
                 {
-                    if (collider.TryGetComponent(out IWeaponPickup pickup) && !isZoomed)
+                    if (collider.TryGetComponent(out IWeaponPickup pickup) && !Aiming)
                     {
                         if (pickup.IsEquiped() && pickup.IsActive()) pickup.Drop();
                         break;
@@ -76,5 +91,13 @@ namespace XtremeFPS.Player
                 }
             }
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, interactionRange);
+        }
+#endif
     }
 }

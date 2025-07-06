@@ -11,40 +11,44 @@ namespace XtremeFPS.Player.CameraSystem
         private XtremeFPSInputHandler inputManager;
 
         // References
-        public MovementController movementController;
-        public Transform FirstPersonCameraRoot;
-        public CinemachineCamera FirstPersonCamera;
+        [Header("References")]
+        [SerializeField] private PlayerMovementController movementController;
+        [SerializeField] private Transform cameraRoot;
+        [SerializeField] private CinemachineCamera cinemachineCamera;
 
         //general
-        public float mouseSensitivity;
-        public float clampAngle;
-        public float sprintFOV;
-        public float walkFOV;
+        [Header("General Settings")]
+        [SerializeField] private float mouseSensitivity;
+        [SerializeField] private float clampAngle;
+        [SerializeField] private float sprintFOV;
+        [SerializeField] private float walkFOV;
 
         private float rotationY;
         private float mouseDirectionX;
         private float mouseDirectionY;
 
         //Zooming
-        public float transitionSpeed;
-        public bool canZoom;
-        public bool isZoomHold;
-        public float zoomFOV = 30f;
+        [Header("Zoom Settings")]
+        [SerializeField] private bool canZoom;
+        [SerializeField] private bool isZoomHold;
+        [SerializeField] private float transitionSpeed;
+        [SerializeField] private float zoomFOV = 30f;
 
         private bool isZooming;
 
         //Head Bobbing effect
-        public bool canHeadBob;
-        public float headBobAmplitude = 0.01f;
-        public float headBobFrequency = 18.5f;
+        [Header("Head Bob Settings")]
+        [SerializeField] private bool canHeadBob;
+        [SerializeField] private float headBobAmplitude = 0.01f;
+        [SerializeField] private float headBobFrequency = 18.5f;
 
         private Vector3 headBobStartPosition;
 
         private void Start()
         {
             inputManager = XtremeFPSInputHandler.Instance;
-            headBobStartPosition = FirstPersonCameraRoot.localPosition;
-            FirstPersonCamera.Lens.FieldOfView = walkFOV;
+            headBobStartPosition = cameraRoot.localPosition;
+            cinemachineCamera.Lens.FieldOfView = walkFOV;
         }
 
         private void Update()
@@ -52,9 +56,9 @@ namespace XtremeFPS.Player.CameraSystem
             HandleInputs();
             HandleFOVChange();
 
-            if (!canHeadBob || inputManager.IsSwitchingCamera) return;
+            if (!canHeadBob || inputManager.IsTryingToSwitchCamera) return;
             HandleHeadBob();
-            FirstPersonCameraRoot.LookAt(FocusTarget());
+            cameraRoot.LookAt(FocusTarget());
         }
 
         private void LateUpdate()
@@ -63,7 +67,7 @@ namespace XtremeFPS.Player.CameraSystem
             rotationY = Mathf.Clamp(rotationY, clampAngle * -1f, clampAngle);
 
             movementController.CharacterController.transform.Rotate(mouseDirectionX * movementController.CharacterController.transform.up);
-            FirstPersonCameraRoot.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
+            cameraRoot.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
 
             inputManager.mouseDirection = Vector2.zero;
         }
@@ -73,25 +77,25 @@ namespace XtremeFPS.Player.CameraSystem
             mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime;
             mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime;
 
-            if (isZoomHold) isZooming = inputManager.isZoomingHold;
-            else isZooming = inputManager.isZoomingTapped;
+            if (isZoomHold) isZooming = inputManager.isZoomHold;
+            else isZooming = inputManager.isZoomTap;
         }
 
         private void AdjustFOVSettings(float targetFOV)
         {
-            float currentFOV = FirstPersonCamera.Lens.FieldOfView;
+            float currentFOV = cinemachineCamera.Lens.FieldOfView;
             float newFOV = Mathf.Lerp(currentFOV, targetFOV, (transitionSpeed * Time.deltaTime));
-            FirstPersonCamera.Lens.FieldOfView = newFOV;
+            cinemachineCamera.Lens.FieldOfView = newFOV;
         }
 
         private void HandleFOVChange()
         {
-            if (movementController.MovementState == MovementController.PlayerMovementState.Sprinting)
+            if (movementController.MovementState == PlayerMovementController.PlayerMovementState.Sprinting)
             {
                 AdjustFOVSettings(sprintFOV);
                 return;
             }
-            if (movementController.MovementState == MovementController.PlayerMovementState.Walking)
+            if (movementController.MovementState == PlayerMovementController.PlayerMovementState.Walking)
             {
                 AdjustFOVSettings(walkFOV);
             }
@@ -105,24 +109,24 @@ namespace XtremeFPS.Player.CameraSystem
 
         private void HandleHeadBob()
         {
-            if (movementController.isMoving)
+            if (movementController.IsMoving)
             {
                 Vector3 headBobMotion = Vector3.zero;
                 headBobMotion.y += Mathf.Sin(Time.time * headBobFrequency) * headBobAmplitude;
                 headBobMotion.x += Mathf.Cos(Time.time * headBobFrequency / 2) * headBobAmplitude * 2;
 
-                FirstPersonCameraRoot.localPosition += headBobMotion;
+                cameraRoot.localPosition += headBobMotion;
             }
-            else if (FirstPersonCameraRoot.localPosition != headBobStartPosition)
+            else if (cameraRoot.localPosition != headBobStartPosition)
             {
-                FirstPersonCameraRoot.localPosition = Vector3.Lerp(FirstPersonCameraRoot.localPosition, headBobStartPosition, 1f * Time.deltaTime);
+                cameraRoot.localPosition = Vector3.Lerp(cameraRoot.localPosition, headBobStartPosition, 1f * Time.deltaTime);
             }
         }
 
         private Vector3 FocusTarget()
         {
-            Vector3 pos = new Vector3(transform.position.x, transform.position.y + FirstPersonCameraRoot.localPosition.y, transform.position.z);
-            pos += FirstPersonCameraRoot.forward * 15.0f;
+            Vector3 pos = new Vector3(transform.position.x, transform.position.y + cameraRoot.localPosition.y, transform.position.z);
+            pos += cameraRoot.forward * 15.0f;
             return pos;
         }
     }

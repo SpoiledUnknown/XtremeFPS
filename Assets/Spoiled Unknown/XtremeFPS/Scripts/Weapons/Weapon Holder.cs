@@ -24,13 +24,13 @@ namespace XtremeFPS.WeaponSystem.Holder
         private void Update()
         {
             int previouslySelectedWeapon = selectedWeapon;
-            if (inputHandler.MouseScroll > 0)
+            if (inputHandler.mouseScrollDirection > 0)
             {
                 if (selectedWeapon >= GetWeaponCount() - 1) selectedWeapon = 0;
                 else selectedWeapon++;
             }
 
-            if (inputHandler.MouseScroll < 0)
+            if (inputHandler.mouseScrollDirection < 0)
             {
                 if (selectedWeapon <= 0) selectedWeapon = GetWeaponCount() - 1;
                 else selectedWeapon--;

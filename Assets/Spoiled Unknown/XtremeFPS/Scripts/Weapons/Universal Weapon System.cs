@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using XtremeFPS.InputHandling;
 using XtremeFPS.PoolingSystem;
-using XtremeFPS.Controller;
+using XtremeFPS.Player.Controller;
 using XtremeFPS.WeaponSystem.Bullet;
 
 namespace XtremeFPS.WeaponSystem
@@ -16,7 +16,7 @@ namespace XtremeFPS.WeaponSystem
     {
         #region Variables
         //Reference
-        public MovementController fpsController;
+        public PlayerMovementController fpsController;
         public Transform shootPoint;
         public ParticleSystem muzzleFlash;
         public GameObject bulletPrefab;
@@ -171,17 +171,17 @@ namespace XtremeFPS.WeaponSystem
         #region Private Methods
         private void PlayerWeaponsInput()
         {
-             if (isGunAuto) shooting = inputManager.isFiringHold;
-             else shooting = inputManager.isFiringTapped;
+             if (isGunAuto) shooting = inputManager.isShootHold;
+             else shooting = inputManager.isShootTap;
 
             //handle mouse inputs
             mouseX = inputManager.mouseDirection.x;
             mouseY = inputManager.mouseDirection.y;
 
-            if (isAimHold) aiming = inputManager.isAimingHold;
-            else aiming = inputManager.isAimingTapped;
+            if (isAimHold) aiming = inputManager.isAimHold;
+            else aiming = inputManager.isAimTap;
 
-            if ((inputManager.isReloading || BulletsLeft == 0)
+            if ((inputManager.isTryingToReload || BulletsLeft == 0)
                 && BulletsLeft < magazineSize
                 && totalBullets > 0
                 && !reloading) Reload();
@@ -352,7 +352,7 @@ namespace XtremeFPS.WeaponSystem
         }
         private void WeaponBobbing()
         {
-            if(!haveBobbing || fpsController.MovementState == MovementController.PlayerMovementState.Sliding) return;
+            if(!haveBobbing || fpsController.MovementState == PlayerMovementController.PlayerMovementState.Sliding) return;
 
             if (!fpsController.IsGrounded)
             {

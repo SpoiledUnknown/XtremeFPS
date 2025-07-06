@@ -8,13 +8,11 @@ namespace XtremeFPS.Demo
     public class DemoMenu : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI stateText;
-        [SerializeField] private TextMeshProUGUI surfaceText;
-        [SerializeField] private MovementController personController;
+        [SerializeField] private PlayerMovementController personController;
 
         private void Update()
         {
                 stateText.text = $"State: {personController.MovementState}";
-                surfaceText.text = $"Surface: {personController.SurfaceType}";
         }
     }
 }

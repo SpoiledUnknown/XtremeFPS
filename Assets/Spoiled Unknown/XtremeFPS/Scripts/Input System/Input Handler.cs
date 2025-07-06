@@ -1,6 +1,3 @@
-/*Copyright © Spoiled Unknown*/
-/*2024*/
-
 using System;
 using UnityEngine;
 using System.Collections;
@@ -19,39 +16,39 @@ namespace XtremeFPS.InputHandling
         #region Variables
         private PlayerInputAction playerInputAction;
 
-        public int maxTouchLimit = 10;
-        public TouchDetectMode touchDetectionMode;
-
         [HideInInspector] public Vector2 moveDirection;
         [HideInInspector] public Vector2 mouseDirection;
+        [HideInInspector] public float mouseScrollDirection;
 
-        [HideInInspector] public bool isSprintingHold;
-        [HideInInspector] public bool isSprintingTapped;
+        [HideInInspector] public bool isSprintHold;
+        [HideInInspector] public bool isSprintTap;
 
-        [HideInInspector] public bool isCrouchingHold;
-        [HideInInspector] public bool isCrouchingTapped;
+        [HideInInspector] public bool isCrouchHold;
+        [HideInInspector] public bool isCrouchTap;
 
-        [HideInInspector] public bool isJumping;
+        [HideInInspector] public bool isTryingToJump;
 
-        [HideInInspector] public bool isZoomingHold;
-        [HideInInspector] public bool isZoomingTapped;
+        [HideInInspector] public bool isZoomHold;
+        [HideInInspector] public bool isZoomTap;
 
-        [HideInInspector] public bool isFiringHold;
-        [HideInInspector] public bool isFiringTapped;
+        [HideInInspector] public bool isShootHold;
+        [HideInInspector] public bool isShootTap;
 
-        [HideInInspector] public bool isReloading;
+        [HideInInspector] public bool isTryingToReload;
 
-        [HideInInspector] public bool isAimingHold;
-        [HideInInspector] public bool isAimingTapped;
+        [HideInInspector] public bool isAimHold;
+        [HideInInspector] public bool isAimTap;
 
         [HideInInspector] public bool isTryingToInteract;
         [HideInInspector] public bool isTryingToInteractAlternate;
 
-        [HideInInspector] public bool IsSwitchingCamera;
-
-        [HideInInspector] public float MouseScroll;
+        [HideInInspector] public bool IsTryingToSwitchCamera;
 
         #region Touch Controls
+#if UNITY_ANDROID || UNITY_IOS
+        public int maxTouchLimit = 10;
+        public TouchDetectMode touchDetectionMode;
+
         public enum TouchDetectMode
         {
             FirstTouch,
@@ -61,6 +58,7 @@ namespace XtremeFPS.InputHandling
         private Func<TouchControl, bool> isTouchAvailable;                        // Delegate takes parameter touch and return true if touch is the available touch for camera rotation
         private List<string> availableTouchIds = new List<string>();     // Get all the touches that began without colliding with any UI Image/Button
         private EventSystem eventStytem;
+#endif
         #endregion
         #endregion
 
@@ -209,34 +207,34 @@ namespace XtremeFPS.InputHandling
 
         private void CrouchHoldInput(InputAction.CallbackContext context)
         {
-            isCrouchingHold = context.ReadValueAsButton();
+            isCrouchHold = context.ReadValueAsButton();
         }
         private void CrouchTapInput(InputAction.CallbackContext context)
         {
-            isCrouchingTapped = !isCrouchingTapped;
+            isCrouchTap = !isCrouchTap;
         }
 
         private void SprintHoldInput(InputAction.CallbackContext context)
         {
-            isSprintingHold = context.ReadValueAsButton();
+            isSprintHold = context.ReadValueAsButton();
         }
         private void SprintTapInput(InputAction.CallbackContext context)
         {
-            isSprintingTapped = !isSprintingTapped;
+            isSprintTap = !isSprintTap;
         }
 
         private void ZoomHoldInput(InputAction.CallbackContext context)
         {
-            isZoomingHold = context.ReadValueAsButton();
+            isZoomHold = context.ReadValueAsButton();
         }
         private void ZoomTapInput(InputAction.CallbackContext context)
         {
-            isZoomingTapped = !isZoomingTapped;
+            isZoomTap = !isZoomTap;
         }
 
         private void JumpInput(InputAction.CallbackContext context)
         {
-            isJumping = context.ReadValueAsButton();
+            isTryingToJump = context.ReadValueAsButton();
         }
 
         private void InteractionInput(InputAction.CallbackContext context)
@@ -250,37 +248,37 @@ namespace XtremeFPS.InputHandling
 
         private void CameraSwitchInput(InputAction.CallbackContext obj)
         {
-            IsSwitchingCamera = !IsSwitchingCamera;
+            IsTryingToSwitchCamera = !IsTryingToSwitchCamera;
         }
         #endregion
 
         #region Weapon Inputs
         private void ShootHoldInput(InputAction.CallbackContext context)
         {
-            isFiringHold = context.ReadValueAsButton();
+            isShootHold = context.ReadValueAsButton();
         }
         private void ShootTapInput(InputAction.CallbackContext context)
         {
-            isFiringTapped = context.ReadValueAsButton();
+            isShootTap = context.ReadValueAsButton();
         }
 
         private void ReloadingInput(InputAction.CallbackContext context)
         {
-            isReloading = context.ReadValueAsButton();
+            isTryingToReload = context.ReadValueAsButton();
         }
 
         private void ADSHoldInput(InputAction.CallbackContext context)
         {
-            isAimingHold = context.ReadValueAsButton();
+            isAimHold = context.ReadValueAsButton();
         }
         private void ADSTapInput(InputAction.CallbackContext context)
         {
-            isAimingTapped = !isAimingTapped;
+            isAimTap = !isAimTap;
         }
 
         private void ScrollInput(InputAction.CallbackContext context)
         {
-            MouseScroll = context.ReadValue<float>();
+            mouseScrollDirection = context.ReadValue<float>();
         }
         #endregion
     }

@@ -1,24 +1,23 @@
-/*Copyright © Spoiled Unknown*/
-/*2024*/
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using XtremeFPS.InputHandling;
 
 namespace XtremeFPS.Player.Controller
 {
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(CharacterController))]
-    [AddComponentMenu("Spoiled Unknown/XtremeFPS/Movement Controller")]
-    public class MovementController : MonoBehaviour
+    [AddComponentMenu("Spoiled Unknown/XtremeFPS/Player Movement Controller")]
+    public class PlayerMovementController : MonoBehaviour
     {
         #region Variables
         // Player
-        public float transitionSpeed;
-        public float walkSpeed = 5f;
+        [Header("Player Settings")]
+        [SerializeField] private float transitionSpeed;
+        [SerializeField] private float walkSpeed = 5f;
+        [SerializeField] private Transform cameraRoot;
 
         public CharacterController CharacterController { private set; get; }
-        public Transform cameraRoot;
         public PlayerMovementState MovementState {  get; private set; }
         public enum PlayerMovementState
         {
@@ -36,45 +35,46 @@ namespace XtremeFPS.Player.Controller
         private float turnSmoothVelocity;
 
         //sprinting
-        public bool canPlayerSprint;
-        public bool unlimitedSprinting;
-        public bool isSprintHold;
-        public float sprintSpeed = 8f;
-        public float sprintDuration = 8f;
-        public float sprintCooldown = 8f;
+        [Header("Sprinting Settings")]
+        [SerializeField] private bool canPlayerSprint;
+        [SerializeField] private bool unlimitedSprinting;
+        [SerializeField] private bool isSprintHold;
+        [SerializeField] private float sprintSpeed = 8f;
+        [SerializeField] private float sprintDuration = 8f;
+        [SerializeField] private float sprintCooldown = 8f;
 
         private bool isSprinting;
         private readonly float sprintCooldownReset;
         private float sprintRemaining;
 
-
         // Gravity and Jumping
-        public bool IsGrounded { get; private set; }
-        public Vector3 JumpVelocity { get; private set; }
-        public bool canJump;
-        public float jumpHeight = 2f;
-        public float gravitationalForce = 10f;
-        public Transform groundSphere;
-        public float groundRadius;
-        public int groundLayerID;
+        [Header("Jumping Settings")]
+        [SerializeField] private bool canJump;
+        [SerializeField] private float jumpHeight = 2f;
+        [SerializeField] private float gravitationalForce = 10f;
+        [SerializeField] private Transform groundSphere;
+        [SerializeField] private float groundRadius;
+        [SerializeField] private LayerMask groundLayerMask;
 
+        public Vector3 JumpVelocity { get; private set; }
+        public bool IsGrounded { get; private set; }
         private Vector3 groundSpherePosition;
-        private LayerMask groundLayerMask;
 
         // Crouching
-        public bool canPlayerCrouch;
-        public bool isCrouchHold;
-        public float crouchedHeight = 1f;
-        public float crouchedSpeed = 1f;
+        [Header("Crouch & Slide Settings")]
+        [SerializeField] private bool canPlayerCrouch;
+        [SerializeField] private bool isCrouchHold;
+        [SerializeField] private float crouchedHeight = 1f;
+        [SerializeField] private float crouchedSpeed = 1f;
 
         private bool isCrouching;
         private float newHeight;
         private float initialHeight;
         private Vector3 initialCameraPosition;
-
+        [Space(10)]
         //Sliding
-        public float slidingSpeed;
-        public float slidingDuration;
+        [SerializeField] private float slidingSpeed;
+        [SerializeField] private float slidingDuration;
 
         private bool canSlide;
         private float slidingTime;
@@ -84,41 +84,35 @@ namespace XtremeFPS.Player.Controller
         private RaycastHit slopeHit;
 
         //Sound System
-        public string SurfaceType { get; private set; }
-        public string grassTag;
-        public AudioClip[] soundGrass;
-
-        public string waterTag;
-        public AudioClip[] soundWater;
-
-        public string metalTag;
-        public AudioClip[] soundMetal;
-
-        public string concreteTag;
-        public AudioClip[] soundConcrete;
-
-        public string gravelTag;
-        public AudioClip[] soundGravel;
-
-        public string woodTag;
-        public AudioClip[] soundWood;
-
-        public AudioClip landingAudioClip;
-        public AudioClip jumpingAudioClip;
-        public AudioClip slidingAudioClip;
-        public float footstepSensitivity;
+        [Header("Sound Settings")]
+        [SerializeField] private float footstepSensitivity;
+        [Space(5)]
+        [SerializeField] private AudioClip[] grassAudioClip;
+        [Space(5)]
+        [SerializeField] private AudioClip[] waterAudioClip;
+        [Space(5)]
+        [SerializeField] private AudioClip[] metalAudioClip;
+        [Space(5)]
+        [SerializeField] private AudioClip[] concreteAudioClip;
+        [Space(5)]
+        [SerializeField] private AudioClip[] gravelAudioClip;
+        [Space(5)]
+        [SerializeField] private AudioClip[] woodAudioClip;
+        [Space(5)]
+        [SerializeField] private AudioClip landAudioClip;
+        [SerializeField] private AudioClip jumpAudioClip;
+        [SerializeField] private AudioClip slideAudioClip;
 
         private AudioSource audioSource;
         private float AudioEffectSpeed;
-        public bool isMoving = false;
+        public bool IsMoving { private set; get; }
 
 
         // Handling Physics
-        public bool canPush;
-        public float pushStrength = 1.1f;
-        public int pushLayerId;
-
-        private LayerMask pushLayerMask;
+        [Header("Physics Settings")]
+        [SerializeField] private bool canPush;
+        [SerializeField] private float pushStrength = 1.1f;
+        [SerializeField] private LayerMask pushLayerMask;
         #endregion
 
         #region MonoBehaviour Callbacks
@@ -130,8 +124,6 @@ namespace XtremeFPS.Player.Controller
 
             StartCoroutine(PlayFootstepSounds());
 
-            pushLayerMask = 1 << pushLayerId;
-            groundLayerMask = 1 << groundLayerID;
             groundSpherePosition = groundSphere.localPosition;
 
             if (!canPlayerCrouch) return;
@@ -145,7 +137,7 @@ namespace XtremeFPS.Player.Controller
             AudioEffectSpeed = Mathf.Clamp(1f / targetSpeed, 0.3f, 1f);
 
             //character Controller movement
-            if (inputManager.IsSwitchingCamera) //TPP Mode
+            if (inputManager.IsTryingToSwitchCamera) //TPP Mode
             {
                 cameraRoot.parent = transform.parent;
                 Vector3 direction = new Vector3(inputManager.moveDirection.x, 0f, inputManager.moveDirection.y).normalized;
@@ -172,14 +164,12 @@ namespace XtremeFPS.Player.Controller
             //checking if player is moving or not by using Inverse of transform direction for god knows what reason\
             //but yeah this looks cool
             Vector3 localVelocity = transform.InverseTransformDirection(CharacterController.velocity);
-            isMoving = Mathf.Abs(localVelocity.z) > footstepSensitivity || Mathf.Abs(localVelocity.x) > footstepSensitivity;
+            IsMoving = Mathf.Abs(localVelocity.z) > footstepSensitivity || Mathf.Abs(localVelocity.x) > footstepSensitivity;
 
             PlayerInputs();
             HandleSprintCooldown();
             GravityAndJump();
             HandleStateMachine();
-            DetectSurfaceAndMovement();
-            if (MovementState == PlayerMovementState.Sliding) HanldeSliding();
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -201,11 +191,11 @@ namespace XtremeFPS.Player.Controller
         #region Private Methods
         private void PlayerInputs()
         {
-            if (isSprintHold) isSprinting = inputManager.isSprintingHold;
-            else isSprinting = inputManager.isSprintingTapped;
+            if (isSprintHold) isSprinting = inputManager.isSprintHold;
+            else isSprinting = inputManager.isSprintTap;
 
-            if (isCrouchHold) isCrouching = inputManager.isCrouchingHold;
-            else isCrouching = inputManager.isCrouchingTapped;
+            if (isCrouchHold) isCrouching = inputManager.isCrouchHold;
+            else isCrouching = inputManager.isCrouchTap;
 
             canSlide = isCrouching && isSprinting && canPlayerCrouch;
         }
@@ -220,8 +210,8 @@ namespace XtremeFPS.Player.Controller
                 sprintRemaining -= 1 * Time.deltaTime;
                 if (sprintRemaining <= 0)
                 {
-                    inputManager.isSprintingTapped = false;
-                    inputManager.isSprintingHold = false;
+                    inputManager.isSprintTap = false;
+                    inputManager.isSprintHold = false;
                     sprintCooldown -= 1 * Time.deltaTime;
                 }
                 else sprintCooldown = sprintCooldownReset;
@@ -263,8 +253,8 @@ namespace XtremeFPS.Player.Controller
             if (!isOnSlope && IsGrounded) slidingTime -= Time.deltaTime;
             if (slidingTime <= 0)
             {
-                inputManager.isSprintingHold = false;
-                inputManager.isSprintingTapped = false;
+                inputManager.isSprintHold = false;
+                inputManager.isSprintTap = false;
                 MovementState = PlayerMovementState.Crouching;
             }
         }
@@ -285,7 +275,7 @@ namespace XtremeFPS.Player.Controller
         #endregion
         private void HandleStateMachine()
         {
-            if (canSlide && isMoving && IsGrounded && (targetSpeed > (sprintSpeed * 0.5f + 1.0f)) && MovementState != PlayerMovementState.Sliding)
+            if (canSlide && IsMoving && IsGrounded && (targetSpeed > (sprintSpeed * 0.5f + 1.0f)) && MovementState != PlayerMovementState.Sliding)
             {
                 slidingTime = slidingDuration;
                 MovementState = PlayerMovementState.Sliding;
@@ -319,9 +309,11 @@ namespace XtremeFPS.Player.Controller
                 case PlayerMovementState.Sliding:
                     targetSpeed = Mathf.Lerp(targetSpeed, slidingSpeed, transitionDelta);
                     AdjustCrouchHeight(crouchedHeight, false);
-                    if (!audioSource.isPlaying && IsGrounded) audioSource.PlayOneShot(slidingAudioClip);
+                    if (!audioSource.isPlaying && IsGrounded) audioSource.PlayOneShot(slideAudioClip);
                     else if (!IsGrounded) audioSource.Stop();
                     canSlide = false;
+
+                    HanldeSliding();
                     break;
 
                 case PlayerMovementState.Default:
@@ -346,62 +338,52 @@ namespace XtremeFPS.Player.Controller
                 return;
             }
 
-            if (!wasPreviouslyGrounded) audioSource.PlayOneShot(landingAudioClip);
+            if (!wasPreviouslyGrounded) audioSource.PlayOneShot(landAudioClip);
 
-            if (inputManager.isJumping && 
+            if (inputManager.isTryingToJump && 
                 MovementState != PlayerMovementState.Crouching &&
                 MovementState != PlayerMovementState.Sliding)
             {
                 JumpVelocity =  new Vector3(JumpVelocity.x, Mathf.Sqrt(jumpHeight * 2f * gravitationalForce), JumpVelocity.z); ;
-                if (wasPreviouslyGrounded) audioSource.PlayOneShot(jumpingAudioClip);
+                if (wasPreviouslyGrounded) audioSource.PlayOneShot(jumpAudioClip);
             }
             else if (!IsGrounded && JumpVelocity.y < 0f) JumpVelocity = new Vector3(JumpVelocity.x, -0.5f, JumpVelocity.z);
         }
         #region Sound Management
-        private void DetectSurfaceAndMovement()
-        {
-            if (!Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 5f)) return;
-            SurfaceType = hit.collider.tag.ToLower() switch
-            {
-                "grass" => "grass",
-                "metals" => "metal",
-                "gravel" => "gravel",
-                "water" => "water",
-                "concrete" => "concrete",
-                "wood" => "wood",
-                _ => "Unknown",
-            };
-        }
-
         private IEnumerator PlayFootstepSounds()
         {
             while (true)
             {
-                if (!IsGrounded || !isMoving || MovementState == PlayerMovementState.Sliding)
+                if (!IsGrounded || !IsMoving || MovementState == PlayerMovementState.Sliding)
                 {
                     yield return null;
                     continue;
                 }
 
-                switch (SurfaceType)
+                if (!Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, CharacterController.height))
+                {
+                    yield return null;
+                    continue;
+                }
+                switch (hit.collider.tag.ToLower())
                 {
                     case "grass":
-                        audioSource.clip = soundGrass[Random.Range(0, soundGrass.Length)];
+                        audioSource.clip = grassAudioClip[Random.Range(0, grassAudioClip.Length)];
                         break;
                     case "gravel":
-                        audioSource.clip = soundGravel[Random.Range(0, soundGravel.Length)];
+                        audioSource.clip = gravelAudioClip[Random.Range(0, gravelAudioClip.Length)];
                         break;
                     case "water":
-                        audioSource.clip = soundWater[Random.Range(0, soundWater.Length)];
+                        audioSource.clip = waterAudioClip[Random.Range(0, waterAudioClip.Length)];
                         break;
                     case "metal":
-                        audioSource.clip = soundMetal[Random.Range(0, soundMetal.Length)];
+                        audioSource.clip = metalAudioClip[Random.Range(0, metalAudioClip.Length)];
                         break;
                     case "concrete":
-                        audioSource.clip = soundConcrete[Random.Range(0, soundConcrete.Length)];
+                        audioSource.clip = concreteAudioClip[Random.Range(0, concreteAudioClip.Length)];
                         break;
                     case "wood":
-                        audioSource.clip = soundWood[Random.Range(0, soundWood.Length)];
+                        audioSource.clip = woodAudioClip[Random.Range(0, woodAudioClip.Length)];
                         break;
                     default:
                         yield return null;

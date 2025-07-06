@@ -11,16 +11,18 @@ namespace XtremeFPS.Player.CameraSystem
         private XtremeFPSInputHandler inputManager;
 
         // References
-        public MovementController movementController;
-        public Transform ThirdPersonCameraRoot;
-        public CinemachineCamera ThirdPersonCamera;
+        [Header("References")]
+        [SerializeField] private PlayerMovementController movementController;
+        [SerializeField] private Transform cameraRoot;
+        [SerializeField] private CinemachineCamera cinemachineCamera;
 
         //general
-        public float transitionSpeed;
-        public float mouseSensitivity;
-        public float clampAngle;
-        public float sprintFOV;
-        public float walkFOV;
+        [Header("General Settings")]
+        [SerializeField] private float transitionSpeed;
+        [SerializeField] private float mouseSensitivity;
+        [SerializeField] private float clampAngle;
+        [SerializeField] private float sprintFOV;
+        [SerializeField] private float walkFOV;
 
         private float rotationY;
         private float rotationX;
@@ -30,7 +32,7 @@ namespace XtremeFPS.Player.CameraSystem
         private void Start()
         {
             inputManager = XtremeFPSInputHandler.Instance;
-            ThirdPersonCamera.Lens.FieldOfView = walkFOV;
+            cinemachineCamera.Lens.FieldOfView = walkFOV;
         }
 
         private void Update()
@@ -43,31 +45,31 @@ namespace XtremeFPS.Player.CameraSystem
 
         private void LateUpdate()
         {
-            ThirdPersonCameraRoot.localPosition = movementController.transform.localPosition;
+            cameraRoot.localPosition = movementController.transform.localPosition;
 
             rotationY -= mouseDirectionY;
             rotationY = Mathf.Clamp(rotationY, clampAngle * -1f, clampAngle);
 
-            ThirdPersonCameraRoot.localRotation = Quaternion.Euler(rotationY, (rotationX += mouseDirectionX), 0f);
+            cameraRoot.localRotation = Quaternion.Euler(rotationY, (rotationX += mouseDirectionX), 0f);
 
             inputManager.mouseDirection = Vector2.zero;
         }
 
         private void AdjustFOVSettings(float targetFOV)
         {
-            float currentFOV = ThirdPersonCamera.Lens.FieldOfView;
+            float currentFOV = cinemachineCamera.Lens.FieldOfView;
             float newFOV = Mathf.Lerp(currentFOV, targetFOV, (transitionSpeed * Time.deltaTime));
-            ThirdPersonCamera.Lens.FieldOfView = newFOV;
+            cinemachineCamera.Lens.FieldOfView = newFOV;
         }
 
         private void HandleFOVChange()
         {
-            if (movementController.MovementState == MovementController.PlayerMovementState.Sprinting)
+            if (movementController.MovementState == PlayerMovementController.PlayerMovementState.Sprinting)
             {
                 AdjustFOVSettings(sprintFOV);
                 return;
             }
-            if (movementController.MovementState == MovementController.PlayerMovementState.Walking)
+            if (movementController.MovementState == PlayerMovementController.PlayerMovementState.Walking)
             {
                 AdjustFOVSettings(walkFOV);
             }

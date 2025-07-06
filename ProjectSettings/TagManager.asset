@@ -8,9 +8,8 @@ TagManager:
   - Grass
   - Gravel
   - Water
-  - Metals
   - Wood
-  - Ledge
+  - Metal
   layers:
   - Default
   - TransparentFX
