@@ -160,10 +160,8 @@ namespace XtremeFPS.Player.Controller
             CharacterController.Move(horizontalMovement + verticalMovement);
             horizontalMovement = Vector3.zero;
 
-            //checking if player is moving or not by using Inverse of transform direction for god knows what reason\
-            //but yeah this looks cool
-            Vector3 localVelocity = transform.InverseTransformDirection(CharacterController.velocity);
-            IsMoving = Mathf.Abs(localVelocity.z) > footstepSensitivity || Mathf.Abs(localVelocity.x) > footstepSensitivity;
+            Vector3 horizontalVelocity = new Vector3(CharacterController.velocity.x, 0f, CharacterController.velocity.z);
+            IsMoving = horizontalVelocity.magnitude > footstepSensitivity;
 
             PlayerInputs();
             HandleSprintCooldown();
@@ -174,7 +172,6 @@ namespace XtremeFPS.Player.Controller
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             if (!canPush) return;
-
             Rigidbody body = hit.collider.attachedRigidbody;
             if (body == null || body.isKinematic) return;
 
@@ -271,7 +268,7 @@ namespace XtremeFPS.Player.Controller
         #endregion
         private void HandleStateMachine()
         {
-            if (canSlide && IsMoving && IsGrounded && (targetSpeed > (sprintSpeed * 0.5f + 1.0f)) && MovementState != PlayerMovementState.Sliding)
+            if (canSlide && IsMoving && IsGrounded && (Mathf.Abs(targetSpeed - sprintSpeed) <= 0.3f) && MovementState != PlayerMovementState.Sliding)
             {
                 slidingTime = slidingDuration;
                 MovementState = PlayerMovementState.Sliding;

@@ -3,7 +3,7 @@ using UnityEngine;
 using XtremeFPS.Player.CameraSystem;
 using XtremeFPS.InputHandling;
 using XtremeFPS.Interfaces;
-using XtremeFPS.WeaponSystem.Holder;
+using XtremeFPS.WeaponSystem.WeaponHolder;
 
 namespace XtremeFPS.Player
 {
@@ -25,10 +25,11 @@ namespace XtremeFPS.Player
         //Interactions
         [Header("Interaction Settings")]
         [SerializeField] private float interactionRange;
-        [SerializeField] private int interactionLayerId;
+        [SerializeField] private LayerMask interactionLayerMask;
 
+        [Header("Weapon Pickup (Optional)")]
+        [SerializeField] private WeaponHolder weaponHolder;
 
-        private LayerMask interactionLayerMask;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -40,7 +41,7 @@ namespace XtremeFPS.Player
         // Update is called once per frame
         void Update()
         {
-            if (XtremeFPSInputHandler.Instance.IsTryingToSwitchCamera)
+            if (inputManager.IsTryingToSwitchCamera)
             {
                 tppCameraManager.enabled = true;
                 fppCameraManager.enabled = false;
@@ -72,12 +73,12 @@ namespace XtremeFPS.Player
                     if (collider.TryGetComponent(out IWeaponPickup pickup) && !Aiming)
                     {
                         if (pickup.IsEquiped()) continue;
-                        if (WeaponHolder.Instance.GetWeaponCount() < 3) pickup.PickUp();
+                        if (weaponHolder.GetWeaponCount() < 3) pickup.PickUp();
                         break;
                     }
                 }
             }
-            else if (inputManager.isTryingToInteractAlternate)
+            if (inputManager.isTryingToInteractAlternate)
             {
                 Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
 

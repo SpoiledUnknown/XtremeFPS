@@ -1,22 +1,16 @@
-using System;
 using UnityEngine;
 using XtremeFPS.InputHandling;
 
-namespace XtremeFPS.WeaponSystem.Holder
+namespace XtremeFPS.WeaponSystem.WeaponHolder
 {
     [AddComponentMenu("Spoiled Unknown/XtremeFPS/Weapon Holder")]
     public class WeaponHolder : MonoBehaviour
     {
-        public static WeaponHolder Instance { get; private set; }
-
         private int selectedWeapon;
         private XtremeFPSInputHandler inputHandler;
 
         private void Start()
         {
-            if (Instance == null) Instance = this;
-            else Destroy(Instance);
-
             inputHandler = XtremeFPSInputHandler.Instance;
             SelectWeapon();
         }
@@ -41,7 +35,7 @@ namespace XtremeFPS.WeaponSystem.Holder
             if (previouslySelectedWeapon != selectedWeapon) SelectWeapon();
         }
 
-        public void SelectWeapon()
+        private void SelectWeapon()
         {
             int i = 0;
             foreach (Transform weapons in transform)

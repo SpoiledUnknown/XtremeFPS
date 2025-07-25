@@ -1,10 +1,6 @@
-/*Copyright � Spoiled Unknown*/
-/*2024*/
-
 using TMPro;
 using UnityEngine;
 using XtremeFPS.Interfaces;
-using XtremeFPS.WeaponSystem.Holder;
 
 namespace XtremeFPS.WeaponSystem.Pickup
 {
@@ -14,16 +10,16 @@ namespace XtremeFPS.WeaponSystem.Pickup
     public class WeaponPickup : MonoBehaviour, IWeaponPickup
     {
         #region Variables
-        public CharacterController playerArmature;
-        public Transform weaponHolder;
-        public Transform cameraRoot;
-        public TextMeshProUGUI bulletText;
-
-        public bool equipped;
-        public int Priority;
-        public float dropForwardForce;
-        public float dropUpwardForce;
-        public float dropTorqueMultiplier;
+        [Header("References")]
+        [SerializeField] private CharacterController characterController;
+        [SerializeField] private Transform weaponHolder;
+        [SerializeField] private Transform cameraRoot;
+        [SerializeField] private TextMeshProUGUI bulletText;
+        [Header("Pickup Settings")]
+        [SerializeField] private bool equipped;
+        [SerializeField] private float dropForwardForce;
+        [SerializeField] private float dropUpwardForce;
+        [SerializeField] private float dropTorqueMultiplier;
 
         private UniversalWeaponSystem weaponSystem;
         private BoxCollider Collider;
@@ -36,14 +32,24 @@ namespace XtremeFPS.WeaponSystem.Pickup
             Collider = GetComponent<BoxCollider>();
             weaponSystem = GetComponent<UniversalWeaponSystem>();
 
-            if (equipped) Equip();
-            else UnEquip();
+            if (equipped) PickUp();
+            else Drop();
         }
         #endregion
-
-        #region Private methods
-        private void UnEquip()
+        public void PickUp()
         {
+            Destroy(rb);
+            equipped = true;
+            weaponSystem.enabled = true;
+            Collider.isTrigger = true;
+            transform.SetParent(weaponHolder);
+            transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
+        }
+
+        public void Drop()
+        {
+            bulletText.SetText("00 / 00");
+            transform.SetParent(null);
             if (!gameObject.TryGetComponent<Rigidbody>(out rb))
             {
                 rb = gameObject.AddComponent<Rigidbody>();
@@ -53,30 +59,8 @@ namespace XtremeFPS.WeaponSystem.Pickup
             weaponSystem.enabled = false;
             Collider.isTrigger = false;
             equipped = false;
-        }
 
-        private void Equip()
-        {
-            Destroy(rb);
-            equipped = true;
-            weaponSystem.enabled = true;
-            Collider.isTrigger = true;
-        }
-
-        public void PickUp()
-        {
-            Equip();
-            transform.SetParent(weaponHolder);
-            transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
-        }
-
-        public void Drop()
-        {
-            UnEquip();
-            bulletText.SetText("00 / 00");
-            transform.SetParent(null);
-
-            rb.linearVelocity = playerArmature.velocity;
+            rb.linearVelocity = characterController.velocity;
             rb.AddForce(cameraRoot.forward * dropForwardForce, ForceMode.Impulse);
             rb.AddForce(cameraRoot.up * dropUpwardForce, ForceMode.Impulse);
 
@@ -93,6 +77,5 @@ namespace XtremeFPS.WeaponSystem.Pickup
         {
             return gameObject.activeSelf;
         }
-        #endregion
     }
 }

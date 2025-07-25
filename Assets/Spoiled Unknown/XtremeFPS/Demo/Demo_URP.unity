@@ -122,38 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &10032324
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 10032325}
-  m_Layer: 0
-  m_Name: Weapon Holder Parent
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &10032325
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 10032324}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.1935997, y: -0.12559891, z: 0.40000153}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 171916744}
-  m_Father: {fileID: 2000383339}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1001 &19241684
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -266,6 +234,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: L96_Sniper_Rifle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783196281547354542, guid: 2d60990fe6e1fb54d8681367adabe8fa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1353,12 +1326,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 171916743}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.1935997, y: -0.12559891, z: 0.40000153}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 10032325}
+  m_Father: {fileID: 2000383339}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &171916745
 MonoBehaviour:
@@ -6796,6 +6769,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: M4_Carbine
       objectReference: {fileID: 0}
+    - target: {fileID: 7790039312812957629, guid: 3d486f468af0fa8429b3f1dc99574534,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9102567424339424500, guid: 3d486f468af0fa8429b3f1dc99574534,
         type: 3}
       propertyPath: bulletCount
@@ -8245,6 +8223,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AK-47
       objectReference: {fileID: 0}
+    - target: {fileID: 969050048398080041, guid: 70acddad957ae5645abdecf3ec972d07,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5941598614821741515, guid: 70acddad957ae5645abdecf3ec972d07,
         type: 3}
       propertyPath: bulletCount
@@ -8274,7 +8257,7 @@ PrefabInstance:
         type: 3}
       propertyPath: gunPositionHolder
       value: 
-      objectReference: {fileID: 10032325}
+      objectReference: {fileID: 0}
     - target: {fileID: 5941598614821741515, guid: 70acddad957ae5645abdecf3ec972d07,
         type: 3}
       propertyPath: cameraRecoilHolder
@@ -9957,7 +9940,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1183359088
 Transform:
   m_ObjectHideFlags: 0
@@ -13977,6 +13960,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: 870_Shotgun
       objectReference: {fileID: 0}
+    - target: {fileID: 8972059624727554837, guid: 061c6cf7daadf244ea473dbb9b51bf13,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9123236870417984071, guid: 061c6cf7daadf244ea473dbb9b51bf13,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -14788,7 +14776,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 10032325}
+  - {fileID: 171916744}
   m_Father: {fileID: 5027719812132762035}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2008067205
@@ -15327,6 +15315,36 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 658929563}
     m_Modifications:
+    - target: {fileID: 1995841682866766276, guid: de42f5f27aa7609439dc50a90ea9d0a6,
+        type: 3}
+      propertyPath: haveSway
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1995841682866766276, guid: de42f5f27aa7609439dc50a90ea9d0a6,
+        type: 3}
+      propertyPath: bobMagnitude
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1995841682866766276, guid: de42f5f27aa7609439dc50a90ea9d0a6,
+        type: 3}
+      propertyPath: fpsController
+      value: 
+      objectReference: {fileID: 8873623447422935977}
+    - target: {fileID: 1995841682866766276, guid: de42f5f27aa7609439dc50a90ea9d0a6,
+        type: 3}
+      propertyPath: recoverySpeed
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1995841682866766276, guid: de42f5f27aa7609439dc50a90ea9d0a6,
+        type: 3}
+      propertyPath: rotationalIntensity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1995841682866766276, guid: de42f5f27aa7609439dc50a90ea9d0a6,
+        type: 3}
+      propertyPath: walkSpeedMultiplier
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3159315065124211940, guid: de42f5f27aa7609439dc50a90ea9d0a6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15391,15 +15409,15 @@ PrefabInstance:
         type: 3}
       propertyPath: cameraRoot
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2000383339}
     - target: {fileID: 7332192298075270293, guid: de42f5f27aa7609439dc50a90ea9d0a6,
         type: 3}
       propertyPath: weaponHolder
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 171916744}
     - target: {fileID: 7332192298075270293, guid: de42f5f27aa7609439dc50a90ea9d0a6,
         type: 3}
-      propertyPath: playerArmature
+      propertyPath: characterController
       value: 
       objectReference: {fileID: 8714608985491471927}
     - target: {fileID: 7789264275385799709, guid: de42f5f27aa7609439dc50a90ea9d0a6,
@@ -15411,27 +15429,7 @@ PrefabInstance:
         type: 3}
       propertyPath: weaponHolder
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7789264275385799709, guid: de42f5f27aa7609439dc50a90ea9d0a6,
-        type: 3}
-      propertyPath: fpsController
-      value: 
-      objectReference: {fileID: 8873623447422935977}
-    - target: {fileID: 7789264275385799709, guid: de42f5f27aa7609439dc50a90ea9d0a6,
-        type: 3}
-      propertyPath: haveWeaponRecoil
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7789264275385799709, guid: de42f5f27aa7609439dc50a90ea9d0a6,
-        type: 3}
-      propertyPath: gunPositionHolder
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7789264275385799709, guid: de42f5f27aa7609439dc50a90ea9d0a6,
-        type: 3}
-      propertyPath: cameraRecoilHolder
-      value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 171916744}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -27390,8 +27388,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementController: {fileID: 8873623447422935977}
-  firstPersonCameraRoot: {fileID: 2000383339}
-  firstPersonCamera: {fileID: 4983420077096768158}
+  cameraRoot: {fileID: 2000383339}
+  cinemachineCamera: {fileID: 4983420077096768158}
   mouseSensitivity: 50
   clampAngle: 85
   sprintFOV: 75
@@ -28451,7 +28449,7 @@ MonoBehaviour:
   transitionSpeed: 10
   walkSpeed: 2
   cameraRoot: {fileID: 2000383339}
-  canSwitchCamera: 1
+  canSwitchCamera: 0
   canPlayerSprint: 1
   unlimitedSprinting: 1
   isSprintHold: 0
@@ -28532,7 +28530,10 @@ MonoBehaviour:
   tppCameraManager: {fileID: 7748514539527609933}
   fppCameraManager: {fileID: 7748514539527609930}
   interactionRange: 1.06
-  interactionLayerId: 0
+  interactionLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  weaponHolder: {fileID: 171916745}
 --- !u!1 &8912003009432351831
 GameObject:
   m_ObjectHideFlags: 0
