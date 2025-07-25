@@ -60,6 +60,7 @@ namespace XtremeFPS.Player.Controller
         public Vector3 JumpVelocity { get; private set; }
         public bool IsGrounded { get; private set; }
         private Vector3 groundSpherePosition;
+        private Vector3 cameraRootPositon;
 
         // Crouching
         [Header("Crouch & Slide Settings")]
@@ -125,6 +126,7 @@ namespace XtremeFPS.Player.Controller
             StartCoroutine(PlayFootstepSounds());
 
             groundSpherePosition = groundSphere.localPosition;
+            cameraRootPositon = cameraRoot.localPosition;
 
             if (!canPlayerCrouch) return;
             initialHeight = CharacterController.height;
@@ -152,6 +154,7 @@ namespace XtremeFPS.Player.Controller
             else  //FPP Mode
             {
                 cameraRoot.parent = transform;
+                cameraRoot.localPosition = cameraRootPositon;
                 horizontalMovement = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right +
                     inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
             }
@@ -230,7 +233,6 @@ namespace XtremeFPS.Player.Controller
             newHeight = Mathf.Lerp(CharacterController.height, targetHeight, transitionDelta);
             CharacterController.height = newHeight;
 
-            // Adjust the camera position based on the new height
             Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) * 0.5f, 0);
             groundSphere.localPosition = groundSpherePosition + halfHeightDifference;
         }
