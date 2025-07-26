@@ -18,13 +18,12 @@ namespace XtremeFPS.WeaponSystem
         [SerializeField] private ParticleSystem muzzleFlash;
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private TextMeshProUGUI bulletCount;
-        [SerializeField] private Transform weaponModel;
+        [SerializeField] private Animator animator;
         [SerializeField] private Transform ShellPosition;
         [SerializeField] private GameObject Shell;
         [SerializeField] private GameObject particlesPrefab;
 
         private XtremeFPSInputHandler inputManager;
-        private Animator animator;
 
         //Bullet Physics
         [Header("Bullet Physics")]
@@ -84,8 +83,6 @@ namespace XtremeFPS.WeaponSystem
         {
             inputManager = XtremeFPSInputHandler.Instance;
             bulletSoundSource = GetComponent<AudioSource>();
-            animator = weaponModel.GetComponent<Animator>();
-            animator.enabled = false;
 
             BulletsLeft = magazineSize;
             if (canAim) normalLocalPosition = weaponHolder.localPosition;
@@ -156,7 +153,6 @@ namespace XtremeFPS.WeaponSystem
         IEnumerator Reload()
         {
             reloading = true;
-            animator.enabled = true;
             animator.SetBool("IsReloading", true);
             bulletSoundSource.PlayOneShot(bulletReloadClip);
 
@@ -164,7 +160,6 @@ namespace XtremeFPS.WeaponSystem
 
             reloading = false;
             animator.SetBool("IsReloading", false);
-            animator.enabled = false;
 
 
             switch (totalBullets.CompareTo(magazineSize))
@@ -202,9 +197,9 @@ namespace XtremeFPS.WeaponSystem
             rotationRecoil = Vector3.Lerp(rotationRecoil, Vector3.zero, transitionSpeed * Time.deltaTime);
             positionRecoil = Vector3.Lerp(positionRecoil, Vector3.zero, transitionSpeed * Time.deltaTime);
 
-            weaponModel.localPosition = Vector3.Slerp(weaponModel.localPosition, positionRecoil, transitionSpeed * Time.deltaTime);
+            transform.localPosition = Vector3.Slerp(transform.localPosition, positionRecoil, transitionSpeed * Time.deltaTime);
             rot = Vector3.Slerp(rot, rotationRecoil, transitionSpeed * Time.deltaTime);
-            weaponModel.localRotation = Quaternion.Euler(rot);
+            transform.localRotation = Quaternion.Euler(rot);
         }
         #endregion
     }

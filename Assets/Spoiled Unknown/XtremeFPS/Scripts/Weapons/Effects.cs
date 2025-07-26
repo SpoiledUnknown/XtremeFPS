@@ -37,7 +37,6 @@ namespace XtremeFPS.WeaponSystem.Effects
         [SerializeField] private float recoverySpeed = 50f;
 
         private float impactForce = 0;
-        private Quaternion originRotation;
         private float mouseX;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -45,9 +44,8 @@ namespace XtremeFPS.WeaponSystem.Effects
         {
             inputManager = XtremeFPSInputHandler.Instance;
 
-            bobMagnitude = bobMagnitude / 1000f;
+            bobMagnitude /= 1000f;
             lastPosition = transform.position;
-            if (haveSway) originRotation = transform.localRotation;
         }
 
         // Update is called once per frame
@@ -93,7 +91,7 @@ namespace XtremeFPS.WeaponSystem.Effects
         {
             if (!haveSway || aiming) return;
 
-            Quaternion targetRotation = originRotation * Quaternion.AngleAxis(rotationalIntensity * mouseX * -1f, Vector3.up);
+            Quaternion targetRotation = Quaternion.identity * Quaternion.AngleAxis(rotationalIntensity * mouseX * -1f, Vector3.up);
             transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, transitionSpeed * Time.deltaTime);
 
             switch (fpsController.IsGrounded)
