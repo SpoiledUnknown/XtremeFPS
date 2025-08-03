@@ -41,10 +41,13 @@ namespace XtremeFPS.WeaponSystem
         [SerializeField] private int magazineSize;
         [SerializeField] private int totalBullets;
         [SerializeField] private int bulletsPerTap;
+        //public float timeBetweenEachShots;
+        public float timeBetweenShooting;
         [SerializeField] private float reloadTime;
         private bool aiming;
 
         private int bulletsShot;
+        private bool readyToShoot;
         private bool shooting;
         private bool reloading;
 
@@ -87,6 +90,8 @@ namespace XtremeFPS.WeaponSystem
             BulletsLeft = magazineSize;
             if (canAim) normalLocalPosition = weaponHolder.localPosition;
             bulletCount.text = $"{BulletsLeft / bulletsPerTap} / {totalBullets / bulletsPerTap}";
+
+            readyToShoot = true;
         }
 
         private void OnEnable()
@@ -114,7 +119,7 @@ namespace XtremeFPS.WeaponSystem
             if ((inputManager.isTryingToReload || BulletsLeft <= 0) && totalBullets > 0 && !reloading) StartCoroutine(Reload());
 
             //Shoot
-            if (shooting && !reloading && BulletsLeft > 0)
+            if (readyToShoot && shooting && !reloading && BulletsLeft > 0)
             {
                 bulletsShot = bulletsPerTap;
                 Shoot();
@@ -124,6 +129,8 @@ namespace XtremeFPS.WeaponSystem
 
         private void Shoot()
         {
+            readyToShoot = false;
+
             GameObject bulletObject = PoolManager.Instance.SpawnObject(bulletPrefab, shootPoint.position, Quaternion.identity);
             ParabolicBullet parabolicBullet = bulletObject.GetComponent<ParabolicBullet>();
             parabolicBullet.Initialize(shootPoint, bulletSpeed, bulletDamage, bulletGravitationalForce, bulletLifeTime, particlesPrefab);
@@ -148,8 +155,17 @@ namespace XtremeFPS.WeaponSystem
             bulletsShot--;
 
             bulletCount.text = $"{BulletsLeft / bulletsPerTap} / {totalBullets / bulletsPerTap}";
+
+            Invoke(nameof(ResetShot), timeBetweenShooting);
             if (bulletsShot > 0 && BulletsLeft > 0) Invoke(nameof(Shoot), 0.01f);
+            //if (bulletsShot > 0 && BulletsLeft > 0) Invoke(nameof(Shoot), timeBetweenEachShots);
         }
+
+        private void ResetShot()
+        {
+            readyToShoot = true;
+        }
+
         IEnumerator Reload()
         {
             reloading = true;

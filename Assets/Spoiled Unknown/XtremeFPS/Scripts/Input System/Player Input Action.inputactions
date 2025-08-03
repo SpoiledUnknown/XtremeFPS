@@ -36,7 +36,7 @@
                     "name": "SprintHold",
                     "type": "Button",
                     "id": "6d690377-3c95-409d-96d7-20b9f099a0a8",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -47,14 +47,14 @@
                     "id": "909612d3-80c6-4431-a75e-a3ab713cc29c",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Tap",
+                    "interactions": "Tap(duration=0.01)",
                     "initialStateCheck": false
                 },
                 {
                     "name": "CrouchTap",
                     "type": "Button",
                     "id": "fd315f53-0531-4fac-93a6-027a8bf5ad9d",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -63,7 +63,7 @@
                     "name": "CrouchHold",
                     "type": "Button",
                     "id": "c512a023-60d1-41ef-a0bf-6a7a2027b336",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -92,7 +92,7 @@
                     "id": "87ef1cec-78a9-4f8d-8c2e-684642fe908a",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Tap",
+                    "interactions": "Tap(duration=0.01)",
                     "initialStateCheck": false
                 },
                 {
@@ -662,39 +662,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Number Keys",
-                    "id": "90169a49-acf9-489b-9990-4e11454d0ebc",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Weapon Scroll",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "106e83e4-f8af-479c-89f6-32c00280447e",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Weapon Scroll",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "39e2eea5-4aaa-4758-bdad-ab750a715c0a",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Weapon Scroll",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "Mouse Control",
                     "id": "69fa9797-897f-4d4b-9f89-c5b54213b7bb",
                     "path": "1DAxis",
@@ -755,7 +722,7 @@
                     "name": "Cancel",
                     "type": "Button",
                     "id": "597ba1ee-57ef-4e48-8475-48f04c884de3",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -1240,6 +1207,34 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Demo",
+            "id": "e65c52b5-8080-4c74-80cf-3d23abf56180",
+            "actions": [
+                {
+                    "name": "Pause Menu",
+                    "type": "Button",
+                    "id": "92ca2b2d-674a-4120-9000-90e0d9809519",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Tap(duration=0.01)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "39f3b90c-ff97-4714-b6bd-b396d16ee2fa",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -124,7 +124,7 @@ namespace XtremeFPS.InputHandling
                     ""name"": ""SprintHold"",
                     ""type"": ""Button"",
                     ""id"": ""6d690377-3c95-409d-96d7-20b9f099a0a8"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -135,14 +135,14 @@ namespace XtremeFPS.InputHandling
                     ""id"": ""909612d3-80c6-4431-a75e-a3ab713cc29c"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Tap"",
+                    ""interactions"": ""Tap(duration=0.01)"",
                     ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""CrouchTap"",
                     ""type"": ""Button"",
                     ""id"": ""fd315f53-0531-4fac-93a6-027a8bf5ad9d"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -151,7 +151,7 @@ namespace XtremeFPS.InputHandling
                     ""name"": ""CrouchHold"",
                     ""type"": ""Button"",
                     ""id"": ""c512a023-60d1-41ef-a0bf-6a7a2027b336"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -180,7 +180,7 @@ namespace XtremeFPS.InputHandling
                     ""id"": ""87ef1cec-78a9-4f8d-8c2e-684642fe908a"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Tap"",
+                    ""interactions"": ""Tap(duration=0.01)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -750,39 +750,6 @@ namespace XtremeFPS.InputHandling
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Number Keys"",
-                    ""id"": ""90169a49-acf9-489b-9990-4e11454d0ebc"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Weapon Scroll"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""106e83e4-f8af-479c-89f6-32c00280447e"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Weapon Scroll"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""39e2eea5-4aaa-4758-bdad-ab750a715c0a"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Weapon Scroll"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""Mouse Control"",
                     ""id"": ""69fa9797-897f-4d4b-9f89-c5b54213b7bb"",
                     ""path"": ""1DAxis"",
@@ -843,7 +810,7 @@ namespace XtremeFPS.InputHandling
                     ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""597ba1ee-57ef-4e48-8475-48f04c884de3"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -1332,6 +1299,34 @@ namespace XtremeFPS.InputHandling
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Demo"",
+            ""id"": ""e65c52b5-8080-4c74-80cf-3d23abf56180"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""92ca2b2d-674a-4120-9000-90e0d9809519"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Tap(duration=0.01)"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""39f3b90c-ff97-4714-b6bd-b396d16ee2fa"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1386,6 +1381,9 @@ namespace XtremeFPS.InputHandling
             m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
             m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+            // Demo
+            m_Demo = asset.FindActionMap("Demo", throwIfNotFound: true);
+            m_Demo_PauseMenu = m_Demo.FindAction("Pause Menu", throwIfNotFound: true);
         }
 
         ~@PlayerInputAction()
@@ -1393,6 +1391,7 @@ namespace XtremeFPS.InputHandling
             UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, PlayerInputAction.Player.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Weapon.enabled, "This will cause a leak and performance issues, PlayerInputAction.Weapon.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, PlayerInputAction.UI.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_Demo.enabled, "This will cause a leak and performance issues, PlayerInputAction.Demo.Disable() has not been called.");
         }
 
         /// <summary>
@@ -2027,6 +2026,102 @@ namespace XtremeFPS.InputHandling
         /// Provides a new <see cref="UIActions" /> instance referencing this action map.
         /// </summary>
         public UIActions @UI => new UIActions(this);
+
+        // Demo
+        private readonly InputActionMap m_Demo;
+        private List<IDemoActions> m_DemoActionsCallbackInterfaces = new List<IDemoActions>();
+        private readonly InputAction m_Demo_PauseMenu;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "Demo".
+        /// </summary>
+        public struct DemoActions
+        {
+            private @PlayerInputAction m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public DemoActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "Demo/PauseMenu".
+            /// </summary>
+            public InputAction @PauseMenu => m_Wrapper.m_Demo_PauseMenu;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_Demo; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="DemoActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(DemoActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="DemoActions" />
+            public void AddCallbacks(IDemoActions instance)
+            {
+                if (instance == null || m_Wrapper.m_DemoActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_DemoActionsCallbackInterfaces.Add(instance);
+                @PauseMenu.started += instance.OnPauseMenu;
+                @PauseMenu.performed += instance.OnPauseMenu;
+                @PauseMenu.canceled += instance.OnPauseMenu;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="DemoActions" />
+            private void UnregisterCallbacks(IDemoActions instance)
+            {
+                @PauseMenu.started -= instance.OnPauseMenu;
+                @PauseMenu.performed -= instance.OnPauseMenu;
+                @PauseMenu.canceled -= instance.OnPauseMenu;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DemoActions.UnregisterCallbacks(IDemoActions)" />.
+            /// </summary>
+            /// <seealso cref="DemoActions.UnregisterCallbacks(IDemoActions)" />
+            public void RemoveCallbacks(IDemoActions instance)
+            {
+                if (m_Wrapper.m_DemoActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="DemoActions.AddCallbacks(IDemoActions)" />
+            /// <seealso cref="DemoActions.RemoveCallbacks(IDemoActions)" />
+            /// <seealso cref="DemoActions.UnregisterCallbacks(IDemoActions)" />
+            public void SetCallbacks(IDemoActions instance)
+            {
+                foreach (var item in m_Wrapper.m_DemoActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_DemoActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="DemoActions" /> instance referencing this action map.
+        /// </summary>
+        public DemoActions @Demo => new DemoActions(this);
         private int m_KeyboardAndMouseSchemeIndex = -1;
         /// <summary>
         /// Provides access to the input control scheme.
@@ -2285,6 +2380,21 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Demo" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="DemoActions.AddCallbacks(IDemoActions)" />
+        /// <seealso cref="DemoActions.RemoveCallbacks(IDemoActions)" />
+        public interface IDemoActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "Pause Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPauseMenu(InputAction.CallbackContext context);
         }
     }
 }

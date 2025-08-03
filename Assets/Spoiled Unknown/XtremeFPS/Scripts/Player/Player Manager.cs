@@ -7,6 +7,10 @@ using XtremeFPS.WeaponSystem.WeaponHolder;
 
 namespace XtremeFPS.Player
 {
+    /// <summary>
+    /// A temporary player manager script that handles camera switching, interactions, and weapon pickups.
+    /// I am still figuring out how to implement a proper player manager.
+    /// </summary>
     [AddComponentMenu("Spoiled Unknown/XtremeFPS/Player Manager")]
     public class PlayerManager : MonoBehaviour
     {
@@ -14,7 +18,7 @@ namespace XtremeFPS.Player
 
         //Cameras
         [Header("Camera Settings")]
-        [SerializeField] private bool isCursorLocked;
+        public bool isCursorLocked;
         [Space(10)]
         [SerializeField] private CinemachineCamera firstPersonCamera;
         [SerializeField] private CinemachineCamera thirdPersonCamera;
@@ -34,13 +38,12 @@ namespace XtremeFPS.Player
         void Start()
         {
             inputManager = XtremeFPSInputHandler.Instance;
-
-            Cursor.lockState = isCursorLocked ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
         // Update is called once per frame
         void Update()
         {
+            /*Remove this when only using TPP or FPP mode, else might cause errors*/
             if (inputManager.IsTryingToSwitchCamera)
             {
                 tppCameraManager.enabled = true;

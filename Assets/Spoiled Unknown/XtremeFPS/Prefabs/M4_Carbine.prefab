@@ -31,6 +31,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 123824414349136368}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3418230070746794401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4319972766604922076}
+  - component: {fileID: 393126378258684472}
+  m_Layer: 7
+  m_Name: Effects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4319972766604922076
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3418230070746794401}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 123824414349136368}
+  m_Father: {fileID: 89194239659965237}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &393126378258684472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3418230070746794401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97a63526d88256a4784cf7028d1f2a60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fpsController: {fileID: 0}
+  transitionSpeed: 10
+  haveBobbing: 1
+  bobMagnitude: 9
+  idleSpeed: 2
+  walkSpeedMultiplier: 4
+  aimReduction: 4
+  haveSway: 1
+  Intensity: 5
+  rotationalIntensity: 2
+  maxAngleClamp: 20
+  recoverySpeed: 45
 --- !u!1 &3654148472335663406
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +154,7 @@ Transform:
   m_Children:
   - {fileID: 1674501346968122832}
   - {fileID: 3287531856852553256}
-  m_Father: {fileID: 89194239659965237}
+  m_Father: {fileID: 4319972766604922076}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6469541286640691115
 MeshFilter:
@@ -207,7 +264,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 123824414349136368}
+  - {fileID: 4319972766604922076}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &604400509251851017
@@ -319,72 +376,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 331c35b3226af094a8f15e2eb4f92311, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponType: 1
-  fpsController: {fileID: 0}
   shootPoint: {fileID: 3287531856852553256}
   muzzleFlash: {fileID: 1860589940189072827}
   bulletPrefab: {fileID: 1660800468149884, guid: afc9c0a592c2d3e408e67df46bacd613,
     type: 3}
   bulletCount: {fileID: 0}
   animator: {fileID: 34065043958220318}
-  aimUIImage: {fileID: 0}
-  bulletSpeed: 200
-  bulletDamage: 20
-  bulletLifeTime: 3
-  bulletGravitationalForce: 25
   ShellPosition: {fileID: 1674501346968122832}
   Shell: {fileID: 5022607508920917637, guid: c4a92788f3aab074baf288aaed06ee96, type: 3}
   particlesPrefab: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d,
     type: 3}
+  bulletSpeed: 200
+  bulletDamage: 20
+  bulletLifeTime: 3
+  bulletGravitationalForce: 25
+  transitionSpeed: 10
   isGunAuto: 1
   isAimHold: 0
-  timeBetweenEachShots: 0.075
-  timeBetweenShooting: 0.075
   magazineSize: 30
   totalBullets: 180
   bulletsPerTap: 1
   reloadTime: 4
-  aiming: 1
-  hardMode: 0
   canAim: 1
   weaponHolder: {fileID: 0}
   aimingLocalPosition: {x: 0.002, y: -0.068, z: 0.239}
-  aimSmoothing: 6
-  haveCameraRecoil: 1
-  cameraRecoilHolder: {fileID: 0}
-  recoilRotationSpeed: 6
-  recoilReturnSpeed: 25
-  hipFireRecoil: {x: 4, y: 4, z: 4}
-  adsFireRecoil: {x: 2, y: 2, z: 2}
-  hRecoil: 0.215
-  vRecoil: 0.221
   haveWeaponRecoil: 1
-  gunPositionHolder: {fileID: 0}
-  gunRecoilPositionSpeed: 8
-  gunPositionReturnSpeed: 10
   recoilKickBackHip: {x: 0.015, y: 0, z: 0.05}
   recoilKickBackAds: {x: -0.08, y: 0.01, z: 0.009}
-  gunRecoilRotationSpeed: 8
-  gunRotationReturnSpeed: 38
   recoilRotationHip: {x: 10, y: 5, z: 7}
   recoilRotationAds: {x: 10, y: 4, z: 6}
-  haveRotationalSway: 1
-  rotaionSwayIntensity: 10
-  rotationSwaySmoothness: 2
-  haveJumpSway: 1
-  jumpIntensity: 5
-  weaponMaxClamp: 20
-  weaponMinClamp: 20
-  jumpSmooth: 15
-  landingIntensity: 5
-  landingSmooth: 15
-  recoverySpeed: 50
-  haveBobbing: 1
-  magnitude: 0.009
-  idleSpeed: 2
-  walkSpeedMultiplier: 4
-  walkSpeedMax: 6
-  aimReduction: 4
   bulletSoundClip: {fileID: 8300000, guid: 44b6c39ee8df15a44aba4438bd084f5d, type: 3}
   bulletReloadClip: {fileID: 8300000, guid: c35f284e9475b5f45b9edab995d9824c, type: 3}
 --- !u!65 &6656770867199517580
@@ -420,15 +440,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ecb2e70dbbdb644b35306a486edde9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerArmature: {fileID: 0}
+  characterController: {fileID: 0}
   weaponHolder: {fileID: 0}
   cameraRoot: {fileID: 0}
   bulletText: {fileID: 0}
   equipped: 0
-  Priority: 0
   dropForwardForce: 5
   dropUpwardForce: 1
-  dropTorqueMultiplier: 0
+  dropTorqueMultiplier: 2
 --- !u!1001 &1976318580550413579
 PrefabInstance:
   m_ObjectHideFlags: 0

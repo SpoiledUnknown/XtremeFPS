@@ -8,7 +8,7 @@ namespace XtremeFPS.WeaponSystem.Effects
     /// This class is responsible for handling various effects in weapons.
     /// </summary>
     [AddComponentMenu("Spoiled Unknown/XtremeFPS/Effects")]
-    public class Effects : MonoBehaviour
+    public class EffectsManager : MonoBehaviour
     {
         [Header("General Settings")]
         [SerializeField] private PlayerMovementController fpsController;

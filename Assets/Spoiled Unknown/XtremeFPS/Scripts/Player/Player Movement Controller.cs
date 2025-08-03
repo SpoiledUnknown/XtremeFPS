@@ -41,12 +41,12 @@ namespace XtremeFPS.Player.Controller
         [SerializeField] private bool unlimitedSprinting;
         [SerializeField] private bool isSprintHold;
         [SerializeField] private float sprintSpeed = 8f;
-        [SerializeField] private float sprintDuration = 8f;
         [SerializeField] private float sprintCooldown = 8f;
+        public float sprintDuration = 8f;
 
         private bool isSprinting;
         private readonly float sprintCooldownReset;
-        private float sprintRemaining;
+        public float sprintRemaining { get; private set; }
 
         // Gravity and Jumping
         [Header("Jumping Settings")]

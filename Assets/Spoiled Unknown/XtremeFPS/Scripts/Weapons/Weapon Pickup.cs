@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using XtremeFPS.Interfaces;
+using XtremeFPS.WeaponSystem.Effects;
 
 namespace XtremeFPS.WeaponSystem.Pickup
 {
@@ -22,6 +23,7 @@ namespace XtremeFPS.WeaponSystem.Pickup
         [SerializeField] private float dropTorqueMultiplier;
 
         private UniversalWeaponSystem weaponSystem;
+        private EffectsManager effects;
         private BoxCollider Collider;
         private Rigidbody rb;
         #endregion
@@ -31,6 +33,7 @@ namespace XtremeFPS.WeaponSystem.Pickup
         {
             Collider = GetComponent<BoxCollider>();
             weaponSystem = GetComponent<UniversalWeaponSystem>();
+            effects = GetComponentInChildren<EffectsManager>();
 
             if (equipped) PickUp();
             else Drop();
@@ -41,6 +44,7 @@ namespace XtremeFPS.WeaponSystem.Pickup
             Destroy(rb);
             equipped = true;
             weaponSystem.enabled = true;
+            effects.enabled = true;
             Collider.isTrigger = true;
             transform.SetParent(weaponHolder);
             transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
@@ -57,6 +61,7 @@ namespace XtremeFPS.WeaponSystem.Pickup
                 rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
             }
             weaponSystem.enabled = false;
+            effects.enabled = false;
             Collider.isTrigger = false;
             equipped = false;
 

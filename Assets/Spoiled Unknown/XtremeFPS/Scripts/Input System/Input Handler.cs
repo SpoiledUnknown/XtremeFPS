@@ -44,6 +44,9 @@ namespace XtremeFPS.InputHandling
 
         [HideInInspector] public bool IsTryingToSwitchCamera;
 
+        //only for demo purpose, please remove in production
+        public bool escape;
+
         #region Touch Controls
 #if UNITY_ANDROID || UNITY_IOS
         public int maxTouchLimit = 10;
@@ -85,7 +88,6 @@ namespace XtremeFPS.InputHandling
         {
             #region Player Movement
             playerInputAction.Player.Jump.started += JumpInput;
-            playerInputAction.Player.Jump.performed += JumpInput;
             playerInputAction.Player.Jump.canceled += JumpInput;
 
             playerInputAction.Player.Movements.performed += MoveInput;
@@ -109,11 +111,9 @@ namespace XtremeFPS.InputHandling
             playerInputAction.Player.CameraSwitch.performed += CameraSwitchInput;
 
             playerInputAction.Player.Interaction.started += InteractionInput;
-            playerInputAction.Player.Interaction.performed += InteractionInput;
             playerInputAction.Player.Interaction.canceled += InteractionInput;
 
             playerInputAction.Player.InteractionAlt.started += InteractionAltInput;
-            playerInputAction.Player.InteractionAlt.performed += InteractionAltInput;
             playerInputAction.Player.InteractionAlt.canceled += InteractionAltInput;
             #endregion
 
@@ -142,6 +142,17 @@ namespace XtremeFPS.InputHandling
             else Debug.LogError("Scene has no Event System!");
             SetIsTouchDelegate();
 #endif
+
+            //only for demo purpose, please remove in production
+            playerInputAction.Demo.PauseMenu.started += (context) =>
+            {
+                escape = context.ReadValueAsButton();
+            };
+
+            playerInputAction.Demo.PauseMenu.canceled += (context) =>
+            {
+                escape = context.ReadValueAsButton();
+            };
         }
 
 
