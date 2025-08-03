@@ -76,7 +76,7 @@ namespace XtremeFPS.Player
                     if (collider.TryGetComponent(out IWeaponPickup pickup) && !Aiming)
                     {
                         if (pickup.IsEquiped()) continue;
-                        if (weaponHolder.GetWeaponCount() < 3) pickup.PickUp();
+                        if (weaponHolder.GetWeaponCount() < 3) pickup.Equip();
                         break;
                     }
                 }

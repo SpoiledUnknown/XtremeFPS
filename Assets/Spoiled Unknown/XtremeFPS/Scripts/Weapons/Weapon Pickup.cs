@@ -16,6 +16,7 @@ namespace XtremeFPS.WeaponSystem.Pickup
         [SerializeField] private Transform weaponHolder;
         [SerializeField] private Transform cameraRoot;
         [SerializeField] private TextMeshProUGUI bulletText;
+
         [Header("Pickup Settings")]
         [SerializeField] private bool equipped;
         [SerializeField] private float dropForwardForce;
@@ -35,11 +36,26 @@ namespace XtremeFPS.WeaponSystem.Pickup
             weaponSystem = GetComponent<UniversalWeaponSystem>();
             effects = GetComponentInChildren<EffectsManager>();
 
-            if (equipped) PickUp();
-            else Drop();
+            if (equipped) Equip();
+            else UnEquip();
         }
         #endregion
-        public void PickUp()
+
+        private void UnEquip()
+        {
+            if (!gameObject.TryGetComponent<Rigidbody>(out rb))
+            {
+                rb = gameObject.AddComponent<Rigidbody>();
+                rb.interpolation = RigidbodyInterpolation.Extrapolate;
+                rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            }
+            weaponSystem.enabled = false;
+            effects.enabled = false;
+            Collider.isTrigger = false;
+            equipped = false;
+        }
+
+        public void Equip()
         {
             Destroy(rb);
             equipped = true;
@@ -52,18 +68,9 @@ namespace XtremeFPS.WeaponSystem.Pickup
 
         public void Drop()
         {
+            UnEquip();
             bulletText.SetText("00 / 00");
             transform.SetParent(null);
-            if (!gameObject.TryGetComponent<Rigidbody>(out rb))
-            {
-                rb = gameObject.AddComponent<Rigidbody>();
-                rb.interpolation = RigidbodyInterpolation.Extrapolate;
-                rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-            }
-            weaponSystem.enabled = false;
-            effects.enabled = false;
-            Collider.isTrigger = false;
-            equipped = false;
 
             rb.linearVelocity = characterController.velocity;
             rb.AddForce(cameraRoot.forward * dropForwardForce, ForceMode.Impulse);

@@ -57,7 +57,7 @@ Transform:
   m_GameObject: {fileID: 3418230070746794401}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3418230070746794401}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97a63526d88256a4784cf7028d1f2a60, type: 3}
   m_Name: 
@@ -396,10 +396,11 @@ MonoBehaviour:
   magazineSize: 30
   totalBullets: 180
   bulletsPerTap: 1
+  timeBetweenShooting: 0.1
   reloadTime: 4
   canAim: 1
   weaponHolder: {fileID: 0}
-  aimingLocalPosition: {x: 0.002, y: -0.068, z: 0.239}
+  aimingLocalPosition: {x: 0, y: -0.111, z: 0.239}
   haveWeaponRecoil: 1
   recoilKickBackHip: {x: 0.015, y: 0, z: 0.05}
   recoilKickBackAds: {x: -0.08, y: 0.01, z: 0.009}
@@ -447,7 +448,7 @@ MonoBehaviour:
   equipped: 0
   dropForwardForce: 5
   dropUpwardForce: 1
-  dropTorqueMultiplier: 2
+  dropTorqueMultiplier: 1
 --- !u!1001 &1976318580550413579
 PrefabInstance:
   m_ObjectHideFlags: 0

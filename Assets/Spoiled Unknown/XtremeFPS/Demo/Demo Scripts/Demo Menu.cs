@@ -42,7 +42,7 @@ namespace XtremeFPS.Demo
                 }
             }
 
-            Cursor.lockState = (playerManager.isCursorLocked && paused) ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.lockState = (playerManager.isCursorLocked && !paused) ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
         void IsPaused()

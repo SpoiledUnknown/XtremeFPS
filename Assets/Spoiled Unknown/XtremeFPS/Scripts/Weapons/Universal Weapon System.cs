@@ -41,11 +41,10 @@ namespace XtremeFPS.WeaponSystem
         [SerializeField] private int magazineSize;
         [SerializeField] private int totalBullets;
         [SerializeField] private int bulletsPerTap;
-        //public float timeBetweenEachShots;
-        public float timeBetweenShooting;
+        [SerializeField] private float timeBetweenShooting;
         [SerializeField] private float reloadTime;
-        private bool aiming;
 
+        private bool aiming;
         private int bulletsShot;
         private bool readyToShoot;
         private bool shooting;
@@ -158,7 +157,6 @@ namespace XtremeFPS.WeaponSystem
 
             Invoke(nameof(ResetShot), timeBetweenShooting);
             if (bulletsShot > 0 && BulletsLeft > 0) Invoke(nameof(Shoot), 0.01f);
-            //if (bulletsShot > 0 && BulletsLeft > 0) Invoke(nameof(Shoot), timeBetweenEachShots);
         }
 
         private void ResetShot()
