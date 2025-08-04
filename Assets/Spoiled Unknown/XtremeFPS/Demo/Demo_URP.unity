@@ -22232,25 +22232,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2169012317469990123, guid: 4f889f7d4015d9a4884ecc2aeaea5eb0,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.392
-      objectReference: {fileID: 0}
-    - target: {fileID: 2169012317469990123, guid: 4f889f7d4015d9a4884ecc2aeaea5eb0,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -3
-      objectReference: {fileID: 0}
     - target: {fileID: 3069568788318544361, guid: 4f889f7d4015d9a4884ecc2aeaea5eb0,
         type: 3}
       propertyPath: m_Name
       value: Player Parent
-      objectReference: {fileID: 0}
-    - target: {fileID: 3998250396681449781, guid: 4f889f7d4015d9a4884ecc2aeaea5eb0,
-        type: 3}
-      propertyPath: isCursorLocked
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

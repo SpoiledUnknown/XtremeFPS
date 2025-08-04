@@ -372,7 +372,7 @@ Transform:
   m_GameObject: {fileID: 5018866914869868421}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.3920001, z: -2.3999977}
+  m_LocalPosition: {x: 0, y: 1.392, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -684,6 +684,7 @@ MonoBehaviour:
   isTryingToInteract: 0
   isTryingToInteractAlternate: 0
   IsTryingToSwitchCamera: 0
+  escape: 0
 --- !u!114 &4303594313959949570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -772,8 +773,8 @@ MonoBehaviour:
   unlimitedSprinting: 1
   isSprintHold: 0
   sprintSpeed: 4
-  sprintDuration: 8
   sprintCooldown: 8
+  sprintDuration: 8
   canJump: 1
   jumpHeight: 1.89
   gravitationalForce: 10

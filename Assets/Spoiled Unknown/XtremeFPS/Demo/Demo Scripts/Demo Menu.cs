@@ -18,7 +18,16 @@ namespace XtremeFPS.Demo
         [SerializeField] private GameObject touchControlMenu;
         [SerializeField] private Slider staminaBar;
 
-        bool paused;
+        public bool paused;
+        bool isCursorLocked;
+        private void Start()
+        {
+            if (playerManager.isCursorLocked)
+            {
+                this.isCursorLocked = true;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
 
         private void Update()
         {
@@ -29,43 +38,38 @@ namespace XtremeFPS.Demo
 
             if (XtremeFPSInputHandler.Instance.escape)
             {
-                if (!pauseMenu.activeSelf && !paused)
-                {
-                    Pause();
-                    Invoke(nameof(IsPaused), 0.1f);
-                    return;
-                }
-                else
-                {
-                    Resume();
-                    Invoke(nameof(IsPaused), 0.1f);
-                }
+                if (!paused) Invoke(nameof(Pause), 0.1f);
+                else Resume();
             }
-
-            Cursor.lockState = (playerManager.isCursorLocked && !paused) ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
-        void IsPaused()
-        {
-            paused = !paused;
-        }
+
 
         public void Pause()
         {
             pauseMenu.SetActive(true);
             staticMenu.SetActive(false);
             touchControlMenu.SetActive(false);
+            Cursor.lockState = CursorLockMode.None;
+            paused = true;
             Time.timeScale = 0f;
         }
 
         public void Resume()
         {             
+            Time.timeScale = 1f;
             pauseMenu.SetActive(false);
             staticMenu.SetActive(true);
+            if (isCursorLocked) Cursor.lockState = CursorLockMode.Locked;
+            Invoke(nameof(IsPaused), 0.1f);
 #if IOS || UNITY_ANDROID
             touchControlMenu.SetActive(true);
 #endif
-            Time.timeScale = 1f;
+        }
+
+        private void IsPaused()
+        {
+            paused = false;
         }
 
         public void Quit()

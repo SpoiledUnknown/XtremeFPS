@@ -76,7 +76,11 @@ namespace XtremeFPS.Player
                     if (collider.TryGetComponent(out IWeaponPickup pickup) && !Aiming)
                     {
                         if (pickup.IsEquiped()) continue;
-                        if (weaponHolder.GetWeaponCount() < 3) pickup.Equip();
+                        if (weaponHolder.GetWeaponCount() < 3) 
+                        {
+                            pickup.Equip();
+                            weaponHolder.SelectWeapon();
+                        }
                         break;
                     }
                 }
@@ -89,7 +93,11 @@ namespace XtremeFPS.Player
                 {
                     if (collider.TryGetComponent(out IWeaponPickup pickup) && !Aiming)
                     {
-                        if (pickup.IsEquiped() && pickup.IsActive()) pickup.Drop();
+                        if (pickup.IsEquiped() && pickup.IsActive()) 
+                        {
+                            pickup.Drop();
+                            weaponHolder.SelectWeapon();
+                        }
                         break;
                     }
                 }

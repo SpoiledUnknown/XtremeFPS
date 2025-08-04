@@ -30,19 +30,16 @@ namespace XtremeFPS.WeaponSystem.WeaponHolder
                 else selectedWeapon--;
             }
 
-            if (inputHandler.isTryingToInteractAlternate) Invoke(nameof(SelectWeapon), 0.25f);
-            if (inputHandler.isTryingToInteract) SelectWeapon();
             if (previouslySelectedWeapon != selectedWeapon) SelectWeapon();
         }
 
-        private void SelectWeapon()
+        public void SelectWeapon()
         {
             int i = 0;
             foreach (Transform weapons in transform)
             {
                 if (i == selectedWeapon) weapons.gameObject.SetActive(true);
                 else weapons.gameObject.SetActive(false);
-
                 i++;
             }
         }
