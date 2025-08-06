@@ -18,7 +18,7 @@ namespace XtremeFPS.Demo
         [SerializeField] private GameObject touchControlMenu;
         [SerializeField] private Slider staminaBar;
 
-        public bool paused;
+        private bool paused;
         bool isCursorLocked;
         private void Start()
         {

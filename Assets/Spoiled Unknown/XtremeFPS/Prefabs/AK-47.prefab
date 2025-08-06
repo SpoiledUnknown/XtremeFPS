@@ -214,7 +214,7 @@ MonoBehaviour:
   weaponHolder: {fileID: 0}
   cameraRoot: {fileID: 0}
   bulletText: {fileID: 0}
-  equipped: 1
+  equipped: 0
   dropForwardForce: 5
   dropUpwardForce: 1
   dropTorqueMultiplier: 1

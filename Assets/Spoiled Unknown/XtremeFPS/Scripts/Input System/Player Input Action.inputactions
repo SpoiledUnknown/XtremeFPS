@@ -96,15 +96,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Interaction Alt",
-                    "type": "Button",
-                    "id": "10d559b8-5fe4-486a-8a2e-7e71e585eea1",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "Tap(duration=0.01)",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Camera Switch",
                     "type": "Button",
                     "id": "2651982d-f9ff-46b5-a478-c635a0b15995",
@@ -305,7 +296,7 @@
                 {
                     "name": "",
                     "id": "4f04d69c-9299-4efd-ba1c-de363c9204eb",
-                    "path": "<Gamepad>/rightStickPress",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -327,7 +318,7 @@
                 {
                     "name": "",
                     "id": "f1def02e-5f6d-48c4-9d39-911e112f9e1d",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -349,7 +340,7 @@
                 {
                     "name": "",
                     "id": "019a6164-8d92-4bad-b67c-dd4910f563c2",
-                    "path": "<Gamepad>/rightStickPress",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -404,7 +395,7 @@
                 {
                     "name": "",
                     "id": "47adce44-6055-4166-85dc-2f017415fcac",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -451,30 +442,8 @@
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Controller",
                     "action": "Interaction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "825f1e59-601c-4c34-90f9-b6208916416e",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interaction Alt",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "71e96e3c-c265-409d-8c9d-232c7f8221c5",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interaction Alt",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -485,6 +454,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard And Mouse",
+                    "action": "Camera Switch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b8b7b01d-f45d-4fd7-a45c-58987d4af86d",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Controller",
                     "action": "Camera Switch",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -565,7 +545,7 @@
                 {
                     "name": "",
                     "id": "c8da9dfb-fc45-4964-99ed-318b5d140766",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -609,7 +589,7 @@
                 {
                     "name": "",
                     "id": "265e61ba-7f4f-4c6d-841f-34e631c10ff5",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -631,7 +611,7 @@
                 {
                     "name": "",
                     "id": "d0aedd4d-9144-41b0-ac49-b44e445ef9c1",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -653,7 +633,7 @@
                 {
                     "name": "",
                     "id": "419a6ba8-b2c7-488c-9672-11e7bf3f94ab",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -678,7 +658,7 @@
                     "path": "<Mouse>/scroll/down",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard And Mouse",
                     "action": "Weapon Scroll",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -689,7 +669,40 @@
                     "path": "<Mouse>/scroll/up",
                     "interactions": "",
                     "processors": "",
+                    "groups": ";Keyboard And Mouse",
+                    "action": "Weapon Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Controller",
+                    "id": "cf6b1511-cc9e-4ce2-9d5e-4d4ad46919a7",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
                     "groups": "",
+                    "action": "Weapon Scroll",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "207aa07c-1980-4f89-b3ab-a08405fcac92",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Controller",
+                    "action": "Weapon Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "e7dc2bba-a267-42e9-a2c2-d55b9ee3b714",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Controller",
                     "action": "Weapon Scroll",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -1233,7 +1246,18 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard And Mouse",
+                    "action": "Pause Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "761c3737-6586-4a73-89f4-e650b0014e1d",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Controller",
                     "action": "Pause Menu",
                     "isComposite": false,
                     "isPartOfComposite": false

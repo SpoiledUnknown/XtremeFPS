@@ -75,30 +75,18 @@ namespace XtremeFPS.Player
                 {
                     if (collider.TryGetComponent(out IWeaponPickup pickup) && !Aiming)
                     {
-                        if (pickup.IsEquiped()) continue;
-                        if (weaponHolder.GetWeaponCount() < 3) 
+                        if (!pickup.IsEquiped() && weaponHolder.GetWeaponCount() < 3) 
                         {
                             pickup.Equip();
                             weaponHolder.SelectWeapon();
+                            break;
                         }
-                        break;
-                    }
-                }
-            }
-            if (inputManager.isTryingToInteractAlternate)
-            {
-                Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
-
-                foreach (Collider collider in colliders)
-                {
-                    if (collider.TryGetComponent(out IWeaponPickup pickup) && !Aiming)
-                    {
-                        if (pickup.IsEquiped() && pickup.IsActive()) 
+                        else if (pickup.IsEquiped() && pickup.IsActive() && weaponHolder.GetWeaponCount() == 3)
                         {
                             pickup.Drop();
                             weaponHolder.SelectWeapon();
+                            break;
                         }
-                        break;
                     }
                 }
             }

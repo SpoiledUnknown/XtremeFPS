@@ -40,7 +40,6 @@ namespace XtremeFPS.InputHandling
         [HideInInspector] public bool isAimTap;
 
         [HideInInspector] public bool isTryingToInteract;
-        [HideInInspector] public bool isTryingToInteractAlternate;
 
         [HideInInspector] public bool IsTryingToSwitchCamera;
 
@@ -112,9 +111,6 @@ namespace XtremeFPS.InputHandling
 
             playerInputAction.Player.Interaction.started += InteractionInput;
             playerInputAction.Player.Interaction.canceled += InteractionInput;
-
-            playerInputAction.Player.InteractionAlt.started += InteractionAltInput;
-            playerInputAction.Player.InteractionAlt.canceled += InteractionAltInput;
             #endregion
 
             #region Weapon System
@@ -251,10 +247,6 @@ namespace XtremeFPS.InputHandling
         private void InteractionInput(InputAction.CallbackContext context)
         {
             isTryingToInteract = context.ReadValueAsButton();
-        }
-        private void InteractionAltInput(InputAction.CallbackContext context)
-        {
-            isTryingToInteractAlternate = context.ReadValueAsButton();
         }
 
         private void CameraSwitchInput(InputAction.CallbackContext obj)

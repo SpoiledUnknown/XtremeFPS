@@ -184,15 +184,6 @@ namespace XtremeFPS.InputHandling
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Interaction Alt"",
-                    ""type"": ""Button"",
-                    ""id"": ""10d559b8-5fe4-486a-8a2e-7e71e585eea1"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": ""Tap(duration=0.01)"",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Camera Switch"",
                     ""type"": ""Button"",
                     ""id"": ""2651982d-f9ff-46b5-a478-c635a0b15995"",
@@ -393,7 +384,7 @@ namespace XtremeFPS.InputHandling
                 {
                     ""name"": """",
                     ""id"": ""4f04d69c-9299-4efd-ba1c-de363c9204eb"",
-                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -415,7 +406,7 @@ namespace XtremeFPS.InputHandling
                 {
                     ""name"": """",
                     ""id"": ""f1def02e-5f6d-48c4-9d39-911e112f9e1d"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -437,7 +428,7 @@ namespace XtremeFPS.InputHandling
                 {
                     ""name"": """",
                     ""id"": ""019a6164-8d92-4bad-b67c-dd4910f563c2"",
-                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -492,7 +483,7 @@ namespace XtremeFPS.InputHandling
                 {
                     ""name"": """",
                     ""id"": ""47adce44-6055-4166-85dc-2f017415fcac"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -539,30 +530,8 @@ namespace XtremeFPS.InputHandling
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Controller"",
                     ""action"": ""Interaction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""825f1e59-601c-4c34-90f9-b6208916416e"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Interaction Alt"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""71e96e3c-c265-409d-8c9d-232c7f8221c5"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Interaction Alt"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -573,6 +542,17 @@ namespace XtremeFPS.InputHandling
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard And Mouse"",
+                    ""action"": ""Camera Switch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b8b7b01d-f45d-4fd7-a45c-58987d4af86d"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
                     ""action"": ""Camera Switch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -653,7 +633,7 @@ namespace XtremeFPS.InputHandling
                 {
                     ""name"": """",
                     ""id"": ""c8da9dfb-fc45-4964-99ed-318b5d140766"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -697,7 +677,7 @@ namespace XtremeFPS.InputHandling
                 {
                     ""name"": """",
                     ""id"": ""265e61ba-7f4f-4c6d-841f-34e631c10ff5"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -719,7 +699,7 @@ namespace XtremeFPS.InputHandling
                 {
                     ""name"": """",
                     ""id"": ""d0aedd4d-9144-41b0-ac49-b44e445ef9c1"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -741,7 +721,7 @@ namespace XtremeFPS.InputHandling
                 {
                     ""name"": """",
                     ""id"": ""419a6ba8-b2c7-488c-9672-11e7bf3f94ab"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -766,7 +746,7 @@ namespace XtremeFPS.InputHandling
                     ""path"": ""<Mouse>/scroll/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard And Mouse"",
                     ""action"": ""Weapon Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -777,7 +757,40 @@ namespace XtremeFPS.InputHandling
                     ""path"": ""<Mouse>/scroll/up"",
                     ""interactions"": """",
                     ""processors"": """",
+                    ""groups"": "";Keyboard And Mouse"",
+                    ""action"": ""Weapon Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Controller"",
+                    ""id"": ""cf6b1511-cc9e-4ce2-9d5e-4d4ad46919a7"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""Weapon Scroll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""207aa07c-1980-4f89-b3ab-a08405fcac92"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
+                    ""action"": ""Weapon Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""e7dc2bba-a267-42e9-a2c2-d55b9ee3b714"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
                     ""action"": ""Weapon Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -1321,7 +1334,18 @@ namespace XtremeFPS.InputHandling
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard And Mouse"",
+                    ""action"": ""Pause Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""761c3737-6586-4a73-89f4-e650b0014e1d"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
                     ""action"": ""Pause Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1359,7 +1383,6 @@ namespace XtremeFPS.InputHandling
             m_Player_ZoomTap = m_Player.FindAction("ZoomTap", throwIfNotFound: true);
             m_Player_ZoomHold = m_Player.FindAction("ZoomHold", throwIfNotFound: true);
             m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
-            m_Player_InteractionAlt = m_Player.FindAction("Interaction Alt", throwIfNotFound: true);
             m_Player_CameraSwitch = m_Player.FindAction("Camera Switch", throwIfNotFound: true);
             // Weapon
             m_Weapon = asset.FindActionMap("Weapon", throwIfNotFound: true);
@@ -1477,7 +1500,6 @@ namespace XtremeFPS.InputHandling
         private readonly InputAction m_Player_ZoomTap;
         private readonly InputAction m_Player_ZoomHold;
         private readonly InputAction m_Player_Interaction;
-        private readonly InputAction m_Player_InteractionAlt;
         private readonly InputAction m_Player_CameraSwitch;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
@@ -1530,10 +1552,6 @@ namespace XtremeFPS.InputHandling
             /// Provides access to the underlying input action "Player/Interaction".
             /// </summary>
             public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/InteractionAlt".
-            /// </summary>
-            public InputAction @InteractionAlt => m_Wrapper.m_Player_InteractionAlt;
             /// <summary>
             /// Provides access to the underlying input action "Player/CameraSwitch".
             /// </summary>
@@ -1594,9 +1612,6 @@ namespace XtremeFPS.InputHandling
                 @Interaction.started += instance.OnInteraction;
                 @Interaction.performed += instance.OnInteraction;
                 @Interaction.canceled += instance.OnInteraction;
-                @InteractionAlt.started += instance.OnInteractionAlt;
-                @InteractionAlt.performed += instance.OnInteractionAlt;
-                @InteractionAlt.canceled += instance.OnInteractionAlt;
                 @CameraSwitch.started += instance.OnCameraSwitch;
                 @CameraSwitch.performed += instance.OnCameraSwitch;
                 @CameraSwitch.canceled += instance.OnCameraSwitch;
@@ -1641,9 +1656,6 @@ namespace XtremeFPS.InputHandling
                 @Interaction.started -= instance.OnInteraction;
                 @Interaction.performed -= instance.OnInteraction;
                 @Interaction.canceled -= instance.OnInteraction;
-                @InteractionAlt.started -= instance.OnInteractionAlt;
-                @InteractionAlt.performed -= instance.OnInteractionAlt;
-                @InteractionAlt.canceled -= instance.OnInteractionAlt;
                 @CameraSwitch.started -= instance.OnCameraSwitch;
                 @CameraSwitch.performed -= instance.OnCameraSwitch;
                 @CameraSwitch.canceled -= instance.OnCameraSwitch;
@@ -2238,13 +2250,6 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnInteraction(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Interaction Alt" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnInteractionAlt(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "Camera Switch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>

@@ -121,7 +121,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2322894006556589050}
         m_TargetAssemblyTypeName: XtremeFPS.Demo.DemoMenu, Assembly-CSharp
         m_MethodName: Resume
         m_Mode: 1
@@ -333,6 +333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateText: {fileID: 4206440338154534375}
   personController: {fileID: 0}
+  playerManager: {fileID: 0}
   pauseMenu: {fileID: 499212010805344674}
   staticMenu: {fileID: 6494254455559927811}
   touchControlMenu: {fileID: 5325495454651673988}
@@ -783,7 +784,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2322894006556589050}
         m_TargetAssemblyTypeName: XtremeFPS.Demo.DemoMenu, Assembly-CSharp
         m_MethodName: Quit
         m_Mode: 1
@@ -973,8 +974,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "WASD / Arrow -> Movement\nC -> Crouch\nLeft Shift -> Sprint\nSpacebar
-    -> Jump\nV -> Switch Camera \n\nR -> Reload\nE -> Interact\nF -> Alternate Interact\n\nMouse
-    -> Look\nLMB -> Shoot\nRMB -> Aim / Zoom\nMMB -> Weapon Scroll"
+    -> Jump\nV -> Switch Camera \n\nR -> Reload\nE -> Interact\n\nMouse -> Look\nLMB
+    -> Shoot\nRMB -> Aim / Zoom\nMMB -> Weapon Scroll"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2174,7 +2175,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2322894006556589050}
         m_TargetAssemblyTypeName: XtremeFPS.Demo.DemoMenu, Assembly-CSharp
         m_MethodName: Pause
         m_Mode: 1
@@ -4282,9 +4283,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "WASD / Arrow -> Movement\nC -> Crouch\nLeft Shift -> Sprint\nSpacebar
-    -> Jump\nV -> Switch Camera \n\nR -> Reload\nE -> Interact\nF -> Alternate Interact\n\nMouse
-    -> Look\nLMB -> Shoot\nRMB -> Aim / Zoom"
+  m_text: "Left Stick -> Movement\r\nLeft Stick Press -> Sprint\r\nButton East ->
+    Crouch\r\nButton South -> Jump\r\nD-Pad Down -> Switch Camera \r\n\r\nButton
+    West -> Reload\r\nButton North -> Interact\r\n\r\nRight Stick -> Look\r\nRight
+    Trigger -> Shoot\r\nLeft Trigger -> Aim / Zoom\r\nD-Pad Left/Right -> Weapon
+    Scroll"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

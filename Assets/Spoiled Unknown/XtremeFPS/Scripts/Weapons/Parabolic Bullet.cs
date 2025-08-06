@@ -87,10 +87,20 @@ namespace XtremeFPS.WeaponSystem.Bullet
         {
             if (hit.transform.TryGetComponent<IShootableObject>(out IShootableObject shootableObject)) shootableObject.OnHit(hit, damage);
 
-            GameObject HitObject = PoolManager.Instance.SpawnObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
-            HitObject.transform.parent = hit.transform;
+            GameObject hitObject = PoolManager.Instance.SpawnObject(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal));
+            SetWorldScaleAndParent(hitObject.transform, hit.transform, Vector3.one);
 
             OnBulletDestroy();
+        }
+
+        private void SetWorldScaleAndParent(Transform hitObject, Transform parent, Vector3 desiredWorldScale)
+        {
+            hitObject.parent = parent;
+            hitObject.localScale = new Vector3(
+                desiredWorldScale.x / parent.lossyScale.x,
+                desiredWorldScale.y / parent.lossyScale.y,
+                desiredWorldScale.z / parent.lossyScale.z
+            );
         }
 
         private IEnumerator DestroyBullets()
