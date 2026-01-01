@@ -41,27 +41,11 @@ namespace XtremeFPS.InputHandling
 
         [HideInInspector] public bool isTryingToInteract;
 
-        [HideInInspector] public bool IsTryingToSwitchCamera;
+        [HideInInspector] public bool isTryingToSwitchCamera;
+        [HideInInspector] public bool isUsingTouchscreen;
 
         //only for demo purpose, please remove in production
         public bool escape;
-
-        #region Touch Controls
-#if UNITY_ANDROID || UNITY_IOS
-        public int maxTouchLimit = 10;
-        public TouchDetectMode touchDetectionMode;
-
-        public enum TouchDetectMode
-        {
-            FirstTouch,
-            LastTouch,
-            All
-        }
-        private Func<TouchControl, bool> isTouchAvailable;                        // Delegate takes parameter touch and return true if touch is the available touch for camera rotation
-        private List<string> availableTouchIds = new List<string>();     // Get all the touches that began without colliding with any UI Image/Button
-        private EventSystem eventStytem;
-#endif
-        #endregion
         #endregion
 
         #region Initialization
@@ -87,6 +71,7 @@ namespace XtremeFPS.InputHandling
         {
             #region Player Movement
             playerInputAction.Player.Jump.started += JumpInput;
+            playerInputAction.Player.Jump.performed += JumpInput;
             playerInputAction.Player.Jump.canceled += JumpInput;
 
             playerInputAction.Player.Movements.performed += MoveInput;
@@ -94,7 +79,7 @@ namespace XtremeFPS.InputHandling
 
             playerInputAction.Player.Look.performed += MouseInput;
             playerInputAction.Player.Look.canceled += MouseInput;
-
+            
             playerInputAction.Player.CrouchHold.performed += CrouchHoldInput;
             playerInputAction.Player.CrouchHold.canceled += CrouchHoldInput;
 
@@ -104,16 +89,27 @@ namespace XtremeFPS.InputHandling
             playerInputAction.Player.ZoomHold.performed += ZoomHoldInput;
             playerInputAction.Player.ZoomHold.canceled += ZoomHoldInput;
 
+            playerInputAction.Player.CrouchTap.started += CrouchTapInput;
             playerInputAction.Player.CrouchTap.performed += CrouchTapInput;
+            playerInputAction.Player.CrouchTap.canceled += CrouchTapInput;
+            
+            playerInputAction.Player.SprintTap.started += SprintTapInput;
             playerInputAction.Player.SprintTap.performed += SprintTapInput;
+            playerInputAction.Player.SprintTap.canceled += SprintTapInput;
+            
+            playerInputAction.Player.ZoomTap.started += ZoomTapInput;
             playerInputAction.Player.ZoomTap.performed += ZoomTapInput;
+            playerInputAction.Player.ZoomTap.canceled += ZoomTapInput;
+            
             playerInputAction.Player.CameraSwitch.performed += CameraSwitchInput;
 
             playerInputAction.Player.Interaction.started += InteractionInput;
+            playerInputAction.Player.Interaction.performed += InteractionInput;
             playerInputAction.Player.Interaction.canceled += InteractionInput;
             #endregion
 
             #region Weapon System
+            playerInputAction.Weapon.FireHold.started += ShootHoldInput;
             playerInputAction.Weapon.FireHold.performed += ShootHoldInput;
             playerInputAction.Weapon.FireHold.canceled += ShootHoldInput;
                               
@@ -124,20 +120,14 @@ namespace XtremeFPS.InputHandling
             playerInputAction.Weapon.Reload.performed += ReloadingInput;
             playerInputAction.Weapon.Reload.canceled += ReloadingInput;
                               
-            playerInputAction.Weapon.ADSHold.canceled += ADSHoldInput;
             playerInputAction.Weapon.ADSHold.performed += ADSHoldInput;
+            playerInputAction.Weapon.ADSHold.canceled += ADSHoldInput;
                               
             playerInputAction.Weapon.ADSTap.performed += ADSTapInput;
                               
             playerInputAction.Weapon.WeaponScroll.performed += ScrollInput;
             playerInputAction.Weapon.WeaponScroll.canceled += ScrollInput;
             #endregion
-
-#if UNITY_ANDROID || UNITY_IOS
-            if (EventSystem.current != null) eventStytem = EventSystem.current;
-            else Debug.LogError("Scene has no Event System!");
-            SetIsTouchDelegate();
-#endif
 
             //only for demo purpose, please remove in production
             playerInputAction.Demo.PauseMenu.started += (context) =>
@@ -150,61 +140,32 @@ namespace XtremeFPS.InputHandling
                 escape = context.ReadValueAsButton();
             };
         }
-
-
-
-#if UNITY_ANDROID || UNITY_IOS
-        private void Update()
-        {
-            // Check for touch input
-            if (Touchscreen.current == null || Touchscreen.current.touches.Count == 0) return;
-
-            foreach (TouchControl touch in Touchscreen.current.touches)
-            {
-                // Handle touch input
-                if ((touch.phase.value == TouchPhase.Began && eventStytem != null) &&
-                    !eventStytem.IsPointerOverGameObject(touch.touchId.ReadValue()) &&
-                    availableTouchIds.Count <= maxTouchLimit)
-                {
-                    availableTouchIds.Add(touch.touchId.ReadValue().ToString());
-                }
-
-                if (availableTouchIds.Count == 0) continue;
-
-                if (isTouchAvailable(touch))
-                {
-                    mouseDirection += new Vector2(touch.delta.x.value, touch.delta.y.value);
-                    if (touch.phase.value == TouchPhase.Ended) availableTouchIds.RemoveAt(0);
-                }
-                else if (touch.phase.value == TouchPhase.Ended)
-                {
-                    availableTouchIds.Remove(touch.touchId.ReadValue().ToString());
-                }
-            }
-        }
-
-        public void SetIsTouchDelegate()
-        {
-            switch (touchDetectionMode)
-            {
-                case TouchDetectMode.FirstTouch:
-                    isTouchAvailable = (TouchControl touch) => { return touch.touchId.ReadValue().ToString() == availableTouchIds[0]; };
-                    break;
-                case TouchDetectMode.LastTouch:
-                    isTouchAvailable = (TouchControl touch) => { return touch.touchId.ReadValue().ToString() == availableTouchIds[availableTouchIds.Count - 1]; };
-                    break;
-                case TouchDetectMode.All:
-                    isTouchAvailable = (TouchControl touch) => { return availableTouchIds.Contains(touch.touchId.ReadValue().ToString()); };
-                    break;
-            }
-        }
-#endif
         #endregion
+        
+        bool IsPointerOverUI(TouchControl touch)
+        {
+            if (EventSystem.current == null) return false;
+            return EventSystem.current.IsPointerOverGameObject(touch.touchId.ReadValue());
+        }
 
         #region Player Inputs
         private void MouseInput(InputAction.CallbackContext context)
         {
-            mouseDirection = context.ReadValue<Vector2>();
+            //mouseDirection = context.ReadValue<Vector2>();
+            
+            Vector2 delta = context.ReadValue<Vector2>();
+
+            // Ignore touches that started over UI
+            if (context.control.device is Touchscreen touchscreen)
+            {
+                foreach (var touch in touchscreen.touches)
+                {
+                    if (IsPointerOverUI(touch))
+                        return;
+                }
+            }
+
+            mouseDirection += delta;
         }
 
         private void MoveInput(InputAction.CallbackContext context)
@@ -251,7 +212,7 @@ namespace XtremeFPS.InputHandling
 
         private void CameraSwitchInput(InputAction.CallbackContext obj)
         {
-            IsTryingToSwitchCamera = !IsTryingToSwitchCamera;
+            isTryingToSwitchCamera = !isTryingToSwitchCamera;
         }
         #endregion
 

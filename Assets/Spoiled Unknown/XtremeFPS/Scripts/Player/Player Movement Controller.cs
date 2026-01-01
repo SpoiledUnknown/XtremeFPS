@@ -138,23 +138,34 @@ namespace XtremeFPS.Player.Controller
             AudioEffectSpeed = Mathf.Clamp(1f / targetSpeed, 0.3f, 1f);
 
             //character Controller movement
-            if (canSwitchCamera && inputManager.IsTryingToSwitchCamera) //TPP Mode
+            /*
+             * TODO: Find a better way to handle FPP and TPP switching
+             */
+            if (canSwitchCamera)
             {
-                cameraRoot.parent = transform.parent;
-                Vector3 direction = new Vector3(inputManager.moveDirection.x, 0f, inputManager.moveDirection.y).normalized;
-                if (direction.magnitude >= 0.1f)
+                if (inputManager.isTryingToSwitchCamera) // TPP
                 {
-                    float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cameraRoot.eulerAngles.y;
-                    float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, transitionDelta);
-                    transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                    cameraRoot.parent = transform.parent;
+                    Vector3 direction = new Vector3(inputManager.moveDirection.x, 0f, inputManager.moveDirection.y).normalized;
+                    if (direction.magnitude >= 0.1f)
+                    {
+                        float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cameraRoot.eulerAngles.y;
+                        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, transitionDelta);
+                        transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-                    horizontalMovement = Quaternion.Euler(0.0f, targetAngle, 0.0f) * Vector3.forward * Time.deltaTime * targetSpeed;
+                        horizontalMovement = Quaternion.Euler(0.0f, targetAngle, 0.0f) * Vector3.forward * (Time.deltaTime * targetSpeed);
+                    }
+                }
+                else //FPP
+                {
+                    cameraRoot.parent = transform;
+                    cameraRoot.localPosition = cameraRootPositon;
+                    horizontalMovement = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right +
+                                         inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
                 }
             }
-            else  //FPP Mode
+            else
             {
-                cameraRoot.parent = transform;
-                cameraRoot.localPosition = cameraRootPositon;
                 horizontalMovement = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right +
                     inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
             }
@@ -385,7 +396,7 @@ namespace XtremeFPS.Player.Controller
                         break;
                 }
 
-                if (audioSource.clip != null)
+                if (audioSource.clip)
                 {
                     audioSource.PlayOneShot(audioSource.clip);
                     yield return new WaitForSeconds(AudioEffectSpeed);

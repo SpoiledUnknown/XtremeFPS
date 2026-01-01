@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "Player Input Action",
     "maps": [
         {
@@ -252,7 +253,7 @@
                 {
                     "name": "",
                     "id": "1afb6ae5-c214-493a-ae77-691d3af34e9e",
-                    "path": "<Gamepad>/leftStickPress",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -373,7 +374,7 @@
                 {
                     "name": "",
                     "id": "7c288ae1-5d13-4ae3-b512-c1aee498c12d",
-                    "path": "<Gamepad>/leftStickPress",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -405,11 +406,11 @@
                 },
                 {
                     "name": "",
-                    "id": "2c033e62-99ef-4f31-b8ca-34d83cf53cd4",
+                    "id": "4241783b-e858-4a18-8881-53b567546971",
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard And Mouse",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -420,7 +421,18 @@
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Controller",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0edb8945-4c2c-4936-8474-6ee4a68a0f2f",
+                    "path": "<Touchscreen>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Mobile",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -439,7 +451,7 @@
                 {
                     "name": "",
                     "id": "f3ca2c3e-96b9-44e8-9f03-5a1326a8e5d4",
-                    "path": "<Gamepad>/buttonNorth",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Controller",
@@ -567,7 +579,7 @@
                 {
                     "name": "",
                     "id": "aaac2d1a-6ee2-4ca8-8680-4a864bb95bdf",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -1269,12 +1281,29 @@
         {
             "name": "Keyboard And Mouse",
             "bindingGroup": "Keyboard And Mouse",
-            "devices": []
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
         },
         {
             "name": "Controller",
             "bindingGroup": "Controller",
-            "devices": []
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
         },
         {
             "name": "Mobile",

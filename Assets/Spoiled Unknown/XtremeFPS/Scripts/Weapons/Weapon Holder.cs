@@ -38,8 +38,7 @@ namespace XtremeFPS.WeaponSystem.WeaponHolder
             int i = 0;
             foreach (Transform weapons in transform)
             {
-                if (i == selectedWeapon) weapons.gameObject.SetActive(true);
-                else weapons.gameObject.SetActive(false);
+                weapons.gameObject.SetActive(i == selectedWeapon);
                 i++;
             }
         }

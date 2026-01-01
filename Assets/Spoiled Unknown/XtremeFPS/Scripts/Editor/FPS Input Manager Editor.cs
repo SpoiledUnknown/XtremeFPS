@@ -35,12 +35,6 @@ namespace XtremeFPS.CustomEditors
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUI.color = Color.white;
             #endregion
-#if UNITY_ANDROID || UNITY_IOS
-        inputM_UI.maxTouchLimit = EditorGUILayout.IntField(new GUIContent("Max Touch Limit", "Maximum number of touches that should be handled by the input manager."), inputM_UI.maxTouchLimit);
-        SerializedProperty touchDetectionMode = serializedObject.FindProperty("touchDetectionMode");
-        EditorGUILayout.PropertyField(touchDetectionMode, new GUIContent("Touch Detection Mode", "Determines the mode at which the touch will be calculated."), true);
-        serializedObject.ApplyModifiedProperties();
-#endif
             #region Update Changes
             //Sets any changes from the prefab
             if (GUI.changed)

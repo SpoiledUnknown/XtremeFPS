@@ -19,7 +19,9 @@ namespace XtremeFPS.Player
         //Cameras
         [Header("Camera Settings")]
         public bool isCursorLocked;
+        
         [Space(10)]
+        public bool canSwitchCameras;
         [SerializeField] private CinemachineCamera firstPersonCamera;
         [SerializeField] private CinemachineCamera thirdPersonCamera;
         [Space(10)]
@@ -43,23 +45,29 @@ namespace XtremeFPS.Player
         // Update is called once per frame
         void Update()
         {
-            /*Remove this when only using TPP or FPP mode, else might cause errors*/
-            if (inputManager.IsTryingToSwitchCamera)
+            /*
+             * TODO: Find a better way to handle FPP and TPP switching
+             */
+            if (canSwitchCameras)
             {
-                tppCameraManager.enabled = true;
-                fppCameraManager.enabled = false;
+                if (inputManager.isTryingToSwitchCamera)
+                {
+                    tppCameraManager.enabled = true;
+                    fppCameraManager.enabled = false;
 
-                thirdPersonCamera.Priority = 1;
-                firstPersonCamera.Priority = 0;
-            }
-            else
-            {
-                tppCameraManager.enabled = false;
-                fppCameraManager.enabled = true;
+                    thirdPersonCamera.Priority = 1;
+                    firstPersonCamera.Priority = 0;
+                }
+                else
+                {
+                    tppCameraManager.enabled = false;
+                    fppCameraManager.enabled = true;
 
-                thirdPersonCamera.Priority = 0;
-                firstPersonCamera.Priority = 1;
+                    thirdPersonCamera.Priority = 0;
+                    firstPersonCamera.Priority = 1;
+                }
             }
+
 
             InteractionHandling();
         }
@@ -81,7 +89,8 @@ namespace XtremeFPS.Player
                             weaponHolder.SelectWeapon();
                             break;
                         }
-                        else if (pickup.IsEquiped() && pickup.IsActive() && weaponHolder.GetWeaponCount() == 3)
+
+                        if (pickup.IsEquiped() && pickup.IsActive() && weaponHolder.GetWeaponCount() == 3)
                         {
                             pickup.Drop();
                             weaponHolder.SelectWeapon();
