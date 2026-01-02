@@ -628,6 +628,24 @@ namespace XtremeFPS.InputHandling
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Weapon Next"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf326e6a-c8b4-4ca5-b582-f369a3dce441"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Tap(duration=0.01)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Weapon Previous"",
+                    ""type"": ""Button"",
+                    ""id"": ""5935985e-da45-4852-8353-5a504f399ce3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Tap(duration=0.01)"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -775,37 +793,26 @@ namespace XtremeFPS.InputHandling
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Controller"",
-                    ""id"": ""cf6b1511-cc9e-4ce2-9d5e-4d4ad46919a7"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Weapon Scroll"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""207aa07c-1980-4f89-b3ab-a08405fcac92"",
-                    ""path"": ""<Gamepad>/dpad/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Controller"",
-                    ""action"": ""Weapon Scroll"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""e7dc2bba-a267-42e9-a2c2-d55b9ee3b714"",
+                    ""name"": """",
+                    ""id"": ""647b3ff7-0b1d-4e83-8fae-0e8b2c142caa"",
                     ""path"": ""<Gamepad>/dpad/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Controller"",
-                    ""action"": ""Weapon Scroll"",
+                    ""action"": ""Weapon Next"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a6850501-4329-49bc-9fe6-a822307a453b"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
+                    ""action"": ""Weapon Previous"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1421,6 +1428,8 @@ namespace XtremeFPS.InputHandling
             m_Weapon_ADSHold = m_Weapon.FindAction("ADSHold", throwIfNotFound: true);
             m_Weapon_ADSTap = m_Weapon.FindAction("ADSTap", throwIfNotFound: true);
             m_Weapon_WeaponScroll = m_Weapon.FindAction("Weapon Scroll", throwIfNotFound: true);
+            m_Weapon_WeaponNext = m_Weapon.FindAction("Weapon Next", throwIfNotFound: true);
+            m_Weapon_WeaponPrevious = m_Weapon.FindAction("Weapon Previous", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1731,6 +1740,8 @@ namespace XtremeFPS.InputHandling
         private readonly InputAction m_Weapon_ADSHold;
         private readonly InputAction m_Weapon_ADSTap;
         private readonly InputAction m_Weapon_WeaponScroll;
+        private readonly InputAction m_Weapon_WeaponNext;
+        private readonly InputAction m_Weapon_WeaponPrevious;
         /// <summary>
         /// Provides access to input actions defined in input action map "Weapon".
         /// </summary>
@@ -1766,6 +1777,14 @@ namespace XtremeFPS.InputHandling
             /// Provides access to the underlying input action "Weapon/WeaponScroll".
             /// </summary>
             public InputAction @WeaponScroll => m_Wrapper.m_Weapon_WeaponScroll;
+            /// <summary>
+            /// Provides access to the underlying input action "Weapon/WeaponNext".
+            /// </summary>
+            public InputAction @WeaponNext => m_Wrapper.m_Weapon_WeaponNext;
+            /// <summary>
+            /// Provides access to the underlying input action "Weapon/WeaponPrevious".
+            /// </summary>
+            public InputAction @WeaponPrevious => m_Wrapper.m_Weapon_WeaponPrevious;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1810,6 +1829,12 @@ namespace XtremeFPS.InputHandling
                 @WeaponScroll.started += instance.OnWeaponScroll;
                 @WeaponScroll.performed += instance.OnWeaponScroll;
                 @WeaponScroll.canceled += instance.OnWeaponScroll;
+                @WeaponNext.started += instance.OnWeaponNext;
+                @WeaponNext.performed += instance.OnWeaponNext;
+                @WeaponNext.canceled += instance.OnWeaponNext;
+                @WeaponPrevious.started += instance.OnWeaponPrevious;
+                @WeaponPrevious.performed += instance.OnWeaponPrevious;
+                @WeaponPrevious.canceled += instance.OnWeaponPrevious;
             }
 
             /// <summary>
@@ -1839,6 +1864,12 @@ namespace XtremeFPS.InputHandling
                 @WeaponScroll.started -= instance.OnWeaponScroll;
                 @WeaponScroll.performed -= instance.OnWeaponScroll;
                 @WeaponScroll.canceled -= instance.OnWeaponScroll;
+                @WeaponNext.started -= instance.OnWeaponNext;
+                @WeaponNext.performed -= instance.OnWeaponNext;
+                @WeaponNext.canceled -= instance.OnWeaponNext;
+                @WeaponPrevious.started -= instance.OnWeaponPrevious;
+                @WeaponPrevious.performed -= instance.OnWeaponPrevious;
+                @WeaponPrevious.canceled -= instance.OnWeaponPrevious;
             }
 
             /// <summary>
@@ -2336,6 +2367,20 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnWeaponScroll(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Weapon Next" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnWeaponNext(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Weapon Previous" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnWeaponPrevious(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

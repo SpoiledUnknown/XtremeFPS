@@ -56,7 +56,7 @@ namespace XtremeFPS.Player.CameraSystem
             HandleInputs();
             HandleFOVChange();
 
-            if (!canHeadBob || inputManager.isTryingToSwitchCamera) return;
+            if (!canHeadBob || inputManager.IsTryingToSwitchCamera) return;
             HandleHeadBob();
             cameraRoot.LookAt(FocusTarget());
         }
@@ -71,18 +71,16 @@ namespace XtremeFPS.Player.CameraSystem
             movementController.CharacterController.transform.Rotate(Vector3.up * (mouseDirectionX * dt));
             cameraRoot.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
             
-            inputManager.mouseDirection = Vector2.zero;
-            
-            //if (inputManager.isUsingTouchscreen) inputManager.mouseDirection = Vector2.zero;
+            if (inputManager.IsUsingTouchscreen) inputManager.ResetMouseDirection();
         }
 
         private void HandleInputs()
         {
-            mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity;
-            mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity;
+            mouseDirectionX = inputManager.MouseDirection.x * mouseSensitivity;
+            mouseDirectionY = inputManager.MouseDirection.y * mouseSensitivity;
 
-            if (isZoomHold) isZooming = inputManager.isZoomHold;
-            else isZooming = inputManager.isZoomTap;
+            if (isZoomHold) isZooming = inputManager.IsZoomHold;
+            else isZooming = inputManager.IsZoomTap;
         }
 
         private void AdjustFOVSettings(float targetFOV)

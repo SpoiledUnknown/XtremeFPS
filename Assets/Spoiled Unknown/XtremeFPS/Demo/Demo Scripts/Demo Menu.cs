@@ -33,10 +33,10 @@ namespace XtremeFPS.Demo
         {
             stateText.text = $"State: {personController.MovementState}";
 
-            float sprintRemainingPercent = personController.sprintRemaining / personController.sprintDuration;
+            float sprintRemainingPercent = personController.SprintRemaining / personController.sprintDuration;
             staminaBar.value = sprintRemainingPercent;
 
-            if (XtremeFPSInputHandler.Instance.escape)
+            if (XtremeFPSInputHandler.Instance.Escape)
             {
                 if (!paused) Invoke(nameof(Pause), 0.1f);
                 else Resume();

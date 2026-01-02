@@ -540,6 +540,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Weapon Next",
+                    "type": "Button",
+                    "id": "bf326e6a-c8b4-4ca5-b582-f369a3dce441",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Tap(duration=0.01)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Weapon Previous",
+                    "type": "Button",
+                    "id": "5935985e-da45-4852-8353-5a504f399ce3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Tap(duration=0.01)",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -687,37 +705,26 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Controller",
-                    "id": "cf6b1511-cc9e-4ce2-9d5e-4d4ad46919a7",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Weapon Scroll",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "207aa07c-1980-4f89-b3ab-a08405fcac92",
-                    "path": "<Gamepad>/dpad/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Controller",
-                    "action": "Weapon Scroll",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "e7dc2bba-a267-42e9-a2c2-d55b9ee3b714",
+                    "name": "",
+                    "id": "647b3ff7-0b1d-4e83-8fae-0e8b2c142caa",
                     "path": "<Gamepad>/dpad/right",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Controller",
-                    "action": "Weapon Scroll",
+                    "action": "Weapon Next",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a6850501-4329-49bc-9fe6-a822307a453b",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Controller",
+                    "action": "Weapon Previous",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

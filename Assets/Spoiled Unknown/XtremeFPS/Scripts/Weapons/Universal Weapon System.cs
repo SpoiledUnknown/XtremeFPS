@@ -109,13 +109,13 @@ namespace XtremeFPS.WeaponSystem
         #region Private Methods
         private void PlayerWeaponsInput()
         {
-             if (isGunAuto) shooting = inputManager.isShootHold;
-             else shooting = inputManager.isShootTap;
+             if (isGunAuto) shooting = inputManager.IsShootHold;
+             else shooting = inputManager.IsShootTap;
 
-            if (isAimHold) aiming = inputManager.isAimHold;
-            else aiming = inputManager.isAimTap;
+            if (isAimHold) aiming = inputManager.IsAimHold;
+            else aiming = inputManager.IsAimTap;
 
-            if ((inputManager.isTryingToReload || BulletsLeft <= 0) && totalBullets > 0 && !reloading) StartCoroutine(Reload());
+            if ((inputManager.IsTryingToReload || BulletsLeft <= 0) && totalBullets > 0 && !reloading) StartCoroutine(Reload());
 
             //Shoot
             if (readyToShoot && shooting && !reloading && BulletsLeft > 0)

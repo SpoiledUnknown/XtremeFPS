@@ -15,37 +15,27 @@ namespace XtremeFPS.InputHandling
 
         #region Variables
         private PlayerInputAction playerInputAction;
-
-        [HideInInspector] public Vector2 moveDirection;
-        [HideInInspector] public Vector2 mouseDirection;
-        [HideInInspector] public float mouseScrollDirection;
-
-        [HideInInspector] public bool isSprintHold;
-        [HideInInspector] public bool isSprintTap;
-
-        [HideInInspector] public bool isCrouchHold;
-        [HideInInspector] public bool isCrouchTap;
-
-        [HideInInspector] public bool isTryingToJump;
-
-        [HideInInspector] public bool isZoomHold;
-        [HideInInspector] public bool isZoomTap;
-
-        [HideInInspector] public bool isShootHold;
-        [HideInInspector] public bool isShootTap;
-
-        [HideInInspector] public bool isTryingToReload;
-
-        [HideInInspector] public bool isAimHold;
-        [HideInInspector] public bool isAimTap;
-
-        [HideInInspector] public bool isTryingToInteract;
-
-        [HideInInspector] public bool isTryingToSwitchCamera;
-        [HideInInspector] public bool isUsingTouchscreen;
+        public Vector2 MoveDirection {  get; private set; }
+        public Vector2 MouseDirection {  get; private set; }
+        public float MouseScrollDirection {  get; private set; }
+        public bool IsSprintHold {  get; private set; }
+        public bool IsSprintTap {  get; private set; }
+        public bool IsCrouchHold {  get; private set; }
+        public bool IsCrouchTap {  get; private set; }
+        public bool IsTryingToJump {  get; private set; }
+        public bool IsZoomHold {  get; private set; }
+        public bool IsZoomTap {  get; private set; }
+        public bool IsShootHold {  get; private set; }
+        public bool IsShootTap {  get; private set; }
+        public bool IsTryingToReload {  get; private set; }
+        public bool IsAimHold {  get; private set; }
+        public bool IsAimTap {  get; private set; }
+        public bool IsTryingToInteract {  get; private set; }
+        public bool IsTryingToSwitchCamera {  get; private set; }
+        public bool IsUsingTouchscreen {  get; private set; }
 
         //only for demo purpose, please remove in production
-        public bool escape;
+        public bool Escape {  get; private set; }
         #endregion
 
         #region Initialization
@@ -120,129 +110,153 @@ namespace XtremeFPS.InputHandling
             playerInputAction.Weapon.Reload.performed += ReloadingInput;
             playerInputAction.Weapon.Reload.canceled += ReloadingInput;
                               
-            playerInputAction.Weapon.ADSHold.performed += ADSHoldInput;
-            playerInputAction.Weapon.ADSHold.canceled += ADSHoldInput;
+            playerInputAction.Weapon.ADSHold.performed += AdsHoldInput;
+            playerInputAction.Weapon.ADSHold.canceled += AdsHoldInput;
                               
-            playerInputAction.Weapon.ADSTap.performed += ADSTapInput;
+            playerInputAction.Weapon.ADSTap.performed += AdsTapInput;
                               
             playerInputAction.Weapon.WeaponScroll.performed += ScrollInput;
             playerInputAction.Weapon.WeaponScroll.canceled += ScrollInput;
+            
+            playerInputAction.Weapon.WeaponNext.started += ControllerScrollNextInput;
+            playerInputAction.Weapon.WeaponNext.canceled += ControllerScrollNextInput;
+            
+            playerInputAction.Weapon.WeaponPrevious.started += ControllerScrollPreviousInput;
+            playerInputAction.Weapon.WeaponPrevious.canceled += ControllerScrollPreviousInput;
             #endregion
 
             //only for demo purpose, please remove in production
             playerInputAction.Demo.PauseMenu.started += (context) =>
             {
-                escape = context.ReadValueAsButton();
+                Escape = context.ReadValueAsButton();
             };
 
             playerInputAction.Demo.PauseMenu.canceled += (context) =>
             {
-                escape = context.ReadValueAsButton();
+                Escape = context.ReadValueAsButton();
             };
         }
         #endregion
-        
-        bool IsPointerOverUI(TouchControl touch)
-        {
-            if (EventSystem.current == null) return false;
-            return EventSystem.current.IsPointerOverGameObject(touch.touchId.ReadValue());
-        }
 
         #region Player Inputs
+        
         private void MouseInput(InputAction.CallbackContext context)
         {
-            //mouseDirection = context.ReadValue<Vector2>();
-            
-            Vector2 delta = context.ReadValue<Vector2>();
-
-            // Ignore touches that started over UI
             if (context.control.device is Touchscreen touchscreen)
             {
+                IsUsingTouchscreen = true;
+                
+                Vector2 delta = context.ReadValue<Vector2>();
+                
                 foreach (var touch in touchscreen.touches)
                 {
-                    if (IsPointerOverUI(touch))
-                        return;
+                    if (EventSystem.current != null &&
+                        EventSystem.current.IsPointerOverGameObject(touch.touchId.ReadValue())) return;
                 }
+                MouseDirection += delta;
             }
+            else
+            {
+                IsUsingTouchscreen = false;
+                MouseDirection = context.ReadValue<Vector2>();
+            }
+        }
 
-            mouseDirection += delta;
+        public void ResetMouseDirection()
+        {
+            MouseDirection = Vector2.zero;
         }
 
         private void MoveInput(InputAction.CallbackContext context)
         {
-            moveDirection = context.ReadValue<Vector2>();
+            MoveDirection = context.ReadValue<Vector2>();
         }
 
         private void CrouchHoldInput(InputAction.CallbackContext context)
         {
-            isCrouchHold = context.ReadValueAsButton();
+            IsCrouchHold = context.ReadValueAsButton();
         }
+        
         private void CrouchTapInput(InputAction.CallbackContext context)
         {
-            isCrouchTap = !isCrouchTap;
+            IsCrouchTap = !IsCrouchTap;
         }
 
         private void SprintHoldInput(InputAction.CallbackContext context)
         {
-            isSprintHold = context.ReadValueAsButton();
+            IsSprintHold = context.ReadValueAsButton();
         }
+        
         private void SprintTapInput(InputAction.CallbackContext context)
         {
-            isSprintTap = !isSprintTap;
+            IsSprintTap = !IsSprintTap;
         }
 
         private void ZoomHoldInput(InputAction.CallbackContext context)
         {
-            isZoomHold = context.ReadValueAsButton();
+            IsZoomHold = context.ReadValueAsButton();
         }
+        
         private void ZoomTapInput(InputAction.CallbackContext context)
         {
-            isZoomTap = !isZoomTap;
+            IsZoomTap = !IsZoomTap;
         }
 
         private void JumpInput(InputAction.CallbackContext context)
         {
-            isTryingToJump = context.ReadValueAsButton();
+            IsTryingToJump = context.ReadValueAsButton();
         }
 
         private void InteractionInput(InputAction.CallbackContext context)
         {
-            isTryingToInteract = context.ReadValueAsButton();
+            IsTryingToInteract = context.ReadValueAsButton();
         }
 
         private void CameraSwitchInput(InputAction.CallbackContext obj)
         {
-            isTryingToSwitchCamera = !isTryingToSwitchCamera;
+            IsTryingToSwitchCamera = !IsTryingToSwitchCamera;
         }
         #endregion
 
         #region Weapon Inputs
         private void ShootHoldInput(InputAction.CallbackContext context)
         {
-            isShootHold = context.ReadValueAsButton();
+            IsShootHold = context.ReadValueAsButton();
         }
+        
         private void ShootTapInput(InputAction.CallbackContext context)
         {
-            isShootTap = context.ReadValueAsButton();
+            IsShootTap = context.ReadValueAsButton();
         }
 
         private void ReloadingInput(InputAction.CallbackContext context)
         {
-            isTryingToReload = context.ReadValueAsButton();
+            IsTryingToReload = context.ReadValueAsButton();
         }
 
-        private void ADSHoldInput(InputAction.CallbackContext context)
+        private void AdsHoldInput(InputAction.CallbackContext context)
         {
-            isAimHold = context.ReadValueAsButton();
+            IsAimHold = context.ReadValueAsButton();
         }
-        private void ADSTapInput(InputAction.CallbackContext context)
+        
+        private void AdsTapInput(InputAction.CallbackContext context)
         {
-            isAimTap = !isAimTap;
+            IsAimTap = !IsAimTap;
         }
 
         private void ScrollInput(InputAction.CallbackContext context)
         {
-            mouseScrollDirection = context.ReadValue<float>();
+            MouseScrollDirection = context.ReadValue<float>();
+        }
+        
+        private void ControllerScrollNextInput(InputAction.CallbackContext context)
+        {
+            MouseScrollDirection = context.ReadValueAsButton() ? 1 : 0;
+        }
+        
+        private void ControllerScrollPreviousInput(InputAction.CallbackContext context)
+        {
+            MouseScrollDirection = context.ReadValueAsButton() ? -1 : 0;
         }
         #endregion
     }

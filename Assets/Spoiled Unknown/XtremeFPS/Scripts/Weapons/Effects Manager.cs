@@ -51,8 +51,8 @@ namespace XtremeFPS.WeaponSystem.Effects
         // Update is called once per frame
         void Update()
         {
-            mouseX = inputManager.mouseDirection.x;
-            aiming = inputManager.isAimHold || inputManager.isAimTap;
+            mouseX = inputManager.MouseDirection.x;
+            aiming = inputManager.IsAimHold || inputManager.IsAimTap;
 
             WeaponBobbing();
             SwayEffect();

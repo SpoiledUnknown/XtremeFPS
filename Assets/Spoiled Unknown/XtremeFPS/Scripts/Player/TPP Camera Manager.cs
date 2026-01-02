@@ -37,22 +37,24 @@ namespace XtremeFPS.Player.CameraSystem
 
         private void Update()
         {
-            mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime;
-            mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime;
+            mouseDirectionX = inputManager.MouseDirection.x * mouseSensitivity;
+            mouseDirectionY = inputManager.MouseDirection.y * mouseSensitivity;
 
             HandleFOVChange();
         }
 
         private void LateUpdate()
         {
+            float dt = Time.deltaTime;
+            
             cameraRoot.localPosition = playerMovementController.transform.localPosition;
 
-            rotationY -= mouseDirectionY;
+            rotationY -= mouseDirectionY * dt;
             rotationY = Mathf.Clamp(rotationY, clampAngle * -1f, clampAngle);
 
-            cameraRoot.localRotation = Quaternion.Euler(rotationY, (rotationX += mouseDirectionX), 0f);
+            cameraRoot.localRotation = Quaternion.Euler(rotationY, rotationX += mouseDirectionX * dt, 0f);
 
-            inputManager.mouseDirection = Vector2.zero;
+            if (inputManager.IsUsingTouchscreen) inputManager.ResetMouseDirection();
         }
 
         private void AdjustFOVSettings(float targetFOV)

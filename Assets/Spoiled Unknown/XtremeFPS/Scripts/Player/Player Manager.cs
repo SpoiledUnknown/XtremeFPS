@@ -50,7 +50,7 @@ namespace XtremeFPS.Player
              */
             if (canSwitchCameras)
             {
-                if (inputManager.isTryingToSwitchCamera)
+                if (inputManager.IsTryingToSwitchCamera)
                 {
                     tppCameraManager.enabled = true;
                     fppCameraManager.enabled = false;
@@ -74,8 +74,8 @@ namespace XtremeFPS.Player
 
         private void InteractionHandling()
         {
-            bool Aiming = inputManager.isAimHold || inputManager.isAimTap;
-            if (inputManager.isTryingToInteract)
+            bool Aiming = inputManager.IsAimHold || inputManager.IsAimTap;
+            if (inputManager.IsTryingToInteract)
             {
                 Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, interactionLayerMask);
 

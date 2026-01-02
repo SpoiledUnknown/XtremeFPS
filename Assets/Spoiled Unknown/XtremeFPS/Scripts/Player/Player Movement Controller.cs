@@ -45,8 +45,10 @@ namespace XtremeFPS.Player.Controller
         public float sprintDuration = 8f;
 
         private bool isSprinting;
+        private bool sprintAllowed;
         private readonly float sprintCooldownReset;
-        public float sprintRemaining { get; private set; }
+        
+        public float SprintRemaining { get; private set; }
 
         // Gravity and Jumping
         [Header("Jumping Settings")]
@@ -57,10 +59,11 @@ namespace XtremeFPS.Player.Controller
         [SerializeField] private float groundRadius;
         [SerializeField] private LayerMask groundLayerMask;
 
-        public Vector3 JumpVelocity { get; private set; }
-        public bool IsGrounded { get; private set; }
         private Vector3 groundSpherePosition;
         private Vector3 cameraRootPositon;
+        
+        public Vector3 JumpVelocity { get; private set; }
+        public bool IsGrounded { get; private set; }
 
         // Crouching
         [Header("Crouch & Slide Settings")]
@@ -128,6 +131,8 @@ namespace XtremeFPS.Player.Controller
             groundSpherePosition = groundSphere.localPosition;
             cameraRootPositon = cameraRoot.localPosition;
 
+            sprintAllowed = canPlayerSprint;
+
             if (!canPlayerCrouch) return;
             initialHeight = CharacterController.height;
         }
@@ -143,10 +148,10 @@ namespace XtremeFPS.Player.Controller
              */
             if (canSwitchCamera)
             {
-                if (inputManager.isTryingToSwitchCamera) // TPP
+                if (inputManager.IsTryingToSwitchCamera) // TPP
                 {
                     cameraRoot.parent = transform.parent;
-                    Vector3 direction = new Vector3(inputManager.moveDirection.x, 0f, inputManager.moveDirection.y).normalized;
+                    Vector3 direction = new Vector3(inputManager.MoveDirection.x, 0f, inputManager.MoveDirection.y).normalized;
                     if (direction.magnitude >= 0.1f)
                     {
                         float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cameraRoot.eulerAngles.y;
@@ -160,14 +165,14 @@ namespace XtremeFPS.Player.Controller
                 {
                     cameraRoot.parent = transform;
                     cameraRoot.localPosition = cameraRootPositon;
-                    horizontalMovement = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right +
-                                         inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
+                    horizontalMovement = inputManager.MoveDirection.x * targetSpeed * Time.deltaTime * transform.right +
+                                         inputManager.MoveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
                 }
             }
             else
             {
-                horizontalMovement = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right +
-                    inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
+                horizontalMovement = inputManager.MoveDirection.x * targetSpeed * Time.deltaTime * transform.right +
+                    inputManager.MoveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
             }
 
             Vector3 verticalMovement = JumpVelocity.y * Time.deltaTime * transform.up;
@@ -201,32 +206,46 @@ namespace XtremeFPS.Player.Controller
         #region Private Methods
         private void PlayerInputs()
         {
-            if (isSprintHold) isSprinting = inputManager.isSprintHold;
-            else isSprinting = inputManager.isSprintTap;
+            isSprinting = canPlayerSprint && (isSprintHold ? inputManager.IsSprintHold : inputManager.IsSprintTap);
 
-            if (isCrouchHold) isCrouching = inputManager.isCrouchHold;
-            else isCrouching = inputManager.isCrouchTap;
+            isCrouching = canPlayerCrouch && (isCrouchHold ? inputManager.IsCrouchHold : inputManager.IsCrouchTap);
 
             canSlide = isCrouching && isSprinting && canPlayerCrouch;
         }
 
         private void HandleSprintCooldown()
         {
-            if (unlimitedSprinting) return;
+            if (unlimitedSprinting)
+            {
+                canPlayerSprint = sprintAllowed;
+                return;
+            }
 
             if (MovementState == PlayerMovementState.Sprinting &&
                 CharacterController.velocity.magnitude > 0)
             {
-                sprintRemaining -= 1 * Time.deltaTime;
-                if (sprintRemaining <= 0)
+                SprintRemaining -= Time.deltaTime;
+
+                if (SprintRemaining <= 0f)
                 {
-                    inputManager.isSprintTap = false;
-                    inputManager.isSprintHold = false;
-                    sprintCooldown -= 1 * Time.deltaTime;
+                    canPlayerSprint = false;
+                    sprintCooldown -= Time.deltaTime;
                 }
-                else sprintCooldown = sprintCooldownReset;
+                else
+                {
+                    sprintCooldown = sprintCooldownReset;
+                }
             }
-            else sprintRemaining = Mathf.Clamp(sprintRemaining += 1 * Time.deltaTime, 0, sprintDuration);
+            else
+            {
+                SprintRemaining = Mathf.Clamp(
+                    SprintRemaining + Time.deltaTime,
+                    0f,
+                    sprintDuration);
+            }
+
+            if (sprintCooldown <= 0f)
+                canPlayerSprint = true;
         }
 
         private void AdjustCrouchHeight(float targetHeight, bool isTryingToUncrouch)
@@ -256,11 +275,13 @@ namespace XtremeFPS.Player.Controller
                 nextSlopeCheckTime = Time.time + slopeCheckInterval;
                 isOnSlope = CheckIfOnSlope();
             }
-            if (!isOnSlope && IsGrounded) slidingTime -= Time.deltaTime;
-            if (slidingTime <= 0)
+
+            if (!isOnSlope && IsGrounded)
+                slidingTime -= Time.deltaTime;
+
+            if (slidingTime <= 0f)
             {
-                inputManager.isSprintHold = false;
-                inputManager.isSprintTap = false;
+                canPlayerSprint = false;
                 MovementState = PlayerMovementState.Crouching;
             }
         }
@@ -286,12 +307,14 @@ namespace XtremeFPS.Player.Controller
                 slidingTime = slidingDuration;
                 MovementState = PlayerMovementState.Sliding;
             }
-            else if (canPlayerSprint && isSprinting && !isCrouching) MovementState = PlayerMovementState.Sprinting;
-            else if (canPlayerCrouch && isCrouching && !isSprinting) MovementState = PlayerMovementState.Crouching;
+            else if (isSprinting && !isCrouching) MovementState = PlayerMovementState.Sprinting;
+            else if (isCrouching && !isSprinting) MovementState = PlayerMovementState.Crouching;
             else if (!isSprinting && !isCrouching) MovementState = PlayerMovementState.Walking;
 
             SwitchMoveState(MovementState);
         }
+        
+        
 
         private void SwitchMoveState(PlayerMovementState movementState)
         {
@@ -346,7 +369,7 @@ namespace XtremeFPS.Player.Controller
 
             if (!wasPreviouslyGrounded) audioSource.PlayOneShot(landAudioClip);
 
-            if (inputManager.isTryingToJump && 
+            if (inputManager.IsTryingToJump && 
                 MovementState != PlayerMovementState.Crouching &&
                 MovementState != PlayerMovementState.Sliding)
             {
@@ -355,6 +378,7 @@ namespace XtremeFPS.Player.Controller
             }
             else if (!IsGrounded && JumpVelocity.y < 0f) JumpVelocity = new Vector3(JumpVelocity.x, -0.5f, JumpVelocity.z);
         }
+        
         #region Sound Management
         private IEnumerator PlayFootstepSounds()
         {
