@@ -14,10 +14,12 @@ namespace XtremeFPS.InputHandling
         public static XtremeFPSInputHandler Instance {  get; private set; }
 
         #region Variables
+        public int maxTouchLimit = 10;
+        public TouchDetectMode touchDetectionMode;
+        
         private PlayerInputAction playerInputAction;
         public Vector2 MoveDirection {  get; private set; }
         public Vector2 MouseDirection {  get; private set; }
-        public float MouseScrollDirection {  get; private set; }
         public bool IsSprintHold {  get; private set; }
         public bool IsSprintTap {  get; private set; }
         public bool IsCrouchHold {  get; private set; }
@@ -32,7 +34,20 @@ namespace XtremeFPS.InputHandling
         public bool IsAimTap {  get; private set; }
         public bool IsTryingToInteract {  get; private set; }
         public bool IsTryingToSwitchCamera {  get; private set; }
-        public bool IsUsingTouchscreen {  get; private set; }
+        public int WeaponCycleDelta { get; private set; }
+
+        private float mouseScrollDirection;
+        #region Touch Controls
+        public enum TouchDetectMode
+        {
+            FirstTouch,
+            LastTouch,
+            All
+        }
+        private Func<TouchControl, bool> isTouchAvailable;                        // Delegate takes parameter touch and return true if touch is the available touch for camera rotation
+        private List<string> availableTouchIds = new List<string>();     // Get all the touches that began without colliding with any UI Image/Button
+        private EventSystem eventStytem;
+        #endregion
 
         //only for demo purpose, please remove in production
         public bool Escape {  get; private set; }
@@ -45,6 +60,12 @@ namespace XtremeFPS.InputHandling
             else Instance = this;
 
             playerInputAction = new PlayerInputAction();
+            
+#if UNITY_ANDROID || UNITY_IOS
+            if (EventSystem.current != null) eventStytem = EventSystem.current;
+            else Debug.LogError($"Scene has no Event System!");
+            SetIsTouchDelegate();
+#endif
         }
 
         private void OnEnable()
@@ -140,26 +161,55 @@ namespace XtremeFPS.InputHandling
 
         #region Player Inputs
         
-        private void MouseInput(InputAction.CallbackContext context)
+        #if UNITY_ANDROID || UNITY_IOS
+        private void Update()
         {
-            if (context.control.device is Touchscreen touchscreen)
+            if (Touchscreen.current == null || Touchscreen.current.touches.Count == 0) return;
+            
+            foreach (TouchControl touch in Touchscreen.current.touches)
             {
-                IsUsingTouchscreen = true;
-                
-                Vector2 delta = context.ReadValue<Vector2>();
-                
-                foreach (var touch in touchscreen.touches)
+                // Handle touch input
+                if ((touch.phase.value == TouchPhase.Began && eventStytem != null) &&
+                    !eventStytem.IsPointerOverGameObject(touch.touchId.ReadValue()) &&
+                    availableTouchIds.Count <= maxTouchLimit)
                 {
-                    if (EventSystem.current != null &&
-                        EventSystem.current.IsPointerOverGameObject(touch.touchId.ReadValue())) return;
+                    availableTouchIds.Add(touch.touchId.ReadValue().ToString());
                 }
-                MouseDirection += delta;
+
+                if (availableTouchIds.Count == 0) continue;
+
+                if (isTouchAvailable(touch))
+                {
+                    MouseDirection = new Vector2(touch.delta.x.value, touch.delta.y.value);
+                    if (touch.phase.value == TouchPhase.Ended) availableTouchIds.RemoveAt(0);
+                }
+                else if (touch.phase.value == TouchPhase.Ended)
+                {
+                    availableTouchIds.Remove(touch.touchId.ReadValue().ToString());
+                }
             }
-            else
+        }
+
+        public void SetIsTouchDelegate()
+        {
+            switch (touchDetectionMode)
             {
-                IsUsingTouchscreen = false;
-                MouseDirection = context.ReadValue<Vector2>();
+                case TouchDetectMode.FirstTouch:
+                    isTouchAvailable = (TouchControl touch) => touch.touchId.ReadValue().ToString() == availableTouchIds[0];
+                    break;
+                case TouchDetectMode.LastTouch:
+                    isTouchAvailable = (TouchControl touch) => touch.touchId.ReadValue().ToString() == availableTouchIds[^1];
+                    break;
+                case TouchDetectMode.All:
+                    isTouchAvailable = (TouchControl touch) => availableTouchIds.Contains(touch.touchId.ReadValue().ToString());
+                    break;
             }
+        }
+#endif
+        
+        private void MouseInput(InputAction.CallbackContext context)
+        { 
+            MouseDirection = context.ReadValue<Vector2>();
         }
 
         public void ResetMouseDirection()
@@ -246,18 +296,28 @@ namespace XtremeFPS.InputHandling
 
         private void ScrollInput(InputAction.CallbackContext context)
         {
-            MouseScrollDirection = context.ReadValue<float>();
+            mouseScrollDirection = context.ReadValue<float>();
+            if (mouseScrollDirection > 0)
+                WeaponCycleDelta += 1;
+            else if (mouseScrollDirection < 0)
+                WeaponCycleDelta -= 1;
         }
         
         private void ControllerScrollNextInput(InputAction.CallbackContext context)
         {
-            MouseScrollDirection = context.ReadValueAsButton() ? 1 : 0;
+            WeaponCycleDelta += context.ReadValueAsButton() ? 1 : 0;
         }
         
         private void ControllerScrollPreviousInput(InputAction.CallbackContext context)
         {
-            MouseScrollDirection = context.ReadValueAsButton() ? -1 : 0;
+            WeaponCycleDelta -= context.ReadValueAsButton() ? 1 : 0;
         }
+        
+        public void ResetWeaponCycle()
+        {
+            WeaponCycleDelta = 0;
+        }
+
         #endregion
     }
 }

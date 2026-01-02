@@ -53,8 +53,6 @@ namespace XtremeFPS.Player.CameraSystem
             rotationY = Mathf.Clamp(rotationY, clampAngle * -1f, clampAngle);
 
             cameraRoot.localRotation = Quaternion.Euler(rotationY, rotationX += mouseDirectionX * dt, 0f);
-
-            if (inputManager.IsUsingTouchscreen) inputManager.ResetMouseDirection();
         }
 
         private void AdjustFOVSettings(float targetFOV)

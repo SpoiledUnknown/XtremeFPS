@@ -516,17 +516,6 @@ namespace XtremeFPS.InputHandling
                 },
                 {
                     ""name"": """",
-                    ""id"": ""0edb8945-4c2c-4936-8474-6ee4a68a0f2f"",
-                    ""path"": ""<Touchscreen>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Mobile"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""ce32e172-84fd-4b0b-8bcb-80bf72f4f956"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",

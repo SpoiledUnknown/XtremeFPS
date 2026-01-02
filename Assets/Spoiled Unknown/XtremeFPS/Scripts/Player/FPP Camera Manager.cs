@@ -70,8 +70,6 @@ namespace XtremeFPS.Player.CameraSystem
 
             movementController.CharacterController.transform.Rotate(Vector3.up * (mouseDirectionX * dt));
             cameraRoot.localRotation = Quaternion.Euler(rotationY, 0f, 0f);
-            
-            if (inputManager.IsUsingTouchscreen) inputManager.ResetMouseDirection();
         }
 
         private void HandleInputs()

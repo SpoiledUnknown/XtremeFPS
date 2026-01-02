@@ -17,21 +17,22 @@ namespace XtremeFPS.WeaponSystem.WeaponHolder
 
         private void Update()
         {
-            int previouslySelectedWeapon = selectedWeapon;
-            if (inputHandler.MouseScrollDirection > 0)
-            {
-                if (selectedWeapon >= GetWeaponCount() - 1) selectedWeapon = 0;
-                else selectedWeapon++;
-            }
+            int delta = inputHandler.WeaponCycleDelta;
+            if (delta == 0)
+                return;
 
-            if (inputHandler.MouseScrollDirection < 0)
-            {
-                if (selectedWeapon <= 0) selectedWeapon = GetWeaponCount() - 1;
-                else selectedWeapon--;
-            }
+            int previousWeapon = selectedWeapon;
 
-            if (previouslySelectedWeapon != selectedWeapon) SelectWeapon();
+            selectedWeapon = (selectedWeapon + delta) % GetWeaponCount();
+            if (selectedWeapon < 0)
+                selectedWeapon += GetWeaponCount();
+
+            if (previousWeapon != selectedWeapon)
+                SelectWeapon();
+
+            inputHandler.ResetWeaponCycle();
         }
+
 
         public void SelectWeapon()
         {
