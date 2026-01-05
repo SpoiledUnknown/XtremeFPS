@@ -16,7 +16,7 @@ namespace XtremeFPS.Player.Controller
         [SerializeField] private float transitionSpeed;
         [SerializeField] private float walkSpeed = 5f;
         [SerializeField] private Transform cameraRoot;
-        [SerializeField] private bool canSwitchCamera;
+        [SerializeField] private PlayerManager playerManager;
 
         public CharacterController CharacterController { private set; get; }
         public PlayerMovementState MovementState {  get; private set; }
@@ -141,39 +141,28 @@ namespace XtremeFPS.Player.Controller
         {
             transitionDelta = Time.deltaTime * transitionSpeed;
             AudioEffectSpeed = Mathf.Clamp(1f / targetSpeed, 0.3f, 1f);
-
-            //character Controller movement
-            /*
-             * TODO: Find a better way to handle FPP and TPP switching
-             */
-            if (canSwitchCamera)
+            
+            if (playerManager.isTpp)
             {
-                if (inputManager.IsTryingToSwitchCamera) // TPP
-                {
-                    cameraRoot.parent = transform.parent;
-                    Vector3 direction = new Vector3(inputManager.MoveDirection.x, 0f, inputManager.MoveDirection.y).normalized;
-                    if (direction.magnitude >= 0.1f)
-                    {
-                        float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cameraRoot.eulerAngles.y;
-                        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, transitionDelta);
-                        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                Vector3 direction = new Vector3( inputManager.MoveDirection.x, 0f, inputManager.MoveDirection.y ).normalized;
 
-                        horizontalMovement = Quaternion.Euler(0.0f, targetAngle, 0.0f) * Vector3.forward * (Time.deltaTime * targetSpeed);
-                    }
-                }
-                else //FPP
+                if (direction.sqrMagnitude > 0.01f)
                 {
-                    cameraRoot.parent = transform;
-                    cameraRoot.localPosition = cameraRootPositon;
-                    horizontalMovement = inputManager.MoveDirection.x * targetSpeed * Time.deltaTime * transform.right +
-                                         inputManager.MoveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
+                    float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cameraRoot.eulerAngles.y;
+
+                    float angle = Mathf.SmoothDampAngle( transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, transitionDelta);
+
+                    transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                    horizontalMovement = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward * (targetSpeed * Time.deltaTime);
                 }
             }
             else
             {
-                horizontalMovement = inputManager.MoveDirection.x * targetSpeed * Time.deltaTime * transform.right +
+                horizontalMovement =
+                    inputManager.MoveDirection.x * targetSpeed * Time.deltaTime * transform.right +
                     inputManager.MoveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
             }
+
 
             Vector3 verticalMovement = JumpVelocity.y * Time.deltaTime * transform.up;
             CharacterController.Move(horizontalMovement + verticalMovement);

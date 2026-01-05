@@ -107,23 +107,29 @@ namespace XtremeFPS.WeaponSystem
         #endregion
 
         #region Private Methods
-        private void PlayerWeaponsInput()
+        
+        private bool ShouldReload()
         {
-             if (isGunAuto) shooting = inputManager.IsShootHold;
-             else shooting = inputManager.IsShootTap;
+            bool reloadTriggered = inputManager.IsTryingToReload || BulletsLeft <= 0;
+            bool hasAmmo = totalBullets > 0;
+            bool notReloading = !reloading;
+            bool magazineNotFull = BulletsLeft < magazineSize;
 
-            if (isAimHold) aiming = inputManager.IsAimHold;
-            else aiming = inputManager.IsAimTap;
+            return reloadTriggered && hasAmmo && notReloading && magazineNotFull;
+        }
 
-            if ((inputManager.IsTryingToReload || BulletsLeft <= 0) && totalBullets > 0 && !reloading) StartCoroutine(Reload());
+        private void PlayerWeaponsInput()
+        { 
+            shooting = isGunAuto ? inputManager.IsShootHold : inputManager.IsShootTap;
+            aiming = isAimHold ? inputManager.IsAimHold : inputManager.IsAimTap;
+
+            if (ShouldReload()) StartCoroutine(Reload());
 
             //Shoot
-            if (readyToShoot && shooting && !reloading && BulletsLeft > 0)
-            {
-                bulletsShot = bulletsPerTap;
-                Shoot();
-                bulletSoundSource.PlayOneShot(bulletSoundClip);
-            }
+            if (!readyToShoot || !shooting || reloading || BulletsLeft <= 0) return;
+            bulletsShot = bulletsPerTap;
+            Shoot();
+            bulletSoundSource.PlayOneShot(bulletSoundClip);
         }
 
         private void Shoot()

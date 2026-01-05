@@ -22862,9 +22862,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3998250396681449781, guid: 4f889f7d4015d9a4884ecc2aeaea5eb0,
         type: 3}
+      propertyPath: cameraRoot
+      value: 
+      objectReference: {fileID: 2000383339}
+    - target: {fileID: 3998250396681449781, guid: 4f889f7d4015d9a4884ecc2aeaea5eb0,
+        type: 3}
       propertyPath: isCursorLocked
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4462171602722870793, guid: 4f889f7d4015d9a4884ecc2aeaea5eb0,
+        type: 3}
+      propertyPath: playerManager
+      value: 
+      objectReference: {fileID: 8873623447422935979}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

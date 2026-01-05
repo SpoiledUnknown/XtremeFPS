@@ -33,9 +33,8 @@ namespace XtremeFPS.InputHandling
         public bool IsAimHold {  get; private set; }
         public bool IsAimTap {  get; private set; }
         public bool IsTryingToInteract {  get; private set; }
-        public bool IsTryingToSwitchCamera {  get; private set; }
+        public event Action CameraSwitchRequested;
         public int WeaponCycleDelta { get; private set; }
-
         private float mouseScrollDirection;
         #region Touch Controls
         public enum TouchDetectMode
@@ -113,6 +112,7 @@ namespace XtremeFPS.InputHandling
             playerInputAction.Player.ZoomTap.canceled += ZoomTapInput;
             
             playerInputAction.Player.CameraSwitch.performed += CameraSwitchInput;
+            playerInputAction.Player.CameraSwitch.canceled += CameraSwitchInput;
 
             playerInputAction.Player.Interaction.started += InteractionInput;
             playerInputAction.Player.Interaction.performed += InteractionInput;
@@ -262,9 +262,12 @@ namespace XtremeFPS.InputHandling
             IsTryingToInteract = context.ReadValueAsButton();
         }
 
-        private void CameraSwitchInput(InputAction.CallbackContext obj)
+        private void CameraSwitchInput(InputAction.CallbackContext context)
         {
-            IsTryingToSwitchCamera = !IsTryingToSwitchCamera;
+            if (!context.performed)
+                return;
+
+            CameraSwitchRequested?.Invoke();
         }
         #endregion
 
