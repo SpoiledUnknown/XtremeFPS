@@ -271,6 +271,7 @@ namespace XtremeFPS.Player.Controller
             if (slidingTime <= 0f)
             {
                 canPlayerSprint = false;
+                inputManager.DisableSprint();
                 MovementState = PlayerMovementState.Crouching;
             }
         }

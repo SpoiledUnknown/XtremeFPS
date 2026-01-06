@@ -67,6 +67,11 @@ namespace XtremeFPS.InputHandling
 #endif
         }
 
+        private void OnDestroy()
+        {
+            playerInputAction.Dispose();
+        }
+
         private void OnEnable()
         {
             playerInputAction.Enable();
@@ -240,6 +245,12 @@ namespace XtremeFPS.InputHandling
         private void SprintTapInput(InputAction.CallbackContext context)
         {
             IsSprintTap = !IsSprintTap;
+        }
+
+        public void DisableSprint()
+        {
+            IsSprintHold =  false;
+            IsSprintTap = false;
         }
 
         private void ZoomHoldInput(InputAction.CallbackContext context)

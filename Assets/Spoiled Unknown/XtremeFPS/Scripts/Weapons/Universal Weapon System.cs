@@ -76,6 +76,7 @@ namespace XtremeFPS.WeaponSystem
         [Header("Audio Settings")]
         [SerializeField] private AudioClip bulletSoundClip;
         [SerializeField] private AudioClip bulletReloadClip;
+        [SerializeField] private AudioClip emptyMagazineClip;
 
         private AudioSource bulletSoundSource;
         #endregion
@@ -125,8 +126,18 @@ namespace XtremeFPS.WeaponSystem
 
             if (ShouldReload()) StartCoroutine(Reload());
 
-            //Shoot
-            if (!readyToShoot || !shooting || reloading || BulletsLeft <= 0) return;
+            // Shoot
+            if (!readyToShoot || !shooting || reloading)
+                return;
+
+            if (BulletsLeft <= 0)
+            {
+                readyToShoot = false;
+                bulletSoundSource.PlayOneShot(emptyMagazineClip);
+                Invoke(nameof(ResetShot), timeBetweenShooting);
+                return;
+            }
+
             bulletsShot = bulletsPerTap;
             Shoot();
             bulletSoundSource.PlayOneShot(bulletSoundClip);
@@ -181,22 +192,12 @@ namespace XtremeFPS.WeaponSystem
             reloading = false;
             animator.SetBool("IsReloading", false);
 
+            int bulletsMissing = magazineSize - BulletsLeft;
+            int bulletsToLoad = Mathf.Min(bulletsMissing, totalBullets);
 
-            switch (totalBullets.CompareTo(magazineSize))
-            {
-                case 1:  // totalBullets > magazineSize
-                    BulletsLeft = magazineSize;
-                    totalBullets -= magazineSize;
-                    break;
-                case 0:  // totalBullets == magazineSize
-                    BulletsLeft = magazineSize;
-                    totalBullets -= magazineSize;
-                    break;
-                case -1: // totalBullets < magazineSize
-                    BulletsLeft = totalBullets;
-                    totalBullets = 0;
-                    break;
-            }
+            BulletsLeft += bulletsToLoad;
+            totalBullets -= bulletsToLoad;
+            
             bulletCount.text = $"{BulletsLeft / bulletsPerTap} / {totalBullets / bulletsPerTap}";
         }
 

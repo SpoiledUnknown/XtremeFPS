@@ -215,6 +215,11 @@ PrefabInstance:
       propertyPath: weaponHolder
       value: 
       objectReference: {fileID: 171916744}
+    - target: {fileID: 6170424704145857850, guid: 2d60990fe6e1fb54d8681367adabe8fa,
+        type: 3}
+      propertyPath: emptyMagazineClip
+      value: 
+      objectReference: {fileID: 8300000, guid: d45c2ad264d228041a86312a766e7b61, type: 3}
     - target: {fileID: 6783196281547354542, guid: 2d60990fe6e1fb54d8681367adabe8fa,
         type: 3}
       propertyPath: m_Name
@@ -6791,6 +6796,11 @@ PrefabInstance:
       propertyPath: weaponHolder
       value: 
       objectReference: {fileID: 171916744}
+    - target: {fileID: 9102567424339424500, guid: 3d486f468af0fa8429b3f1dc99574534,
+        type: 3}
+      propertyPath: emptyMagazineClip
+      value: 
+      objectReference: {fileID: 8300000, guid: d45c2ad264d228041a86312a766e7b61, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8280,9 +8290,24 @@ PrefabInstance:
       objectReference: {fileID: 1667745346}
     - target: {fileID: 5941598614821741515, guid: 70acddad957ae5645abdecf3ec972d07,
         type: 3}
+      propertyPath: magazineSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5941598614821741515, guid: 70acddad957ae5645abdecf3ec972d07,
+        type: 3}
+      propertyPath: totalBullets
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5941598614821741515, guid: 70acddad957ae5645abdecf3ec972d07,
+        type: 3}
       propertyPath: weaponHolder
       value: 
       objectReference: {fileID: 171916744}
+    - target: {fileID: 5941598614821741515, guid: 70acddad957ae5645abdecf3ec972d07,
+        type: 3}
+      propertyPath: emptyMagazineClip
+      value: 
+      objectReference: {fileID: 8300000, guid: d45c2ad264d228041a86312a766e7b61, type: 3}
     - target: {fileID: 5982010438202458100, guid: 70acddad957ae5645abdecf3ec972d07,
         type: 3}
       propertyPath: fpsController
@@ -14265,6 +14290,11 @@ PrefabInstance:
       propertyPath: weaponHolder
       value: 
       objectReference: {fileID: 171916744}
+    - target: {fileID: 270942843566577593, guid: 061c6cf7daadf244ea473dbb9b51bf13,
+        type: 3}
+      propertyPath: emptyMagazineClip
+      value: 
+      objectReference: {fileID: 8300000, guid: d45c2ad264d228041a86312a766e7b61, type: 3}
     - target: {fileID: 6293046904676881971, guid: 061c6cf7daadf244ea473dbb9b51bf13,
         type: 3}
       propertyPath: bulletText
@@ -15676,6 +15706,11 @@ PrefabInstance:
       propertyPath: weaponHolder
       value: 
       objectReference: {fileID: 171916744}
+    - target: {fileID: 7789264275385799709, guid: de42f5f27aa7609439dc50a90ea9d0a6,
+        type: 3}
+      propertyPath: emptyMagazineClip
+      value: 
+      objectReference: {fileID: 8300000, guid: d45c2ad264d228041a86312a766e7b61, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22868,7 +22903,7 @@ PrefabInstance:
     - target: {fileID: 3998250396681449781, guid: 4f889f7d4015d9a4884ecc2aeaea5eb0,
         type: 3}
       propertyPath: isCursorLocked
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4462171602722870793, guid: 4f889f7d4015d9a4884ecc2aeaea5eb0,
         type: 3}

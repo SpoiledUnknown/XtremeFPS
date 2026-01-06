@@ -240,6 +240,7 @@ MonoBehaviour:
   recoilRotationAds: {x: 10, y: 4, z: 6}
   bulletSoundClip: {fileID: 8300000, guid: 85271efe3a4fd614f95d8653ced9927b, type: 3}
   bulletReloadClip: {fileID: 8300000, guid: c35f284e9475b5f45b9edab995d9824c, type: 3}
+  emptyMagazineClip: {fileID: 8300000, guid: d45c2ad264d228041a86312a766e7b61, type: 3}
 --- !u!65 &4862417669674616978
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -402,6 +403,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -423,9 +426,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!95 &5177216876238798077
 Animator:
