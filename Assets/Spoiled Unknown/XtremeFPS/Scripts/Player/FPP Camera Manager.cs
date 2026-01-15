@@ -13,7 +13,6 @@ namespace XtremeFPS.Player.CameraSystem
         // References
         [Header("References")]
         [SerializeField] private PlayerMovementController movementController;
-        [SerializeField] private PlayerManager playerManager;
         [SerializeField] private Transform cameraRoot;
         [SerializeField] private CinemachineCamera cinemachineCamera;
 
@@ -57,7 +56,7 @@ namespace XtremeFPS.Player.CameraSystem
             HandleInputs();
             HandleFOVChange();
 
-            if (!canHeadBob || (playerManager is not null && playerManager.isTpp)) return;
+            if (!canHeadBob) return;
             HandleHeadBob();
             cameraRoot.LookAt(FocusTarget());
         }

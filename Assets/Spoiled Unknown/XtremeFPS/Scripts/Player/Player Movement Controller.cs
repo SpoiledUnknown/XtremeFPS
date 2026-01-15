@@ -196,9 +196,7 @@ namespace XtremeFPS.Player.Controller
         private void PlayerInputs()
         {
             isSprinting = canPlayerSprint && (isSprintHold ? inputManager.IsSprintHold : inputManager.IsSprintTap);
-
             isCrouching = canPlayerCrouch && (isCrouchHold ? inputManager.IsCrouchHold : inputManager.IsCrouchTap);
-
             canSlide = isCrouching && isSprinting && canPlayerCrouch;
         }
 
@@ -220,21 +218,11 @@ namespace XtremeFPS.Player.Controller
                     canPlayerSprint = false;
                     sprintCooldown -= Time.deltaTime;
                 }
-                else
-                {
-                    sprintCooldown = sprintCooldownReset;
-                }
+                else sprintCooldown = sprintCooldownReset;
             }
-            else
-            {
-                SprintRemaining = Mathf.Clamp(
-                    SprintRemaining + Time.deltaTime,
-                    0f,
-                    sprintDuration);
-            }
+            else SprintRemaining = Mathf.Clamp( SprintRemaining + Time.deltaTime, 0f, sprintDuration);
 
-            if (sprintCooldown <= 0f)
-                canPlayerSprint = true;
+            if (sprintCooldown <= 0f) canPlayerSprint = true;
         }
 
         private void AdjustCrouchHeight(float targetHeight, bool isTryingToUncrouch)
@@ -303,8 +291,6 @@ namespace XtremeFPS.Player.Controller
 
             SwitchMoveState(MovementState);
         }
-        
-        
 
         private void SwitchMoveState(PlayerMovementState movementState)
         {

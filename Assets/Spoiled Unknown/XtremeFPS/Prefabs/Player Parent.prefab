@@ -674,24 +674,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd9027d004d8ef42a87424e7f401565, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDirection: {x: 0, y: 0}
-  mouseDirection: {x: 0, y: 0}
-  mouseScrollDirection: 0
-  isSprintHold: 0
-  isSprintTap: 0
-  isCrouchHold: 0
-  isCrouchTap: 0
-  isTryingToJump: 0
-  isZoomHold: 0
-  isZoomTap: 0
-  isShootHold: 0
-  isShootTap: 0
-  isTryingToReload: 0
-  isAimHold: 0
-  isAimTap: 0
-  isTryingToInteract: 0
-  IsTryingToSwitchCamera: 0
-  escape: 0
+  maxTouchLimit: 10
+  touchDetectionMode: 0
 --- !u!114 &4303594313959949570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,10 +736,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCursorLocked: 1
   canSwitchCameras: 1
+  isTpp: 0
   firstPersonCamera: {fileID: 2532775333318062798}
   thirdPersonCamera: {fileID: 661971259824602789}
   tppCameraManager: {fileID: 976499174301512673}
   fppCameraManager: {fileID: 4303594313959949570}
+  cameraRoot: {fileID: 1307710037659088522}
   interactionRange: 1.06
   interactionLayerMask:
     serializedVersion: 2
@@ -776,7 +762,7 @@ MonoBehaviour:
   transitionSpeed: 10
   walkSpeed: 2
   cameraRoot: {fileID: 1307710037659088522}
-  canSwitchCamera: 1
+  playerManager: {fileID: 3998250396681449781}
   canPlayerSprint: 1
   unlimitedSprinting: 1
   isSprintHold: 0

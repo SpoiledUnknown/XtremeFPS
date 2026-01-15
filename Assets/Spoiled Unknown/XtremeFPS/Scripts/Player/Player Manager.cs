@@ -18,7 +18,7 @@ namespace XtremeFPS.Player
         [Header("Camera Settings")]
         public bool isCursorLocked;
         public bool canSwitchCameras;
-        public bool isTpp;
+        [HideInInspector] public bool isTpp;
         
         [Space(10)]
         [SerializeField] private CinemachineCamera firstPersonCamera;
