@@ -74,12 +74,76 @@ namespace XtremeFPS.InputHandling
     /// }
     /// </code>
     /// </example>
+    /// <summary>
+    /// Provides programmatic access to <see cref="InputActionAsset" />, <see cref="InputActionMap" />, <see cref="InputAction" /> and <see cref="InputControlScheme" /> instances defined in asset "Assets/Spoiled Unknown/XtremeFPS/Scripts/Input System/Player Input Action.inputactions".
+    /// </summary>
+    /// <remarks>
+    /// This class is source generated and any manual edits will be discarded if the associated asset is reimported or modified.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// using namespace UnityEngine;
+    /// using UnityEngine.InputSystem;
+    ///
+    /// // Example of using an InputActionMap named "Player" from a UnityEngine.MonoBehaviour implementing callback interface.
+    /// public class Example : MonoBehaviour, MyActions.IPlayerActions
+    /// {
+    ///     private MyActions_Actions m_Actions;                  // Source code representation of asset.
+    ///     private MyActions_Actions.PlayerActions m_Player;     // Source code representation of action map.
+    ///
+    ///     void Awake()
+    ///     {
+    ///         m_Actions = new MyActions_Actions();              // Create asset object.
+    ///         m_Player = m_Actions.Player;                      // Extract action map object.
+    ///         m_Player.AddCallbacks(this);                      // Register callback interface IPlayerActions.
+    ///     }
+    ///
+    ///     void OnDestroy()
+    ///     {
+    ///         m_Actions.Dispose();                              // Destroy asset object.
+    ///     }
+    ///
+    ///     void OnEnable()
+    ///     {
+    ///         m_Player.Enable();                                // Enable all actions within map.
+    ///     }
+    ///
+    ///     void OnDisable()
+    ///     {
+    ///         m_Player.Disable();                               // Disable all actions within map.
+    ///     }
+    ///
+    ///     #region Interface implementation of MyActions.IPlayerActions
+    ///
+    ///     // Invoked when "Move" action is either started, performed or canceled.
+    ///     public void OnMove(InputAction.CallbackContext context)
+    ///     {
+    ///         Debug.Log($"OnMove: {context.ReadValue&lt;Vector2&gt;()}");
+    ///     }
+    ///
+    ///     // Invoked when "Attack" action is either started, performed or canceled.
+    ///     public void OnAttack(InputAction.CallbackContext context)
+    ///     {
+    ///         Debug.Log($"OnAttack: {context.ReadValue&lt;float&gt;()}");
+    ///     }
+    ///
+    ///     #endregion
+    /// }
+    /// </code>
+    /// </example>
     public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     {
         /// <summary>
         /// Provides access to the underlying asset instance.
         /// </summary>
+        /// <summary>
+        /// Provides access to the underlying asset instance.
+        /// </summary>
         public InputActionAsset asset { get; }
+
+        /// <summary>
+        /// Constructs a new instance.
+        /// </summary>
 
         /// <summary>
         /// Constructs a new instance.
@@ -1453,12 +1517,14 @@ namespace XtremeFPS.InputHandling
         }
 
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.bindingMask" />
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.bindingMask" />
         public InputBinding? bindingMask
         {
             get => asset.bindingMask;
             set => asset.bindingMask = value;
         }
 
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.devices" />
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.devices" />
         public ReadOnlyArray<InputDevice>? devices
         {
@@ -1467,8 +1533,10 @@ namespace XtremeFPS.InputHandling
         }
 
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.controlSchemes" />
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.controlSchemes" />
         public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
 
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Contains(InputAction)" />
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Contains(InputAction)" />
         public bool Contains(InputAction action)
         {
@@ -1476,11 +1544,13 @@ namespace XtremeFPS.InputHandling
         }
 
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.GetEnumerator()" />
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.GetEnumerator()" />
         public IEnumerator<InputAction> GetEnumerator()
         {
             return asset.GetEnumerator();
         }
 
+        /// <inheritdoc cref="IEnumerable.GetEnumerator()" />
         /// <inheritdoc cref="IEnumerable.GetEnumerator()" />
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -1488,11 +1558,13 @@ namespace XtremeFPS.InputHandling
         }
 
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Enable()" />
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Enable()" />
         public void Enable()
         {
             asset.Enable();
         }
 
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Disable()" />
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Disable()" />
         public void Disable()
         {
@@ -1500,14 +1572,17 @@ namespace XtremeFPS.InputHandling
         }
 
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.bindings" />
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.bindings" />
         public IEnumerable<InputBinding> bindings => asset.bindings;
 
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.FindAction(string, bool)" />
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.FindAction(string, bool)" />
         public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
         {
             return asset.FindAction(actionNameOrId, throwIfNotFound);
         }
 
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.FindBinding(InputBinding, out InputAction)" />
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.FindBinding(InputBinding, out InputAction)" />
         public int FindBinding(InputBinding bindingMask, out InputAction action)
         {
@@ -1538,7 +1613,14 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Construct a new instance of the input action map wrapper class.
             /// </summary>
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
             public PlayerActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Movements".
+            /// </summary>
             /// <summary>
             /// Provides access to the underlying input action "Player/Movements".
             /// </summary>
@@ -1546,7 +1628,13 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Provides access to the underlying input action "Player/Look".
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Look".
+            /// </summary>
             public InputAction @Look => m_Wrapper.m_Player_Look;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/SprintTap".
+            /// </summary>
             /// <summary>
             /// Provides access to the underlying input action "Player/SprintTap".
             /// </summary>
@@ -1554,7 +1642,13 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Provides access to the underlying input action "Player/SprintHold".
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action "Player/SprintHold".
+            /// </summary>
             public InputAction @SprintHold => m_Wrapper.m_Player_SprintHold;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Jump".
+            /// </summary>
             /// <summary>
             /// Provides access to the underlying input action "Player/Jump".
             /// </summary>
@@ -1562,7 +1656,13 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Provides access to the underlying input action "Player/CrouchTap".
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action "Player/CrouchTap".
+            /// </summary>
             public InputAction @CrouchTap => m_Wrapper.m_Player_CrouchTap;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/CrouchHold".
+            /// </summary>
             /// <summary>
             /// Provides access to the underlying input action "Player/CrouchHold".
             /// </summary>
@@ -1570,11 +1670,20 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Provides access to the underlying input action "Player/ZoomTap".
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action "Player/ZoomTap".
+            /// </summary>
             public InputAction @ZoomTap => m_Wrapper.m_Player_ZoomTap;
             /// <summary>
             /// Provides access to the underlying input action "Player/ZoomHold".
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action "Player/ZoomHold".
+            /// </summary>
             public InputAction @ZoomHold => m_Wrapper.m_Player_ZoomHold;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Interaction".
+            /// </summary>
             /// <summary>
             /// Provides access to the underlying input action "Player/Interaction".
             /// </summary>
@@ -1588,15 +1697,29 @@ namespace XtremeFPS.InputHandling
             /// </summary>
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
             public void Enable() { Get().Enable(); }
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
             public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
             public bool enabled => Get().enabled;
             /// <summary>
             /// Implicitly converts an <see ref="PlayerActions" /> to an <see ref="InputActionMap" /> instance.
             /// </summary>
+            /// <summary>
+            /// Implicitly converts an <see ref="PlayerActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
             public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="PlayerActions" />
             /// <summary>
             /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
             /// </summary>
@@ -1692,12 +1815,25 @@ namespace XtremeFPS.InputHandling
             /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />.
             /// </summary>
             /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />.
+            /// </summary>
+            /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
             public void RemoveCallbacks(IPlayerActions instance)
             {
                 if (m_Wrapper.m_PlayerActionsCallbackInterfaces.Remove(instance))
                     UnregisterCallbacks(instance);
             }
 
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
+            /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
+            /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
             /// <summary>
             /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
             /// </summary>
@@ -1715,6 +1851,9 @@ namespace XtremeFPS.InputHandling
                 AddCallbacks(instance);
             }
         }
+        /// <summary>
+        /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
+        /// </summary>
         /// <summary>
         /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
         /// </summary>
@@ -1781,7 +1920,9 @@ namespace XtremeFPS.InputHandling
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
             public void Enable() { Get().Enable(); }
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
             public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
             public bool enabled => Get().enabled;
             /// <summary>
@@ -1909,9 +2050,16 @@ namespace XtremeFPS.InputHandling
         /// <summary>
         /// Provides access to input actions defined in input action map "UI".
         /// </summary>
+        /// <summary>
+        /// Provides access to input actions defined in input action map "UI".
+        /// </summary>
         public struct UIActions
         {
             private @PlayerInputAction m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
 
             /// <summary>
             /// Construct a new instance of the input action map wrapper class.
@@ -1920,7 +2068,13 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Provides access to the underlying input action "UI/Navigate".
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Navigate".
+            /// </summary>
             public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Submit".
+            /// </summary>
             /// <summary>
             /// Provides access to the underlying input action "UI/Submit".
             /// </summary>
@@ -1928,7 +2082,13 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Provides access to the underlying input action "UI/Cancel".
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Cancel".
+            /// </summary>
             public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Point".
+            /// </summary>
             /// <summary>
             /// Provides access to the underlying input action "UI/Point".
             /// </summary>
@@ -1936,7 +2096,13 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Provides access to the underlying input action "UI/Click".
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Click".
+            /// </summary>
             public InputAction @Click => m_Wrapper.m_UI_Click;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/ScrollWheel".
+            /// </summary>
             /// <summary>
             /// Provides access to the underlying input action "UI/ScrollWheel".
             /// </summary>
@@ -1944,7 +2110,13 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Provides access to the underlying input action "UI/MiddleClick".
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action "UI/MiddleClick".
+            /// </summary>
             public InputAction @MiddleClick => m_Wrapper.m_UI_MiddleClick;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/RightClick".
+            /// </summary>
             /// <summary>
             /// Provides access to the underlying input action "UI/RightClick".
             /// </summary>
@@ -1952,7 +2124,13 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Provides access to the underlying input action "UI/TrackedDevicePosition".
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action "UI/TrackedDevicePosition".
+            /// </summary>
             public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/TrackedDeviceOrientation".
+            /// </summary>
             /// <summary>
             /// Provides access to the underlying input action "UI/TrackedDeviceOrientation".
             /// </summary>
@@ -1960,17 +2138,34 @@ namespace XtremeFPS.InputHandling
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
             public InputActionMap Get() { return m_Wrapper.m_UI; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
             public void Enable() { Get().Enable(); }
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
             public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
             public bool enabled => Get().enabled;
             /// <summary>
             /// Implicitly converts an <see ref="UIActions" /> to an <see ref="InputActionMap" /> instance.
             /// </summary>
+            /// <summary>
+            /// Implicitly converts an <see ref="UIActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
             public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="UIActions" />
             /// <summary>
             /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
             /// </summary>
@@ -2022,6 +2217,13 @@ namespace XtremeFPS.InputHandling
             /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
             /// </remarks>
             /// <seealso cref="UIActions" />
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="UIActions" />
             private void UnregisterCallbacks(IUIActions instance)
             {
                 @Navigate.started -= instance.OnNavigate;
@@ -2060,12 +2262,25 @@ namespace XtremeFPS.InputHandling
             /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UIActions.UnregisterCallbacks(IUIActions)" />.
             /// </summary>
             /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UIActions.UnregisterCallbacks(IUIActions)" />.
+            /// </summary>
+            /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
             public void RemoveCallbacks(IUIActions instance)
             {
                 if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
                     UnregisterCallbacks(instance);
             }
 
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="UIActions.AddCallbacks(IUIActions)" />
+            /// <seealso cref="UIActions.RemoveCallbacks(IUIActions)" />
+            /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
             /// <summary>
             /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
             /// </summary>
@@ -2083,6 +2298,9 @@ namespace XtremeFPS.InputHandling
                 AddCallbacks(instance);
             }
         }
+        /// <summary>
+        /// Provides a new <see cref="UIActions" /> instance referencing this action map.
+        /// </summary>
         /// <summary>
         /// Provides a new <see cref="UIActions" /> instance referencing this action map.
         /// </summary>
@@ -2188,6 +2406,10 @@ namespace XtremeFPS.InputHandling
         /// Provides access to the input control scheme.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
+        /// <summary>
+        /// Provides access to the input control scheme.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
         public InputControlScheme KeyboardAndMouseScheme
         {
             get
@@ -2197,6 +2419,10 @@ namespace XtremeFPS.InputHandling
             }
         }
         private int m_ControllerSchemeIndex = -1;
+        /// <summary>
+        /// Provides access to the input control scheme.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
         /// <summary>
         /// Provides access to the input control scheme.
         /// </summary>
@@ -2214,6 +2440,10 @@ namespace XtremeFPS.InputHandling
         /// Provides access to the input control scheme.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
+        /// <summary>
+        /// Provides access to the input control scheme.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
         public InputControlScheme MobileScheme
         {
             get
@@ -2227,8 +2457,19 @@ namespace XtremeFPS.InputHandling
         /// </summary>
         /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
         /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
+        /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
         public interface IPlayerActions
         {
+            /// <summary>
+            /// Method invoked when associated input action "Movements" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "Movements" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2242,7 +2483,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "Look" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnLook(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SprintTap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "SprintTap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2256,7 +2509,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "SprintHold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnSprintHold(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2270,7 +2535,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "CrouchTap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnCrouchTap(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "CrouchHold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "CrouchHold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2284,6 +2561,12 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "ZoomTap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnZoomTap(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "ZoomHold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
@@ -2291,7 +2574,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "ZoomHold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnZoomHold(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Interaction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "Interaction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2327,7 +2622,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "FireTap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnFireTap(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Reload" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "Reload" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2341,7 +2648,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "ADSHold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnADSHold(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ADSTap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "ADSTap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2384,7 +2703,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "Navigate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnNavigate(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Submit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "Submit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2398,7 +2729,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "Cancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnCancel(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Point" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "Point" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2412,7 +2755,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "Click" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnClick(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ScrollWheel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "ScrollWheel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2426,7 +2781,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "MiddleClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnMiddleClick(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "RightClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "RightClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2440,7 +2807,19 @@ namespace XtremeFPS.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            /// <summary>
+            /// Method invoked when associated input action "TrackedDevicePosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnTrackedDevicePosition(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "TrackedDeviceOrientation" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             /// <summary>
             /// Method invoked when associated input action "TrackedDeviceOrientation" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
