@@ -1,6 +1,3 @@
-/*Copyright � Spoiled Unknown*/
-/*2024*/
-
 using UnityEngine;
 using XtremeFPS.Interfaces;
 

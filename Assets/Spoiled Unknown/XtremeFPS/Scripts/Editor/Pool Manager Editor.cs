@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEditor;
 using XtremeFPS.PoolingSystem;
 
-namespace XtremeFPS.Editor
+namespace XtremeFPS.CustomEditors
 {
     [CustomEditor(typeof(PoolManager)), CanEditMultipleObjects]
-    public class PoolManagerEditor : UnityEditor.Editor
+    public class PoolManagerEditor : Editor
     {
         private PoolManager poolManager;
         private SerializedObject serializedPoolManager;
@@ -35,7 +35,7 @@ namespace XtremeFPS.Editor
             #region Intro
             EditorGUILayout.Space();
             GUI.color = Color.black;
-            GUILayout.Label("Xtreme FPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
+            GUILayout.Label("XtremeFPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUI.color = Color.green;
             GUILayout.Label("Pool Manager", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
@@ -67,20 +67,29 @@ namespace XtremeFPS.Editor
                 string objectName = objectToPool != null ? objectToPool.name : "Element " + i.ToString();
 
                 // Display foldout for each ObjectPoolItem with the GameObject name
-                foldoutStates[i] = EditorGUILayout.Foldout(foldoutStates[i], new GUIContent(objectName, "Contains all the property required by the element " + i + "."));
+                GUIStyle backgroundStyle = new GUIStyle(GUI.skin.box);
+                backgroundStyle.normal.background = MakeTex(2, 2, new Color(65f / 255f, 65f / 255f, 65f / 255f, 1f));// rgb(65, 65, ) // Light grey with transparency
+
+                foldoutStates[i] = EditorGUILayout.Foldout(foldoutStates[i], new GUIContent(objectName, "Contains all the property required by the element " + i + "."), foldoutStyle);
+
                 if (foldoutStates[i])
                 {
                     EditorGUI.indentLevel++;
 
+                    // Apply custom background style for the foldout contents
+                    EditorGUILayout.BeginVertical(backgroundStyle);
+
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PropertyField(objectToPoolProperty, new GUIContent("Pooled Item", "Referrence to the object that should be pooled."), true);
+                    EditorGUILayout.PropertyField(objectToPoolProperty, new GUIContent("Pooled Item", "Reference to the object that should be pooled."), true);
                     if (GUILayout.Button("Remove"))
                     {
                         RemoveObjectPoolItem(i);
                         break;
                     }
                     EditorGUILayout.EndHorizontal();
+
                     EditorGUILayout.PropertyField(objectAmountToPoolProperty, new GUIContent("Pool Size", "How many items should be stored in the pool."), true);
+
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PropertyField(canExpandProperty, new GUIContent("Expand Pool", "Should the pool expand (if not enough items are left in the pool)."), true);
                     EditorGUILayout.PropertyField(canRecycleProperty, new GUIContent("Recycle", "Should the pool recycle the oldest element store in pool (if not enough items are left in the pool)."), true);
@@ -90,6 +99,9 @@ namespace XtremeFPS.Editor
                     if (canRecycleProperty.boolValue) canExpandProperty.boolValue = false;
 
                     EditorGUILayout.Space();
+
+                    EditorGUILayout.EndVertical(); // End custom background style
+
                     EditorGUI.indentLevel--;
                 }
             }
@@ -121,6 +133,20 @@ namespace XtremeFPS.Editor
         private void RemoveObjectPoolItem(int index)
         {
             itemsToPoolProperty.DeleteArrayElementAtIndex(index);
+        }
+
+        // Function to create a texture for background color
+        Texture2D MakeTex(int width, int height, Color col)
+        {
+            Color[] pix = new Color[width * height];
+            for (int i = 0; i < pix.Length; i++)
+                pix[i] = col;
+
+            Texture2D result = new Texture2D(width, height);
+            result.SetPixels(pix);
+            result.Apply();
+
+            return result;
         }
     }
 }

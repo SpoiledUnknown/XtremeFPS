@@ -33,9 +33,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4674196650364510141}
-  - {fileID: 5054699442772944359}
-  - {fileID: 5186758061731743215}
+  - {fileID: 8838160720343420609}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &2432504419190476544
@@ -49,6 +47,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -146,73 +145,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 331c35b3226af094a8f15e2eb4f92311, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fpsController: {fileID: 0}
   shootPoint: {fileID: 5054699442772944359}
   muzzleFlash: {fileID: 8872769351777428150}
   bulletPrefab: {fileID: 1660800468149884, guid: afc9c0a592c2d3e408e67df46bacd613,
     type: 3}
   bulletCount: {fileID: 0}
   animator: {fileID: 3043441741077489399}
-  aimUIImage: {fileID: 0}
-  bulletSpeed: 200
-  bulletDamage: 25
-  bulletLifeTime: 3
-  bulletGravitationalForce: 25
   ShellPosition: {fileID: 5186758061731743215}
   Shell: {fileID: 5022607508920917637, guid: c4a92788f3aab074baf288aaed06ee96, type: 3}
   particlesPrefab: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d,
     type: 3}
+  bulletSpeed: 200
+  bulletDamage: 25
+  bulletLifeTime: 3
+  bulletGravitationalForce: 25
+  transitionSpeed: 10
   isGunAuto: 1
   isAimHold: 0
-  timeBetweenEachShots: 0.1
-  timeBetweenShooting: 0.1
   magazineSize: 30
   totalBullets: 180
   bulletsPerTap: 1
-  reloadTime: 1.5
-  aiming: 1
-  hardMode: 0
+  timeBetweenShooting: 0.1
+  reloadTime: 4
   canAim: 1
   weaponHolder: {fileID: 0}
   aimingLocalPosition: {x: 0.002, y: -0.068, z: 0.239}
-  aimSmoothing: 6
-  haveCameraRecoil: 1
-  cameraRecoilHolder: {fileID: 0}
-  recoilRotationSpeed: 6
-  recoilReturnSpeed: 25
-  hipFireRecoil: {x: 4, y: 4, z: 4}
-  adsFireRecoil: {x: 2, y: 2, z: 2}
-  hRecoil: 0.215
-  vRecoil: 0.221
   haveWeaponRecoil: 1
-  gunPositionHolder: {fileID: 0}
-  gunRecoilPositionSpeed: 8
-  gunPositionReturnSpeed: 10
   recoilKickBackHip: {x: 0.015, y: 0, z: 0.05}
   recoilKickBackAds: {x: -0.08, y: 0.01, z: 0.009}
-  gunRecoilRotationSpeed: 8
-  gunRotationReturnSpeed: 38
   recoilRotationHip: {x: 10, y: 5, z: 7}
   recoilRotationAds: {x: 10, y: 4, z: 6}
-  haveRotationalSway: 1
-  rotaionSwayIntensity: 10
-  rotationSwaySmoothness: 2
-  haveJumpSway: 1
-  jumpIntensity: 5
-  weaponMaxClamp: 20
-  weaponMinClamp: 20
-  jumpSmooth: 15
-  landingIntensity: 5
-  landingSmooth: 15
-  recoverySpeed: 50
-  haveBobbing: 1
-  magnitude: 0.009
-  idleSpeed: 2
-  walkSpeedMultiplier: 4
-  walkSpeedMax: 6
-  aimReduction: 4
   bulletSoundClip: {fileID: 8300000, guid: d3247579c549643a5b3a95f9224eaf3c, type: 3}
   bulletReloadClip: {fileID: 8300000, guid: c35f284e9475b5f45b9edab995d9824c, type: 3}
+  emptyMagazineClip: {fileID: 8300000, guid: d45c2ad264d228041a86312a766e7b61, type: 3}
 --- !u!65 &4573774880330676004
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -246,15 +211,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ecb2e70dbbdb644b35306a486edde9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerArmature: {fileID: 0}
+  characterController: {fileID: 0}
   weaponHolder: {fileID: 0}
   cameraRoot: {fileID: 0}
   bulletText: {fileID: 0}
   equipped: 0
-  Priority: 0
   dropForwardForce: 5
   dropUpwardForce: 1
-  dropTorqueMultiplier: 0
+  dropTorqueMultiplier: 1
 --- !u!1 &2361160459005642731
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,12 +243,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2361160459005642731}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1136, y: 0.0507, z: 0.0163}
+  m_LocalRotation: {x: -0.000000021855694, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.1135999, y: 0.0507, z: 0.016299993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6112300006543672966}
+  m_Father: {fileID: 4674196650364510141}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4633997246731270381
 GameObject:
@@ -310,14 +274,111 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4633997246731270381}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: -0.00000001545431, y: -0.7071068, z: 0.00000001545431, w: 0.7071068}
   m_LocalPosition: {x: -0.566, y: 0.034, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8760401485079180220}
-  m_Father: {fileID: 6112300006543672966}
+  m_Father: {fileID: 4674196650364510141}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!1 &7748121065985379052
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8282757829971210573}
+  m_Layer: 7
+  m_Name: Bobber
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8282757829971210573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7748121065985379052}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4674196650364510141}
+  m_Father: {fileID: 8838160720343420609}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8813664719796313723
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8838160720343420609}
+  - component: {fileID: 5982010438202458100}
+  m_Layer: 7
+  m_Name: Effects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8838160720343420609
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8813664719796313723}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.051, y: -0.041, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8282757829971210573}
+  m_Father: {fileID: 6112300006543672966}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5982010438202458100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8813664719796313723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97a63526d88256a4784cf7028d1f2a60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fpsController: {fileID: 0}
+  bobberTransform: {fileID: 8282757829971210573}
+  haveBobbing: 1
+  bobMagnitude: 4
+  idleSpeed: 4
+  walkSpeedMultiplier: 4
+  aimReduction: 4
+  haveSway: 1
+  jumpSwayIntensity: 5
+  maxJumpSwayAngle: 20
+  smoothJump: 10
+  recoverySpeed: 50
+  positionAmount: 0.04
+  maxPositionAmount: 0.08
+  smoothPosition: 20
+  rotationAmount: 6
+  maxRotationAmount: 7
+  smoothRotation: 12
+  rotationX: 1
+  rotationZ: 1
 --- !u!1 &9000411504335220864
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,11 +407,13 @@ Transform:
   m_GameObject: {fileID: 9000411504335220864}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.051, y: 0.041, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6112300006543672966}
+  m_Children:
+  - {fileID: 5186758061731743215}
+  - {fileID: 5054699442772944359}
+  m_Father: {fileID: 8282757829971210573}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7565065775163791314
 MeshFilter:
@@ -377,6 +440,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -398,13 +466,15 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!95 &3043441741077489399
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -418,6 +488,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -489,6 +560,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000011227296186, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198000012944515248, guid: 9defeac88977c0d448aa4541073ee9e4,
+        type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
