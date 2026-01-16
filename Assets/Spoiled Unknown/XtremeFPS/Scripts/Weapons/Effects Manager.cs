@@ -13,6 +13,7 @@ namespace XtremeFPS.WeaponSystem.Effects
         private bool aiming;
 
         [Header("Weapon Bobbing Settings")]
+        [SerializeField] private Transform bobberTransform;
         [SerializeField] private bool haveBobbing = true;
         [SerializeField] private float bobMagnitude = 9f;
         [SerializeField] private float idleSpeed = 2f;
@@ -22,7 +23,6 @@ namespace XtremeFPS.WeaponSystem.Effects
         private float sinY = 0f;
         private float sinX = 0f;
         private Vector3 lastPosition;
-        private Transform modelTransform;
 
         [Header("Sway Settings")]
         [SerializeField] private bool haveSway = true;
@@ -57,11 +57,10 @@ namespace XtremeFPS.WeaponSystem.Effects
         private void Start()
         {
             inputManager = XtremeFPSInputHandler.Instance;
-            modelTransform = GetComponentInChildren<Transform>();
 
             initialPosition = transform.localPosition;
             initialRotation = transform.localRotation;
-            lastPosition =  transform.position;
+            lastPosition =  bobberTransform.position;
         }
 
         private void Update()
@@ -78,20 +77,17 @@ namespace XtremeFPS.WeaponSystem.Effects
         }
 
         #region Effects
-        /*
-         * todo: Fix this piece of crap
-         */
         private void WeaponBobbing()
         {
             if (!haveBobbing) return;
             if (!fpsController.IsGrounded || fpsController.MovementState == PlayerMovementController.PlayerMovementState.Sliding)
             {
-                //modelTransform.localPosition = Vector3.Lerp(modelTransform.localPosition, Vector3.zero, Time.deltaTime);
+                bobberTransform.localPosition = Vector3.Lerp(bobberTransform.localPosition, Vector3.zero, Time.deltaTime);
                 return;
             }
 
             float delta = Time.deltaTime * idleSpeed;
-            float velocity = (lastPosition - transform.position).magnitude * walkSpeedMultiplier;
+            float velocity = (lastPosition - bobberTransform.position).magnitude * walkSpeedMultiplier;
             delta += Mathf.Clamp(velocity, 0, idleSpeed * 3f);
 
             sinX += delta / 2;
@@ -100,10 +96,10 @@ namespace XtremeFPS.WeaponSystem.Effects
             sinY %= Mathf.PI * 2;
 
             float magnitude = aiming ? bobMagnitude / (aimReduction * 1000f) : (bobMagnitude / 1000f);
-            transform.localPosition = Vector3.zero + magnitude * Mathf.Sin(sinY) * Vector3.up;
-            transform.localPosition += magnitude * Mathf.Sin(sinX) * Vector3.right;
+            bobberTransform.localPosition = Vector3.zero + magnitude * Mathf.Sin(sinY) * Vector3.up;
+            bobberTransform.localPosition += magnitude * Mathf.Sin(sinX) * Vector3.right;
 
-            lastPosition = transform.position;
+            lastPosition = bobberTransform.position;
         }
 
         private void JumpSwayEffect()

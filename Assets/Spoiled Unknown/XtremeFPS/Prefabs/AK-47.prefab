@@ -215,7 +215,7 @@ MonoBehaviour:
   weaponHolder: {fileID: 0}
   cameraRoot: {fileID: 0}
   bulletText: {fileID: 0}
-  equipped: 1
+  equipped: 0
   dropForwardForce: 5
   dropUpwardForce: 1
   dropTorqueMultiplier: 1
@@ -282,6 +282,38 @@ Transform:
   - {fileID: 8760401485079180220}
   m_Father: {fileID: 4674196650364510141}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!1 &7748121065985379052
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8282757829971210573}
+  m_Layer: 7
+  m_Name: Bobber
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8282757829971210573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7748121065985379052}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4674196650364510141}
+  m_Father: {fileID: 8838160720343420609}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8813664719796313723
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +344,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4674196650364510141}
+  - {fileID: 8282757829971210573}
   m_Father: {fileID: 6112300006543672966}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5982010438202458100
@@ -328,9 +360,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fpsController: {fileID: 0}
+  bobberTransform: {fileID: 8282757829971210573}
   haveBobbing: 1
-  bobMagnitude: 2
-  idleSpeed: 2
+  bobMagnitude: 4
+  idleSpeed: 4
   walkSpeedMultiplier: 4
   aimReduction: 4
   haveSway: 1
@@ -380,7 +413,7 @@ Transform:
   m_Children:
   - {fileID: 5186758061731743215}
   - {fileID: 5054699442772944359}
-  m_Father: {fileID: 8838160720343420609}
+  m_Father: {fileID: 8282757829971210573}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7565065775163791314
 MeshFilter:
