@@ -18,7 +18,7 @@ namespace XtremeFPS.WeaponSystem.WeaponHolder
         private void Update()
         {
             int delta = inputHandler.WeaponCycleDelta;
-            if (delta == 0)
+            if (delta == 0 || GetWeaponCount() == 0)
                 return;
 
             int previousWeapon = selectedWeapon;
