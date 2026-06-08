@@ -44,10 +44,6 @@ A showcase video demonstrating the controller's features and capabilities can be
     </a>
 </p>
 
-Or watch directly on YouTube:
-
-**▶️ [XtremeFPS Controller Trailer](https://youtu.be/05usRDfW6lk?si=ZPMFUEdA7BbLVRCX)**
-
 ---
 
 ## 🔓 Community Usage
